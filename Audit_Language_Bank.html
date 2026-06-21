@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#1F3864"/>
+<title>Audit Language Bank — for every audit student</title>
+<style>
+  :root{ --navy:#1F3864; --blue:#2E5496; --accent:#2E75B6; --green:#548235; --gold:#BF8F00; --ink:#13233b; --muted:#6a7a90; --line:#e4eaf2; --bg:#eef2f7; --card:#ffffff; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink);
+        -webkit-text-size-adjust:100%; padding-bottom:40px; }
+  header{ position:sticky; top:0; z-index:30; background:linear-gradient(135deg,var(--navy),var(--accent)); color:#fff; padding:12px 14px 10px; box-shadow:0 4px 14px rgba(0,0,0,.18); }
+  .h1{ font-size:18px; font-weight:800; letter-spacing:.01em; }
+  .h2{ font-size:12px; opacity:.85; margin-top:1px; }
+  .by{ font-size:12px; font-weight:700; color:#ffe9b0; margin-top:3px; letter-spacing:.01em; }
+  .hbar{ display:flex; align-items:center; gap:12px; }
+  .htext{ flex:1; min-width:0; }
+  .avatar{ width:48px; height:48px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid var(--gold); box-shadow:0 2px 7px rgba(0,0,0,.28); }
+  .search{ margin-top:10px; display:flex; gap:8px; }
+  .search input{ flex:1; border:none; border-radius:10px; padding:11px 12px; font-size:15px; outline:none; }
+  .search .clr{ border:none; background:rgba(255,255,255,.18); color:#fff; border-radius:10px; padding:0 12px; font-size:15px; font-weight:700; }
+  .tabs{ display:flex; gap:8px; margin-top:10px; }
+  .tab{ flex:1; text-align:center; border:none; background:rgba(255,255,255,.14); color:#eaf1fb; padding:9px; border-radius:10px; font-size:13.5px; font-weight:700; cursor:pointer; }
+  .tab.on{ background:#fff; color:var(--navy); }
+  .controls{ background:var(--card); border-bottom:1px solid var(--line); padding:9px 12px; position:sticky; top:0; z-index:20; }
+  .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  select{ flex:1; min-width:140px; border:1px solid var(--line); border-radius:9px; padding:9px 10px; font-size:13.5px; background:#fff; color:var(--ink); }
+  .chip{ border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:999px; padding:7px 11px; font-size:12.5px; font-weight:700; cursor:pointer; }
+  .chip.on.imp{ background:#fff7e0; border-color:var(--gold); color:#8a6500; }
+  .chip.on.rev{ background:#eaf3e2; border-color:var(--green); color:#2f5417; }
+  .chip.on.all{ background:#e7eefb; border-color:var(--accent); color:var(--blue); }
+  .stat{ font-size:11.5px; color:var(--muted); margin-left:auto; }
+  main{ padding:12px 12px 0; max-width:760px; margin:0 auto; }
+  .catTitle{ font-size:12px; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin:16px 2px 8px; }
+  .item{ background:var(--card); border:1px solid var(--line); border-radius:13px; padding:12px 12px 10px; margin-bottom:9px; box-shadow:0 1px 2px rgba(20,40,80,.04); }
+  .item.s-imp{ border-left:4px solid var(--gold); }
+  .item.s-rev{ border-left:4px solid var(--green); }
+  .item.s-both{ border-left:4px solid var(--gold); box-shadow:inset 4px 0 0 0 #fff, inset 8px 0 0 0 var(--green); }
+  .term{ font-size:15.5px; font-weight:800; color:var(--navy); line-height:1.25; }
+  .mean{ font-size:13.7px; color:#33415a; margin-top:4px; line-height:1.5; }
+  .marks{ display:flex; gap:8px; margin-top:9px; }
+  .mk{ border:1px solid var(--line); background:#fafbfd; border-radius:8px; padding:6px 10px; font-size:12.5px; font-weight:700; color:var(--muted); cursor:pointer; display:flex; align-items:center; gap:5px; }
+  .mk.on-imp{ background:#fff7e0; border-color:var(--gold); color:#8a6500; }
+  .mk.on-rev{ background:#eaf3e2; border-color:var(--green); color:#2f5417; }
+  .empty{ text-align:center; color:var(--muted); padding:40px 20px; font-size:14px; }
+  /* flashcards */
+  .deckwrap{ max-width:560px; margin:18px auto 0; padding:0 6px; }
+  .progress{ text-align:center; font-size:12.5px; color:var(--muted); margin-bottom:10px; }
+  .card{ position:relative; background:var(--card); border-radius:18px; min-height:240px; box-shadow:0 14px 34px rgba(20,40,80,.16); border:1px solid var(--line);
+         display:flex; align-items:center; justify-content:center; text-align:center; padding:26px; cursor:pointer; user-select:none; }
+  .card .badge{ position:absolute; top:12px; left:14px; font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
+  .card .flipnote{ position:absolute; bottom:12px; right:14px; font-size:11px; color:var(--muted); }
+  .face-front .ct{ font-size:24px; font-weight:800; color:var(--navy); line-height:1.3; }
+  .face-back .cm{ font-size:16.5px; color:#33415a; line-height:1.55; }
+  .face-back .cmt{ font-size:14px; font-weight:800; color:var(--blue); margin-bottom:10px; }
+  .cardmarks{ display:flex; gap:10px; justify-content:center; margin-top:14px; }
+  .nav{ display:flex; gap:10px; justify-content:center; margin-top:14px; align-items:center; }
+  .navb{ border:none; background:var(--card); border:1px solid var(--line); color:var(--navy); border-radius:12px; padding:12px 16px; font-size:15px; font-weight:700; cursor:pointer; }
+  .navb.big{ background:var(--accent); color:#fff; border:none; flex:1; max-width:200px; }
+  .navb.sm{ padding:12px 14px; }
+  .footer{ text-align:center; font-size:11px; color:var(--muted); padding:22px 12px 6px; }
+  .reset{ display:inline-block; margin-top:6px; color:var(--accent); font-size:11.5px; text-decoration:underline; cursor:pointer; }
+  @media(min-width:680px){ .item{ padding:14px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <div class="htext">
+      <div class="h1">Audit Language Bank</div>
+      <div class="h2">Speak the auditor’s language — for every audit student (CA Inter · CA Final · ACCA &amp; beyond)</div>
+      <div class="by">by CA Sachhin Holmukhe</div>
+    </div>
+    <img class="avatar" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwQDAwQEBAQFBQQFBwsHBwYGBw4KCggLEA4RERAOEA8SFBoWEhMYEw8QFh8XGBsbHR0dERYgIh8cIhocHRz/2wBDAQUFBQcGBw0HBw0cEhASHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBz/wAARCACMAIwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0S4iltJ5IJkZJY2KsrdQR2poavS/iD4YN7AdVtEzcQr+/QDl0H8X1H8vpXlqvX0eGqxrQ5l8z4bGYSWGquD26eha3V3HgHw19vnGqXSf6NA37pT0dx3+g/n9K5jw1oc3iHUkt0JWFfmmkH8C/4noP/rV6n4j1y38IaIiW6Is5XyraHsMfxH2H6mufG1XdUKfxM7MtwsdcTW+GP4v+vxJL3xdYWOvQaVKwy4xJLn5Y3P3VP17+mRWT498Km7hfVLSP/SYl/fIBzIo/i+o/UfSvJpZ3nleWVy7uSzM3JYnqTXrfw+8W/wBpwLpd2+b2Ff3Tt1lQdv8AeH6j8awqYWWFUa1PW252UsZDHOWHr6X28v8AgnmAajJrqfiLoEPhpm1VSsWmTNhvSKQ84A7g84A968Xv/iLN5xj03STLGDjzbh9gP0Art+u0FBTlK1zzI5Tip1HThC9uvQ741e0TR5tc1GKzg43cu+OI1HVv8968507x9NJKI7/TPKXH34Jd3/jp/wAa+kfAdvpll4aGpW95BOs6+bPcoeEwM7D3G3uDzn8KxrZhS9m3Sd2dNHJq6rJYiPLFas07u807wfo8IYGO2iIijReWY9/qepNVvE2gQ+J9LV4GQ3Cr5ltKDw2ecZ9D/OvLfFviSTxFqTSjctrFlYIz2X1PuetdH8O/FYt5F0a8fEMh/wBHdv4GP8H0Pb3+tcrwVSlTVdP3lq/6/M745hSr1XhpL3Hov6/I4aWN4JXikRkkQlWVhggjqDUZavTPiH4XM8b6vaJ+9jH+kIB95R/H9R39vpXlpYivTw9aNeHOjxMVhZYao4S+Q4nvUlrbTX1zFbwIZJ5WCIo7k1W3evSvWPh94YOn2o1O6TF3cL+6RhzHGf6n+X41OKrKhDme/QvB4R4mooLbqbGl6fZ+D9CbzZFCxr5lxNjl29v5AVwLfEzURPOyRQeU7lkV1yUXsM9//r1F8QfFg1W7+wWj5srZuWU8SuO/0HQfia4YyVyYbB80XUrK7Z6OLxzhJUsO7RifRWiW0lhYw2c1/HePENqycBio6AjJzj1rkdS+GlvcX0s1vfG2hlbKw+Vu2k9QDkce1eV2d/PY3UVzA/lzRMHRx2Ir6D0a/m1PTLO7ntzBLLGJDGw+6fUfXqO+DWOIo1cE+eEvi/rY6sNVo4+Ps6kPh21f5kfh3Qbbw3pwt0cMzHdLM+F3t/QdgKwdd8DHxBqMl5ca9EC3ypGEUiNR0UfPXMfE/Xr2bUl0tkeK0gAkGekxI+99ByB+NcGJCfT8q6cLgqsl7fns5eVzmxmNoxf1f2d4x82j1QfCq2769H/37X/4uq+p+C9M8JWM2t3Pic28ViBL5kcSs+7PyhQH5YnAA75rzdW74GfpXGfEG8kWTR7QZEbvLO2O5VQF/IsTWuJpVqNKU3UvbyRlg3h8RXjSVK1+t2WvHvj/AFHxtqavdPshjG2O2Q/JGO/Hdj3P4DgCueigZgAE+lZlssjTAIOc4rrbHTLnKlk3eoFfHV5Ns/RcPTjGNkYrwuoY4wB696uaF4y1DQVuLSKaR7K5K+dbbsLLtPA9j6H8+Kn1KyNsjPPLHCnozgc1xrz2807xxXUUsiDJCOCRTw85wlzx6E4qlTqwdOeqZ9V6H4N8PeItFsdXtPEbfZr2ISosixqy56ggtwQcg+4q4fh1oi8nxKBj/aiH9a8G+HU5bQ7uBzua3vZQM9g2GH8zXUuc9h+VfY0KNarTjP2r18kfnWIqUKFaVL2K0fdn0XptxbtbxWv9pQ308aYLh0LuB3IB/OuN1T4d6JHNJcS6hLZQSOdqFkCKT2BavLNO1KfSb2G7tn2TxNuU9vofY9K9xtLvT/HHh5iygwzrslizlon/AMQeQa4a+HqYKSlGT5Xuz0KGIpY6LhOK5ltf/MwtJ+HuiGeG7hv5b6GJ8ldyNGxHYlfw4ro9au7B7eexudWjspJUwxEqrIFPpnpkd6p6nqVj4H8PIsSKFiXyreHPMj+/8ya8LvtRn1C6mubhzJPMxZ3Pc0UMPUxkuecnZbDr16eCj7OnFXe56O3g3wcOviE/+BMX+FRHwh4Mz/yH2/8AAmP/AOJrzIvTfMPqa9D6pU/5+M8361S/59I7j4e+FP7cvftt0mdPtm6N0lfsv0HU/gK7nxZ46g8NahZ2iRieUsHuQDykZ7D/AGj1+g96sa3q1j4C8ORrBGoZV8q1gP8AG3cn1A6k9/xrwa5vZr65luJ5GkmlYu7seWJ71lRovH1HVqL3FokdNaqsBTVGl8b1bPfvFPh+28ZaHHNZuj3Cr5trMOjg87T7H9D+NeGujQyPHIpSRCVZWGCCOoNdx8MPGP2C5XRr2TFrO37h2PEch/h+jfz+ta3xP8Ikq+u2cfzDAu0UfgJP6H8D61eFlLCVvq1TZ7P+v6uZ4unHGUfrNP4luv6/qx5ojCuM+IaLEbHUHkUR20co2E/M5OMKo7n+grqw+DXKeNWn/cB5z9jYD91j+LkE/kwrrzRKOFlfy/MwyaLeMhZ9/wAjze5hWeZZby6u0BUSfZrZj8kfHUgcnJ7ZrSXXb3w7bo1us9whkWMRF8v82MYJ69QPrWjpsKBYxLbTTSqgGUAYcDAOM0XN1ZvqFrLezR2Vpby7VWdgHkfHXGeAM18ZKaejVz76FKSfNzWMm5vb3Xwz3ECvDvaP7PIDlcdS5+vYD0qLUbKBVtRb6ZFYNtaWOWEAFCB0YHOc8ng1sHVbCLU7s6beW9xLIy7rSQlDIemVI6HHXr0rR1C3mudOWTy7VEYEZWRnccY9AKj2nLZWsipUHOV+a5s+Abq3+zXcSgR3Mz+c0YYspAAG4E+xXjnv611rP6V534Eu411q9t9i7jbAhh1UB+n05/Su8L19rlN54WL7HwOdU1TxkkutmTIjzypHGjPI5CqijJYnoBXuvhbw/B4N0KR7p0W4ZfOu5SeFwPuj2A49zXN/C7wjsRddvU+dxi0QjoOhk/HoPxPpWV8UvGX22dtEspM28Df6Q6nh3H8P0X+f0rkxUpYut9WpbLd/1/VzfCU44Sj9ZqbvZf1/VjtvFHh+28X6KjW8iGbb5trODwcjoT6Hp7fhXhFxDJazSQzI0csbFWRhgqR1BrvPhn4y+wTLot9Ji0nb9xIx4jc/w/Q/ofrW18TvB5vYW1myT/SYV/0hFHMiD+L6jv6j6VOHlLB1vq9X4Xs/6/q5eJhHGUvrFP4luv6/qx5AzUzdTWaoS3NezynjnsviPR/D3ijUTeXXjO3QBdkcKlCsa+gyfxJrLHgDwp28aQf+Q/8A4qvKlbPenhsVjDAVIRUYVWkvJHVPGU5ycpUk2/Nnqo+H/hjqvjW3/wDIf/xVenaJeWU9nHYDWLXVZ449rsGUtIvTLKCexwa+YAeKvaVqtzouoQX1pJsuIG3Kex9QfUEcGssRldStH3ql2ttEaYfMYUZe7TST31Z6vq3wt0e0naaXXv7Pt5XPlRyouF77QxYZxXA/Fj4a2dl4Fl1qy1s3yW86IPLjXYdzYJyCehAr2uGTS/iR4V+Zf3M4w6g/Pbyj0PqOx7g+9ReL9Z07wZ4V+xx28JEsRtba0IyrDGCSO4AOT6k+9ePKviKyWHk25N2tZdD14UaFCX1mKSile931PizQNZE9t5nIkVDuj7ggcj864yO1uvFF495qcM8iEkRom2JAAf73WpvHMEvhTVZhbFlDklM9GQjgj8c1NpGqm78MM9xCgh4jDFiNuOARj3rzp4eVGUtNb29D26eJhXjG70t94/UPDHmSCW1hljvG+YSJebmz6kH+lauiX99a6JdwatKTdwTbAWOSRtBz71n6Fq1rplnP5QWWbAQzHrkngfnXF3fiKW9vZpGY/M3C+g7VHspVLxlsjT20KdpR37Ht/wAEdHj8W+NtTM+pQ6bYw2ZLSS4+Y7gAoyQM9T+Br6R0r4TaVcXCSrry6hbROPNjhRcN32lgxxn+VcL+zV8O9OvPh1q9/eBJJtbkERQEF7dYs7T7MWJb6Aepr2fOmfDjwpyP3Fsv0e4lP9SfyA9q9CjiKlOn7KlJ3b2t+p4uJoU6tV1asU0luaGsz2sFnJZLq1rpdxJHtjd2UGNemVUkduB6V5efhnoJyf8AhMbY57/u/wD4uvOdZ1e517Uri/vH3zzNk+ijso9ABxVZGATHfNe3h8rq0Y+7Us3vojx6+YU60vep3S21Z6Y/w38Pj/mcLb/yH/8AF16Lol3am0gsRrdtqV1EmPMV13uo7kAnOB1NfNcsgxjFFhqNxpV7BeWkhiuIWDI47H/DtSxGWVK0bSqXttogoY+FGV407X31Z65r3wv0hbme8fV/7NtZXyI3RdiE9gxI75wKwz8PfDhP/I4wf+Qv/iq9D0jVdN+IHhpzLGrRzL5V1b55jf2/mp/wrE0b4WaFY2Zj1CD7fcl2bzWJTC54AA9sfiTXmRxdSmnGrNprS1kehLC05tSpwTT1vdnhJYqxBBBHBB7UokzXqHxb8E/ZpW8Q2Ef7iVgLtFH3HPST6Hoff615SCa+pwleGJpqpH+mfPYnDyoVHCRbV6s2lvNfXMNtbRtLcTMI4416sx6Cs8PivePg/wCCPsNuuvX8RF3cp/osbDmOM/x/Vu3oPrU43FRwtJ1Hv0XdlYTCyxNRQW3U6fw1olj8PfC8j3cyLsXzry47M3TA9h0A7/jVL4h+D08XaNHfaeFkv7ePzIChyJ4zyU/HqPf61558VvG//CQah/ZGnybtMs2+Zk6TyDq3+6Og/E+lZPhP9oTQfh9pVxpuu3L3ghG6zhs8SSg55jJzhR3BJ459q+feExFGCxzl79728v66dj3FXo1ZPBqPuWtfz/rr3PHfidoS6tplpI6EvG7xjsRwD/SvJ4IrzS7OezDCa1kUptIAI6kfrX1V4jkT4k+HH1+z0cafLfAX0Vosm8k89TgDcy8kAYya8bk0iJ5SQgIPZhivMx+N56zqWsnb8j18uwajQVO92r/meWaZDdrDJCyCMM4bOMnoQa6fwt4FkvLmCOGF57qVgqhurn+g/kK7zTfC0V1cRxRW5llkOEjjXkmvcvCfg2DwzaltivqMy4kkXkIP7i+3qe9c9OrKu7R0R01acMOry1fRHQfCKK28HImlTGMI8IQ3TNtHmLliPTBJbH0HrXb+MPDdt4+8ORPZzI8gHn2c6t8jEjofY9PY/jXzv8e9eh0HwN9hV/8ATdTlWGMA8hVId2/RR/wKvKfCH7SfjvwTp6WNreWt3aBy2y9txIQT/tcHn612QjKDVSD95bHnSSqJwktHuenXFvLaXEtvPG0U0TFHRxgqw6g00txXJar+0RY+MryC61jQl07USAk1zYuXjlAHBZG5BHqCePpW3p+sWGsxl7C8huAByEb5h9V6j8q+uwuKhiIJ7S7HzOIwc6Emt13LrOKryPzSSZrtPhp4HbxVqZu7yM/2RZsPMz/y2fqIx7d29uO9a4irGhTdSeyIpUZVZqEd2dt8IfC11YWkus3LyRreoFht84DJnO9h79vbJ716OrJKu+N1dDkBlORwcH9RXEfFHxyvhfThp9i6rqt0mF2/8sI+m72J6L+fYV4xovj3XvD9mbSw1CSK33l9mA2CevWvmfqVfH3xG19vQ95YilhLUVrbc9/8F6hqGu6A1n4i0u4hvEXyZxdQlVuUIxu59RwR68968b8X/DfV9D1qaDT7G8vdPf54JYYmkwp/hbH8Q6e/BrNtP2j76GGNbldVuJ1xukBtkDHv8vl+ue9e+eFPF9v8RPCA1LRrprK6lUxuCqyPaTDqrKeCOh9wawwuOrYarKap8sX0e3ys2b4jBU6sFFyu11W55Z8Nvhpe6zrQm1iwuLfTrQh2juIyhnbsgB6jufbjvWl8c/j7ong/TbjQ9FvIr7W5sxTi1f5bZRwylxwGPTAyRz0ruvix4vXwL8NNb1A3hTUGtWt7R+A7zsNoYAdMZLe1fmrM7SNuZiSe5q6mIqYuqq09lsuhNLDwoU3Tj13Og13x3q+ubo5JzHbnpBD8ifj3P41zRDOxBOWfj8+Khl5U889sUb2wCT8w7j1q5zlN3k7s0hCMFaKsj7M1Xxd/ZVyfCvh22t7rWrK3RpFnbZBaJgBd5HViOQg7dT2rnfsTeIJZJJ4IotQLbZJIl8ptw65XO0/XA7Vzf7NcUl/N4m1C6kae4lliVppjvdmwzEljyTyK9KurRofEN9NHIok8lWICAjdzzz3xXlYyNonRQm4y0KVvL/wissaacBLfyjYU2Bt/Hc9T68YFdZfeLzoOlyX+vxNZ20Khp57cGWKMkgYI+91I7HrWN4RsUImv5iJbuVm3E/woDwOfU4rlf2jdW/s7wNZ6arfPqN0ob3VAXY/99bavC03GKV9yK0+eep498Z/GVv4w8ZySafdrdaTZQpBbSJkK2RudhkA8sSOn8IrztyPLbJAHXJpmTnOTmoZQZGAc/KOg7V3JWIGq+/ntVmC7lt5FkjkdJF6MpII/EVViHUD1qdUJpjPQPDnxPvbSWKDVS95aZAaQY85V7kE8N9D+dfZvh/4v+AovBDyeGbvzhYIqJYTIY52kboWHcE5LMMj9K/PRRh/pXoPwl+Jd58LvFP8Aa9raxXglt3tnt5WKq4bBHPbDAGqqTnWUYTbkk9r/AKmcaUYNuCs31PWNX1W71nULi/vJDJczsXdj/IegHQD0rOLH2rq0/a51qWVI28B2XzsFLfayMZP41vv+0bfA/wDIr2B+kzH+lerWx9XDWjUpJdveX6HNHKnUu4yv8v8AgnhHgrwprHjTUdL0ywtpPtN4qnfIpCRrgFnY/wB0Dn8h1Ir7o8M+G9H+HnhaOxtSkFhZRmSe5lwDI2Pnlc+p/QYA6Vz/AMIfh63gXwxZxXoR9cngjF2yHcI8KP3SnuAep7nnoBXA/Gj4hDUrpvDemy5srZ/9LkQ8Syj+D/dX9T9K8bC0q2YVFStZdfJHXiKlPDRck7iftdWloPh/pOpLM32mW7WCMK2UkjKs5P6Kcjrn6V8PsflHr0r2j4s+Nb/UfCXhzw1cP5lvp0s1xC5PzBSFUIfYfNj647V4tkH8zW88PPDydGbvy/luRCpGpFTj1IHOGNN7U5/v0hqGaH0z+zXAIPCmqXJ/5aXr5Pssaf413Nk/2m9nnI5nOce3Yflgj8a4z4KH7J8J55gSDJc3GCOuSVX/AD9K7nRodrAn+Fccdsdf8R7GvGx8ryUTeit2aXh+L7M2pxggjzFAx05AP9a8C/aT1wX/AItsNMRspp9ruYD+/Ic/+gqv519CaWuxLlzw010fpxxn6Zr418dayfEHjDW9RLbkmunEf+4p2r+iiu3Dr3F6GD1mzncUyQ4QnGT2qQ1G3P4V1AJarwSetWQQoPYCoIiI1waJpMqF/vHFAD1OFBPVuaG6ZpAMjNKDzg0wOn0/XYiLbzFuHlUrv8q3eToevyg11yeJ4GXMWl6zKp/jSxYA/mQazPhTLcSXWpWULsAQkgAY4zkr/Ij8q9aazkdI8iIyBcPvznOfavCzPMeSr7OavbzPcy/COVLni9/I9/8Ai34//wCES0kafYS41q+QhWXrbxngv9T0X8T2r5ljVmOTmvXP+F7fDPxRqLTf8IsmoTOFMtzcRoCPlHBJ9On4V1Q8W/B3ndpfh0jjlZ4xmvqMszjDYSnyKDb6v/hz57EZdXrvmurdD41+JTn+0bVP7tuDj6sa4FWG8r3yDXr/AO0NqPh/UfH8jeGre2g0uO0hULbMGQvgljkcZ5x+FeM79t2gzwxxUV66xFR1UrXHTpOlFU30Jphg59KjbpU8gypqGXgfWsGaI+mPhRIV+FulwggGW+nbnth+v54r0fTfkcqPlCr+WP8AD+VeafCVS/gPSFz9yW4bntmQjP6YP1r0exkwZXBx83Htjj9P5V4GMd6zOmkrRDXtVXRfCGr3wG1rWK4lXno2CF/XFfFm09zk9z619P8Axh1M2Xw8vIc4e8uEgxntvLn9Fr5j5P1r2KKtBHN1ZG3yru9On1qMYA96kc5bHZf503gitQIpW2jNV3fLxDPcmn3BwMVU35uYx6A00BprwBSMM05cMopG4NMR6z8A7F73XdXdTGPKt4s78kcyj0+hr2W5s7zzBsay247g14R8DNUtNP8AiBa2Oo3RtdN1qNrCW4D7fIZuYpc9tsir+BNejavPr2m6ndWfmTXHkSFBNFtkSQDoyt3BGD+NfJ5zg5zxPtE1Zo+kyrEwVH2bTuinYiaBRIlpFHI6/N++AH6LWfBLfzybBBZ8kZ3Ozf0rWAyqjpxjisOzdlmUA/xD+ddWFgp1UmE5OMdDzvxyx/4SS+i2RIYiqFYRhQQo6VxtwdtzEemGH866HxDK02tajI5y7XEhJ/4Ea5jUCfmPcAV9JGNlY+dqO8mzXbg1WkPIHYGpgxYAnqQDVd+bhR9KQkfTPwjBTwNpzA8b5P8A0M/4816FpYby2PIy2ee3bn6dDXBfDFVHgTRMDqrkjsf3rA/pXf6bxbq2Tkk8/Q4/lXzld3qSfmdcdkeLfHHVfMstF04HB864nZfoQi/1rxdjtAI+8TgV3vxbneXxPGjH5YrfCj0zI5Nefg7pWB/hwBXvU/hRyIaRgY9KiY4NTGoXqwK0pyaoOxW4jPbOKuSnk103w2sLa/8AE2LqBJ0itbiQI/3SwjIBP03Z+oFEpckXJ9BxXNJRMa3bKinuKrWn+pT6CrPWqJJtPm8i9tpCcCOVGz6YYGverjxHYxzyIZW+ViOjev0r56bhsA17lY6PZXllbTywZkkiRmIdhklR714+aQg+WUvM9TLpSXMl5H//2Q==" alt="CA Sachhin Holmukhe"/>
+  </div>
+  <div class="search">
+    <input id="q" type="search" placeholder="Search a phrase or meaning…" autocomplete="off"/>
+    <button class="clr" id="clr">✕</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-mode="list" id="tabList">📖 List</button>
+    <button class="tab" data-mode="cards" id="tabCards">🃏 Flashcards</button>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="row">
+    <select id="typeSel">
+      <option value="all">All</option>
+      <option value="phrase">Key phrases</option>
+      <option value="sentence">Stock sentences</option>
+    </select>
+    <select id="catSel"></select>
+  </div>
+  <div class="row" style="margin-top:8px">
+    <button class="chip all on" data-mark="all" id="chAll">All</button>
+    <button class="chip imp" data-mark="imp" id="chImp">⭐ Important</button>
+    <button class="chip rev" data-mark="rev" id="chRev">🔁 Revise</button>
+    <span class="stat" id="stat"></span>
+  </div>
+</div>
+
+<main id="main"></main>
+<div class="footer">Marks are saved on this device/browser. <span class="reset" id="reset">Reset all marks</span><br/>Tip: add this page to your home screen for one-tap access.</div>
+
+<script>
+const DATA = [{"cat":"Foundations & Objective","kind":"phrase","items":[["Reasonable assurance","A high, but not absolute, level of assurance — the auditor reduces audit risk to an acceptably low level but cannot guarantee the statements are error-free."],["True and fair view","The financial statements present the entity’s state of affairs and results fairly, in accordance with the applicable financial reporting framework."],["Material misstatement","An error or omission in the financial statements large enough to influence the economic decisions of users."],["Fraud vs error","Fraud is an intentional act to deceive; error is an unintentional mistake."],["Professional judgement","Applying relevant training, knowledge and experience to make informed decisions throughout the audit."],["Professional skepticism","A questioning mind and a critical assessment of audit evidence, staying alert to possible misstatement — not taking management’s word at face value."],["Inherent limitations of an audit","Built-in reasons (nature of reporting, nature of procedures, timeliness/cost, concealed fraud) why an audit gives reasonable, not absolute, assurance."],["Scope of audit","The audit work determined by the SAs, the law and the terms of engagement, covering all aspects of the financial statements."],["Financial reporting framework","The accounting rules used to prepare the statements — either a ‘fair presentation’ or a ‘compliance’ framework."],["General purpose financial statements","Statements prepared to meet the common information needs of a wide range of users."],["Audit risk","The risk that the auditor gives an inappropriate opinion when the statements are materially misstated — = inherent × control × detection risk."],["Inherent risk","The susceptibility of an assertion to material misstatement before considering controls."],["Control risk","The risk that a misstatement is not prevented or detected on time by internal control."],["Detection risk","The risk that the auditor’s own procedures fail to detect a material misstatement."],["Assurance engagement","An engagement where the practitioner gives a conclusion to enhance users’ confidence about a subject matter measured against criteria."],["Reasonable vs limited assurance","Reasonable = high assurance with a positive opinion (audit); limited = moderate assurance with a negative conclusion (review)."],["Audit vis-à-vis review","Audit gives reasonable assurance and a positive opinion; a review gives limited assurance and a negative conclusion (‘nothing has come to our attention’)."]]},{"cat":"Planning & Strategy","kind":"phrase","items":[["Overall audit strategy","The broad approach that sets the scope, timing and direction of the audit."],["Audit plan","The detailed plan of the nature, timing and extent of audit procedures."],["Audit programme","A written, step-by-step list of the audit procedures to be performed."],["Knowledge of the business","Understanding the entity, its industry and environment in order to plan and perform the audit effectively."],["Nature, timing and extent (NTE)","What procedures to perform, when to perform them, and how much to perform."],["Preliminary engagement activities","Client acceptance/continuance, ethics and independence checks, and agreeing the terms before the audit begins."],["Direction, supervision and review","Guiding the team, overseeing the work, and reviewing it for quality."],["Permanent / current audit file","The permanent file holds long-term information (e.g., MOA/AOA); the current file holds the year’s evidence and correspondence."]]},{"cat":"Risk & Internal Control","kind":"phrase","items":[["Risk of material misstatement (RoMM)","The risk that the statements are materially misstated before the audit — = inherent × control risk."],["Risk assessment procedures","Procedures (inquiry, analytical procedures, observation, inspection) to understand the entity and identify risks."],["Significant risk","An identified risk of material misstatement that requires special audit attention."],["Internal control","The process designed by management/TCWG to give reasonable assurance about reliable reporting, efficient operations and compliance with laws."],["Control environment","The overall attitude, awareness and actions of management regarding internal control — the ‘tone at the top’."],["Control activities","The policies and procedures that ensure management’s directives are carried out (e.g., authorisation, reconciliation, physical controls)."],["Monitoring of controls","The process of assessing whether internal controls are operating effectively over time."],["Information system & communication","The system that records, processes and reports transactions, and communicates roles and responsibilities."],["Segregation of duties","Dividing responsibilities among different people to reduce the risk of error or fraud."],["Tests of controls","Procedures to test whether internal controls are operating effectively."],["Walk-through test","Tracing one transaction through the whole system to confirm understanding of the process."],["Internal financial controls (IFC)","Controls over financial reporting that the auditor reports on under Section 143(3)(i)."],["Materiality","The magnitude of a misstatement that could influence the economic decisions of users."],["Performance materiality","An amount set below overall materiality to reduce the chance that uncorrected misstatements add up to a material amount."],["Benchmark","The base (e.g., profit before tax, revenue, total assets) used to calculate materiality."],["Aggregation risk","The risk that individually immaterial misstatements together become material."],["CAATs","Computer-assisted audit techniques — using software to test data and controls in a computerised environment."],["General IT / application controls","General IT controls govern the IT environment as a whole; application controls are built into specific applications."]]},{"cat":"Audit Evidence","kind":"phrase","items":[["Audit evidence","The information the auditor uses to arrive at the opinion."],["Sufficient appropriate audit evidence","Enough evidence (sufficiency = quantity) of the right quality (appropriateness = relevance + reliability)."],["Sufficiency","The measure of the quantity of audit evidence; more is needed when risk is higher or quality is lower."],["Appropriateness","The measure of the quality of audit evidence — its relevance and reliability."],["Relevance and reliability","Relevance = the evidence relates to the assertion tested; reliability = how trustworthy it is, based on source and nature."],["Substantive procedures","Procedures to detect material misstatements directly — tests of details and substantive analytical procedures."],["Tests of details","Substantive procedures applied to individual transactions, balances or disclosures."],["Substantive analytical procedures","Evaluating financial information by studying plausible relationships among the data."],["Inspection","Examining records, documents or physical assets."],["Observation","Watching a process or procedure being performed by others."],["External confirmation","Audit evidence obtained as a direct written response to the auditor from a third party."],["Recalculation","Checking the mathematical accuracy of documents or records."],["Reperformance","Independently carrying out procedures or controls originally performed by the entity."],["Analytical procedures","Evaluating financial information through analysis of plausible relationships among data."],["Inquiry","Seeking information from knowledgeable persons inside or outside the entity."],["Positive confirmation","A confirmation request asking the third party to reply whether or not they agree (more reliable)."],["Negative confirmation","A confirmation request asking the third party to reply only if they disagree (less persuasive)."],["Audit sampling","Applying procedures to less than 100% of items so that each has a chance of selection."],["Sampling risk","The risk that the conclusion from a sample differs from a conclusion on the whole population."],["Non-sampling risk","The risk of a wrong conclusion for reasons unrelated to sampling (e.g., a wrong procedure)."],["Management’s / auditor’s expert","A specialist whose work is used by management, or engaged by the auditor, to help with a specialised matter."],["Opening balances","The account balances at the start of the period, examined specially in an initial audit engagement."]]},{"cat":"Assertions","kind":"phrase","items":[["Assertions","Representations by management, embodied in the financial statements, that the auditor tests."],["Occurrence","Recorded transactions and events actually took place and pertain to the entity."],["Completeness","All transactions, balances and disclosures that should have been recorded have been recorded."],["Accuracy","Amounts and other data relating to transactions have been recorded appropriately."],["Cut-off","Transactions are recorded in the correct accounting period."],["Classification","Transactions are recorded in the proper accounts."],["Existence","Assets, liabilities and equity interests actually exist."],["Rights and obligations","The entity holds the rights to its assets and bears the obligations for its liabilities."],["Valuation and allocation","Items are included in the financial statements at appropriate amounts."],["Presentation and disclosure","Items are properly described, classified and disclosed."]]},{"cat":"Verification of Items","kind":"phrase","items":[["Vouching","Examining documentary evidence to verify the authenticity and accuracy of recorded transactions."],["Verification","Confirming the existence, ownership, valuation and presentation of assets and liabilities."],["Physical verification","Physically inspecting assets (e.g., counting stock or cash) to confirm their existence."],["Net realisable value (NRV)","Estimated selling price less costs to complete and sell; inventory is valued at the lower of cost and NRV."],["Provision for doubtful debts / ECL","An estimated amount set aside against receivables that may not be recovered."],["Ageing schedule","A statement classifying receivables or payables by how long they have been outstanding."],["Title deeds","Documents proving legal ownership of immovable property."],["Contingent liability vs provision (AS 29)","A provision (probable + reliably estimable) is recognised; a contingent liability (only possible) is merely disclosed."]]},{"cat":"Completion & Review","kind":"phrase","items":[["Subsequent events","Events occurring between the balance sheet date and the date the financial statements are issued."],["Adjusting / non-adjusting events","Adjusting = the condition existed at year-end (adjust the figures); non-adjusting = arose after year-end (disclose)."],["Going concern","The assumption that the entity will continue in operation for the foreseeable future."],["Material uncertainty (going concern)","A significant doubt about the entity’s ability to continue, requiring disclosure and a special report section."],["Written representations","Written statements from management confirming certain matters, used to support audit evidence."],["Uncorrected misstatements","Misstatements identified during the audit that management has not corrected."],["Clearly trivial","Misstatements so small that they need not even be accumulated."],["Those charged with governance (TCWG)","The persons responsible for overseeing the entity’s strategic direction and accountability (e.g., the board)."],["Significant deficiency in internal control","A control weakness important enough to merit the attention of those charged with governance."]]},{"cat":"Reporting & Opinion","kind":"phrase","items":[["Unmodified opinion","A clean opinion that the financial statements give a true and fair view."],["Modified opinion","A qualified opinion, an adverse opinion, or a disclaimer of opinion."],["Qualified opinion","‘Except for’ a specific material (but not pervasive) issue, the statements are true and fair."],["Adverse opinion","The financial statements do NOT give a true and fair view (misstatement is material and pervasive)."],["Disclaimer of opinion","The auditor does not express an opinion — unable to obtain evidence and the possible effects could be material and pervasive."],["Basis for opinion","The report section explaining the grounds for the opinion expressed."],["Material but not pervasive / pervasive","Pervasiveness measures how deeply an issue affects the statements; it decides qualified vs adverse/disclaimer."],["Emphasis of Matter (EOM)","A paragraph highlighting a matter already disclosed that is fundamental to users’ understanding (the opinion is not modified)."],["Other Matter paragraph","A paragraph on a matter not disclosed in the statements but relevant to users’ understanding of the audit."],["Key Audit Matters (KAM)","The matters of most significance in the audit, communicated in the report of a listed entity."],["Corresponding figures / comparative FS","Two ways of presenting prior-period figures; they decide what the auditor’s opinion covers."],["Management’s / auditor’s responsibility","Report sections stating who is responsible for the financial statements and who for the audit."],["UDIN","Unique Document Identification Number — an 18-digit number that authenticates a CA’s signed document."],["CARO 2020","The Companies (Auditor’s Report) Order — reporting on specified matters; not applicable to certain companies (e.g., banking, insurance, small companies)."],["Branch audit","Audit of a company’s branch, whose results feed into the company audit (Section 143(8))."],["Joint audit","An audit by two or more auditors who are jointly and severally responsible (SA 299)."]]},{"cat":"Ethics & Engagement","kind":"phrase","items":[["Integrity","Being straightforward and honest in all professional and business relationships."],["Objectivity","Not allowing bias, conflict of interest or undue influence to override professional judgement."],["Professional competence and due care","Maintaining professional knowledge and skill and acting diligently in line with current standards."],["Confidentiality","Not disclosing information acquired at work without proper authority or a legal/professional duty to do so."],["Professional behaviour","Complying with relevant laws and avoiding any conduct that discredits the profession."],["Independence of mind","The state of mind that permits the auditor to express an unbiased opinion."],["Independence in appearance","Avoiding situations a reasonable third party would see as compromising independence."],["Self-interest threat","A threat to independence arising from a financial or other interest in the client."],["Self-review threat","A threat arising from reviewing the firm’s own previous work or judgement."],["Advocacy threat","A threat from promoting the client’s position to the point that objectivity is compromised."],["Familiarity threat","A threat arising from a long or close relationship with the client."],["Intimidation threat","A threat from actual or perceived pressure that deters the auditor from acting objectively."],["Safeguards","Measures that eliminate threats to independence or reduce them to an acceptable level."],["Conflict of interest","A situation where competing interests could impair the auditor’s objectivity."],["Preconditions for an audit","An acceptable financial reporting framework plus management’s agreement to the premise of the audit."],["Terms of engagement / engagement letter","The agreed objective, scope and responsibilities, recorded in a letter (SA 210)."],["Recurring audit","A continuing audit relationship across successive periods."],["Change in terms of engagement","Altering the engagement (e.g., audit to review) — allowed only with reasonable justification."]]},{"cat":"Quality Control","kind":"phrase","items":[["SQC 1","The standard on quality control for firms performing audits and other assurance and related-services engagements."],["SA 220","Quality control at the level of an individual audit engagement."],["Engagement quality control review (EQCR)","An objective review of significant judgements, required for listed entities, before the report is dated."],["Leadership responsibilities","The firm’s leaders promoting an internal culture that values quality."],["Acceptance and continuance","Deciding whether to take on, or keep, a client based on integrity, competence and ethics."],["Consultation","Seeking appropriate advice on difficult or contentious matters during the engagement."],["Differences of opinion","Disagreements within the team, or with the reviewer, resolved before the report is issued."]]},{"cat":"Specialised — Entities & Banks","kind":"phrase","items":[["Government audit","Audit of public funds and public bodies, conducted under the C&AG."],["C&AG","The Comptroller and Auditor General of India — the constitutional authority for government audit."],["Propriety audit","Examining whether expenditure is wise, faithful and economical, not merely rule-compliant."],["Performance audit (three Es)","Assessing the economy, efficiency and effectiveness of government programmes."],["Expenditure audit","Audit ensuring public expenditure is authorised, sanctioned and applied to the intended purpose."],["Audit of receipts","Audit ensuring government revenues are correctly assessed, collected and accounted for."],["LLP audit","Audit of a Limited Liability Partnership — mandatory above turnover ₹40 lakh or contribution ₹25 lakh."],["Co-operative society audit","Audit under the Co-operative Societies Act (e.g., the 20% / ₹1,000 shareholding limit)."],["Prudential norms","RBI norms on income recognition, asset classification and provisioning for bank advances."],["Non-Performing Asset (NPA)","A loan where interest/principal is overdue beyond 90 days, or an OD/CC account that is ‘out of order’."],["Out of order","A cash credit/overdraft account that has exceeded its limit, or shown no/insufficient credits — a sign of an NPA."],["Overdue","Any amount due to the bank that is not paid by its due date."],["IRAC","Income Recognition, Asset Classification and Provisioning norms for bank advances."],["Drawing power","The amount a borrower may draw, computed from paid stock and eligible debtors net of margin."],["Special Mention Account (SMA)","An early-warning category for accounts showing stress before they become NPAs (SMA-0/1/2)."],["Long Form Audit Report (LFAR)","A detailed report bank auditors submit to the RBI on the bank’s operations and controls."],["Statutory Central Auditor (SCA)","The auditor appointed to audit a bank as a whole."]]},{"cat":"Stock Sentences — Framing","kind":"sentence","items":[["As per SA ___, the auditor is required to…","Open a theory or practical answer by naming the governing standard."],["In the instant case / In the given situation…","Begin the analysis part of a practical (case-study) answer."]]},{"cat":"Stock Sentences — Risk & Controls","kind":"sentence","items":[["The auditor should identify and assess the risks of material misstatement, whether due to fraud or error, at the financial statement level and at the assertion level.","Standard opening for any risk-assessment question (SA 315)."],["The auditor should obtain an understanding of the entity and its environment, including its internal control.","Use when discussing planning or risk assessment."],["Based on the assessed risks, the auditor should determine the nature, timing and extent of audit procedures.","Use to link the assessed risk to the audit response (SA 330)."]]},{"cat":"Stock Sentences — Evidence & Procedures","kind":"sentence","items":[["The auditor should design and perform audit procedures to obtain sufficient appropriate audit evidence.","Core sentence for any evidence or procedure question (SA 500)."],["The reliability of audit evidence is influenced by its source and its nature.","Use when ranking or evaluating evidence."],["The auditor should exercise professional judgement and maintain professional skepticism throughout the audit.","A strong supporting or closing line for many answers (SA 200)."]]},{"cat":"Stock Sentences — Reporting & Verdicts","kind":"sentence","items":[["When the financial statements give a true and fair view, the auditor shall express an unmodified opinion.","State the clean-opinion rule (SA 700)."],["If the misstatement is material but not pervasive, the auditor shall express a qualified opinion; if material and pervasive, an adverse opinion.","The SA 705 ‘misstatement’ branch."],["If the auditor is unable to obtain sufficient appropriate audit evidence and the possible effects could be material and pervasive, he shall disclaim an opinion.","The SA 705 ‘unable to obtain evidence’ branch."],["Therefore, the contention of management is not tenable.","A decisive conclusion line in a practical answer."]]},{"cat":"Stock Sentences — Ethics","kind":"sentence","items":[["The auditor should be independent both in mind and in appearance.","Anchor sentence for any independence question."],["Where threats are identified, the auditor should evaluate them and apply appropriate safeguards; if they cannot be reduced to an acceptable level, he should decline or withdraw.","The threats-and-safeguards conclusion."]]},{"cat":"Stock Sentences — Completion","kind":"sentence","items":[["The auditor should perform procedures to identify events up to the date of the auditor’s report that require adjustment or disclosure.","Subsequent events (SA 560)."],["Written representations are necessary information but do not, on their own, provide sufficient appropriate audit evidence.","Use in any written-representation answer (SA 580)."]]},{"cat":"Stock Sentences — Answer Structure","kind":"sentence","items":[["IPAC — Issue → Provision → Analysis → Conclusion.","Structure for practical / case-study questions."],["True/False — state the verdict first, then the reason.","Structure for correct/incorrect questions."],["Descriptive — framing line → numbered points → conclusion.","Structure for descriptive answers."]]}];
+const TOTAL = 169;
+// assign stable ids
+DATA.forEach((c,ci)=> c.items.forEach((it,ii)=> it.id = 'c'+ci+'_'+ii ));
+
+let marks = {};
+try{ marks = JSON.parse(localStorage.getItem('auditLangMarks')||'{}'); }catch(e){ marks={}; }
+function saveMarks(){ try{ localStorage.setItem('auditLangMarks', JSON.stringify(marks)); }catch(e){} }
+function mget(id){ return marks[id]||{}; }
+function toggle(id,key){ const m=marks[id]||{}; m[key]=!m[key]; if(!m[key]) delete m[key]; if(Object.keys(m).length) marks[id]=m; else delete marks[id]; saveMarks(); }
+
+let state = { mode:'list', type:'all', cat:'all', mark:'all', q:'' , deck:[], idx:0, flipped:false };
+const $ = id => document.getElementById(id);
+
+function buildCatOptions(){
+  const sel=$('catSel');
+  const cats = DATA.filter(c=> state.type==='all' || c.kind===state.type);
+  sel.innerHTML = '<option value="all">All categories</option>' + cats.map((c)=>'<option value="'+c.cat+'">'+c.cat.replace(/&/g,'&amp;')+'</option>').join('');
+  if(![...sel.options].some(o=>o.value===state.cat)) state.cat='all';
+  sel.value=state.cat;
+}
+
+function getFiltered(){
+  const q = state.q.trim().toLowerCase();
+  const out=[];
+  DATA.forEach(c=>{
+    if(state.type!=='all' && c.kind!==state.type) return;
+    if(state.cat!=='all' && c.cat!==state.cat) return;
+    c.items.forEach(it=>{
+      const m=mget(it.id);
+      if(state.mark==='imp' && !m.imp) return;
+      if(state.mark==='rev' && !m.rev) return;
+      if(q && !(it[0].toLowerCase().includes(q) || it[1].toLowerCase().includes(q))) return;
+      out.push({cat:c.cat, kind:c.kind, it});
+    });
+  });
+  return out;
+}
+
+function countMarks(){ let imp=0,rev=0; Object.values(marks).forEach(m=>{ if(m.imp)imp++; if(m.rev)rev++; }); return {imp,rev}; }
+
+function render(){
+  const cm=countMarks();
+  $('stat').textContent = cm.imp+' ⭐ · '+cm.rev+' 🔁 · '+TOTAL+' total';
+  if(state.mode==='list') renderList(); else renderCards();
+}
+
+function itemNode(o){
+  const m=mget(o.it.id);
+  const cls = m.imp&&m.rev?'s-both':m.imp?'s-imp':m.rev?'s-rev':'';
+  const d=document.createElement('div'); d.className='item '+cls;
+  d.innerHTML = '<div class="term"></div><div class="mean"></div>'+
+    '<div class="marks"><button class="mk '+(m.imp?'on-imp':'')+'" data-k="imp">⭐ Important</button>'+
+    '<button class="mk '+(m.rev?'on-rev':'')+'" data-k="rev">🔁 Revise</button></div>';
+  d.querySelector('.term').textContent=o.it[0];
+  d.querySelector('.mean').textContent=o.it[1];
+  d.querySelectorAll('.mk').forEach(b=> b.onclick=()=>{ toggle(o.it.id,b.dataset.k); render(); });
+  return d;
+}
+
+function renderList(){
+  const main=$('main'); main.innerHTML='';
+  const list=getFiltered();
+  if(!list.length){ main.innerHTML='<div class="empty">No matches. Try clearing the search or the ⭐/🔁 filter.</div>'; return; }
+  let cur=null, wrap=null;
+  list.forEach(o=>{
+    if(o.cat!==cur){ cur=o.cat; const h=document.createElement('div'); h.className='catTitle'; h.textContent=o.cat; main.appendChild(h); }
+    main.appendChild(itemNode(o));
+  });
+}
+
+function renderCards(){
+  const main=$('main');
+  state.deck=getFiltered();
+  if(!state.deck.length){ main.innerHTML='<div class="empty">No cards. Try clearing the search or the ⭐/🔁 filter.</div>'; return; }
+  if(state.idx>=state.deck.length) state.idx=0;
+  const o=state.deck[state.idx]; const m=mget(o.it.id);
+  main.innerHTML =
+    '<div class="deckwrap">'+
+      '<div class="progress">Card '+(state.idx+1)+' of '+state.deck.length+'  ·  '+o.cat+'</div>'+
+      '<div class="card" id="card">'+
+        '<div class="badge">'+(o.kind==='sentence'?'Stock sentence':'Key phrase')+'</div>'+
+        (state.flipped
+          ? '<div class="face-back">'+(o.kind==='sentence'?'<div class="cmt">When to use</div>':'')+'<div class="cm"></div></div>'
+          : '<div class="face-front"><div class="ct"></div></div>')+
+        '<div class="flipnote">tap to '+(state.flipped?'hide':'reveal')+'</div>'+
+      '</div>'+
+      '<div class="cardmarks">'+
+        '<button class="mk '+(m.imp?'on-imp':'')+'" id="cImp">⭐ Important</button>'+
+        '<button class="mk '+(m.rev?'on-rev':'')+'" id="cRev">🔁 Revise</button>'+
+      '</div>'+
+      '<div class="nav">'+
+        '<button class="navb sm" id="prev">‹ Prev</button>'+
+        '<button class="navb big" id="flip">'+(state.flipped?'Hide':'Reveal')+'</button>'+
+        '<button class="navb sm" id="next">Next ›</button>'+
+      '</div>'+
+      '<div class="nav"><button class="navb sm" id="shuffle">🔀 Shuffle</button></div>'+
+    '</div>';
+  if(state.flipped) main.querySelector('.cm').textContent=o.it[1]; else main.querySelector('.ct').textContent=o.it[0];
+  $('card').onclick=()=>{ state.flipped=!state.flipped; renderCards(); };
+  $('flip').onclick=(e)=>{ e.stopPropagation(); state.flipped=!state.flipped; renderCards(); };
+  $('prev').onclick=()=>{ state.idx=(state.idx-1+state.deck.length)%state.deck.length; state.flipped=false; renderCards(); };
+  $('next').onclick=()=>{ state.idx=(state.idx+1)%state.deck.length; state.flipped=false; renderCards(); };
+  $('shuffle').onclick=()=>{ for(let i=state.deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [state.deck[i],state.deck[j]]=[state.deck[j],state.deck[i]];} state.idx=0; state.flipped=false; render(); };
+  $('cImp').onclick=()=>{ toggle(o.it.id,'imp'); render(); };
+  $('cRev').onclick=()=>{ toggle(o.it.id,'rev'); render(); };
+}
+
+// wiring
+$('q').oninput=e=>{ state.q=e.target.value; if(state.mode==='cards'){state.idx=0;state.flipped=false;} render(); };
+$('clr').onclick=()=>{ $('q').value=''; state.q=''; render(); };
+$('typeSel').onchange=e=>{ state.type=e.target.value; buildCatOptions(); state.idx=0; state.flipped=false; render(); };
+$('catSel').onchange=e=>{ state.cat=e.target.value; state.idx=0; state.flipped=false; render(); };
+function setMode(m){ state.mode=m; $('tabList').classList.toggle('on',m==='list'); $('tabCards').classList.toggle('on',m==='cards'); state.idx=0; state.flipped=false; render(); }
+$('tabList').onclick=()=>setMode('list'); $('tabCards').onclick=()=>setMode('cards');
+function setMark(mk){ state.mark=mk; ['chAll','chImp','chRev'].forEach(id=>$(id).classList.remove('on')); ({all:'chAll',imp:'chImp',rev:'chRev'})[mk]&&$(({all:'chAll',imp:'chImp',rev:'chRev'})[mk]).classList.add('on'); state.idx=0; render(); }
+$('chAll').onclick=()=>setMark('all'); $('chImp').onclick=()=>setMark('imp'); $('chRev').onclick=()=>setMark('rev');
+$('reset').onclick=()=>{ if(confirm('Clear all ⭐ Important and 🔁 Revise marks on this device?')){ marks={}; saveMarks(); render(); } };
+document.addEventListener('keydown',e=>{ if(state.mode!=='cards')return; if(e.code==='Space'){e.preventDefault(); state.flipped=!state.flipped; renderCards();} else if(e.code==='ArrowRight'){$('next')&&$('next').click();} else if(e.code==='ArrowLeft'){$('prev')&&$('prev').click();} });
+
+buildCatOptions(); render();
+</script>
+</body>
+</html>

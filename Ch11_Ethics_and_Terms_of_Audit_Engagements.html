@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chapter 11 — Ethics and Terms of Audit Engagements</title>
+<style>
+  :root{ --navy:#1F3864; --blue:#2E5496; --accent:#2E75B6; --ink:#13233b; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        background:#0c1626; color:#13233b; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:18px; }
+  .frame{ width:min(960px,100%); }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; color:#cdd9ea; font-size:13px; letter-spacing:.04em; margin-bottom:8px; }
+  .topbar b{ color:#fff; }
+  .stage{ position:relative; border-radius:20px; overflow:hidden; aspect-ratio:16/9; box-shadow:0 24px 60px rgba(0,0,0,.45);
+          background:linear-gradient(135deg,#2E5496,#2E75B6); display:flex; flex-direction:column; }
+  .stage::after{ content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 80% 10%,rgba(255,255,255,.18),transparent 55%); pointer-events:none; }
+  .head{ position:relative; z-index:2; padding:22px 30px 0; color:#fff; }
+  .head .ch{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; opacity:.85; }
+  .head .ti{ font-size:clamp(18px,3vw,27px); font-weight:800; margin-top:3px; line-height:1.15; }
+  .head .tg{ font-size:clamp(13px,1.8vw,16px); font-style:italic; opacity:.9; margin-top:4px; }
+  .body{ position:relative; z-index:2; flex:1; display:flex; align-items:center; gap:26px; padding:10px 34px 18px; }
+  .icon{ font-size:clamp(54px,10vw,104px); line-height:1; filter:drop-shadow(0 8px 18px rgba(0,0,0,.35)); animation:float 3.4s ease-in-out infinite; flex:none; }
+  @keyframes float{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-12px) } }
+  .copy{ color:#fff; }
+  .key{ display:inline-block; font-size:clamp(15px,2.4vw,22px); font-weight:800; background:rgba(255,255,255,.16); padding:6px 14px; border-radius:999px; margin-bottom:12px; }
+  .cap{ font-size:clamp(15px,2.3vw,21px); line-height:1.5; font-weight:500; text-shadow:0 1px 2px rgba(0,0,0,.25); }
+  .scene-enter{ animation:rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(16px) } to{ opacity:1; transform:none } }
+  .pbar{ position:relative; z-index:2; height:5px; background:rgba(255,255,255,.18); }
+  .pfill{ height:100%; width:0; background:#fff; }
+  .controls{ display:flex; align-items:center; gap:10px; justify-content:center; padding:14px; background:#0e1c30; color:#cdd9ea; flex-wrap:wrap; }
+  .controls .sp{ flex:1 1 auto; }
+  .cbtn{ cursor:pointer; border:none; background:#1b2c46; color:#eaf1fb; width:42px; height:42px; border-radius:50%; font-size:17px; display:grid; place-items:center; transition:.15s; }
+  .cbtn:hover{ background:#27406a; }
+  .cbtn.big{ width:54px; height:54px; font-size:22px; background:var(--accent); }
+  .cbtn.big:hover{ background:#3a8bd0; }
+  .meta{ font-size:12px; color:#9fb2cd; min-width:120px; }
+  .toggle{ display:flex; align-items:center; gap:6px; font-size:12px; color:#cdd9ea; cursor:pointer; user-select:none; }
+  .dots{ display:flex; gap:6px; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.25); }
+  .dot.on{ background:#fff; }
+  .endcard{ position:absolute; inset:0; z-index:3; background:linear-gradient(135deg,#2E5496,#2E75B6); color:#fff; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; }
+  .endcard.show{ display:flex; }
+  .endcard h2{ font-size:clamp(20px,3vw,30px); }
+  .endcard p{ opacity:.9; margin-top:8px; max-width:560px; line-height:1.5; }
+  .btn{ cursor:pointer; border:none; border-radius:999px; padding:9px 16px; font-size:13px; font-weight:600; background:rgba(255,255,255,.2); color:#eaf1fb; }
+  .btn:hover{ background:rgba(255,255,255,.32); }
+  .hint{ color:#7e90ab; font-size:12px; text-align:center; margin-top:10px; }
+
+  .topbar .avatar{ display:inline-block; width:30px; height:30px; min-width:30px; border-radius:50%; border:2px solid #BF8F00; box-shadow:0 2px 5px rgba(0,0,0,.4); margin-left:10px; background-size:cover; background-position:center; vertical-align:middle; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="topbar"><span>CA INTERMEDIATE · <b>Auditing &amp; Ethics</b> · CA Sachhin Holmukhe</span><span>Chapter 11</span></div>
+    <div class="stage" id="stage">
+      <div class="head"><div class="ch" id="chLbl"></div><div class="ti" id="tiLbl"></div><div class="tg" id="tgLbl"></div></div>
+      <div class="body"><div class="icon" id="icon">✨</div>
+        <div class="copy"><span class="key" id="key"></span><div class="cap" id="cap"></div></div></div>
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <div class="endcard" id="endcard"><h2 id="endTitle"></h2><p id="endText"></p>
+        <div style="margin-top:18px"><button class="btn" id="replayBtn">↺ Replay</button></div></div>
+      <span class="avatar" style="background-image:url(data:image/jpeg;base64,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)" role="img" aria-label="CA Sachhin Holmukhe"></span>
+    </div>
+    <div class="controls">
+      <div class="meta" id="meta"></div><div class="sp"></div>
+      <button class="cbtn" id="prevBtn" title="Previous scene">⏮</button>
+      <button class="cbtn big" id="playBtn" title="Play / Pause">▶</button>
+      <button class="cbtn" id="nextBtn" title="Next scene">⏭</button>
+      <button class="cbtn" id="restartBtn" title="Restart">↺</button>
+      <div class="sp"></div>
+      <label class="toggle"><input type="checkbox" id="voiceChk" checked/> 🔊 Narrate aloud</label>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="hint">Press <b>Play</b> to start. Best in Chrome/Edge (for spoken narration). To make a clip, screen-record this window.</div>
+  </div>
+<script>
+const CHAPTERS = [{"ch":"Chapter 11","title":"Ethics and Terms of Audit Engagements","tagline":"The client he had to refuse","runtime":"~1 min 30 sec","accent":"2E5496","scenes":[{"time":"0:00","icon":"🤝","key":"A dream client","visual":"A big-fee offer; a famous company name.","narration":"Vikas was offered a dream client — large fees, a famous name, exactly the growth his small firm needed. He almost said yes."},{"time":"0:16","icon":"🚩","key":"Two warning bells","visual":"A money-laundering investigation file; inherited shares in the same company.","narration":"Then he learned the company was under investigation for money laundering — and that he’d inherited some of its shares from a relative. Two warning bells rang at once."},{"time":"0:36","icon":"🧭","key":"Independence at stake","visual":"Scales tipping; ‘independence’ and ‘good name’ highlighted.","narration":"The shares meant his own money now rode on the company — could he judge it without bias? The investigation meant its very integrity was in doubt. He walked away from the fees, to protect the one thing he couldn’t lose — his independence and good name."},{"time":"0:58","icon":"🏛️","key":"The foundation","visual":"Five pillars: Integrity, Objectivity, Competence, Confidentiality, Professional behaviour.","narration":"Ethics isn’t a side-topic — it’s the ground everything stands on. The profession sets fundamental principles, and warns of the threats that quietly erode independence: self-interest, self-review, advocacy, familiarity, intimidation."},{"time":"1:20","icon":"🚪","key":"Courage to say no","visual":"An engagement letter; a door politely closing.","narration":"And before any audit begins there’s a gate — agreeing the terms, checking the preconditions, knowing when to say no. In this chapter: the principles, independence, the five threats and safeguards, professional skepticism, SA 210, and quality control under SQC 1 and SA 220."}]}];
+let ci=0, si=0, playing=false, timer=null, fillRAF=null, voice=true;
+const $=id=>document.getElementById(id);
+const stage=$("stage");
+function dur(text){ return Math.max(6200, Math.min(15000, text.split(/\s+/).length*360+1400)); }
+function paintDots(){ $("dots").innerHTML = CHAPTERS[ci].scenes.map((_,i)=>'<span class="dot '+(i===si?'on':'')+'"></span>').join(""); }
+function render(){
+  const c=CHAPTERS[ci], s=c.scenes[si];
+  $("endcard").classList.remove("show");
+  $("chLbl").textContent=c.ch+"  ·  "+c.runtime;
+  $("tiLbl").textContent=c.title; $("tgLbl").textContent="“"+c.tagline+"”";
+  $("icon").textContent=s.icon; $("key").textContent=s.key; $("cap").textContent=s.narration;
+  const body=stage.querySelector(".body"); body.classList.remove("scene-enter"); void body.offsetWidth; body.classList.add("scene-enter");
+  $("meta").textContent="Scene "+(si+1)+" / "+c.scenes.length;
+  paintDots(); $("pfill").style.transition='none'; $("pfill").style.width='0%';
+}
+function clearTimers(){ if(timer){clearTimeout(timer);timer=null;} if(window.speechSynthesis) speechSynthesis.cancel(); if(fillRAF) cancelAnimationFrame(fillRAF); }
+function runFill(ms){ const start=performance.now(); function step(t){ const p=Math.min(1,(t-start)/ms); $("pfill").style.transition='none'; $("pfill").style.width=(p*100)+'%'; if(p<1&&playing) fillRAF=requestAnimationFrame(step);} fillRAF=requestAnimationFrame(step); }
+function speakAndAdvance(){
+  const s=CHAPTERS[ci].scenes[si], ms=dur(s.narration); runFill(ms);
+  if(voice && 'speechSynthesis' in window){
+    const u=new SpeechSynthesisUtterance(s.narration); u.rate=0.98; u.pitch=1.0;
+    let done=false; const go=()=>{ if(done)return; done=true; next(true); }; u.onend=go;
+    timer=setTimeout(go, ms+1800); speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } else { timer=setTimeout(()=>next(true), ms); }
+}
+function play(){ playing=true; $("playBtn").textContent="⏸"; clearTimers(); speakAndAdvance(); }
+function pause(){ playing=false; $("playBtn").textContent="▶"; clearTimers(); }
+function toggle(){ playing?pause():play(); }
+function next(auto){ clearTimers(); const c=CHAPTERS[ci]; if(si<c.scenes.length-1){ si++; render(); if(playing) speakAndAdvance(); } else { showEnd(); } }
+function prev(){ clearTimers(); if(si>0) si--; render(); if(playing) speakAndAdvance(); }
+function restart(){ clearTimers(); si=0; render(); play(); }
+function showEnd(){ playing=false; $("playBtn").textContent="▶"; clearTimers(); const c=CHAPTERS[ci];
+  $("endTitle").textContent="✓  "+c.ch; $("endText").textContent="That’s the context for “"+c.title+".” Now open the chapter and dive into the detail."; $("endcard").classList.add("show"); }
+$("playBtn").onclick=toggle; $("nextBtn").onclick=()=>next(false); $("prevBtn").onclick=prev; $("restartBtn").onclick=restart;
+$("voiceChk").onchange=e=>{ voice=e.target.checked; if(playing){ clearTimers(); speakAndAdvance(); } };
+$("replayBtn").onclick=()=>{ si=0; render(); play(); };
+document.addEventListener("keydown",e=>{ if(e.code==="Space"){e.preventDefault();toggle();} else if(e.code==="ArrowRight") next(false); else if(e.code==="ArrowLeft") prev(); });
+render(); if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=()=>{}; speechSynthesis.getVoices(); }
+</script>
+</body>
+</html>

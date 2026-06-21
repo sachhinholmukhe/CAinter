@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F3864">
+<title>CA Inter · Audit — Chapter 6 Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F1EA; --card:#FFFFFF; --ink:#222A35; --muted:#6A7180;
+    --navy:#1F3864; --navy2:#284a82; --accent:#2E75B6; --gold:#BF8F00;
+    --green:#2F7D32; --green-bg:#E7F2E3; --red:#B23A2E; --red-bg:#FBE9E6;
+    --soft:#EBF0F8; --line:#E4DFD4; --shadow:0 10px 30px rgba(31,56,100,.10);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:'Mulish',system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #fbfaf6 0%, rgba(251,250,246,0) 60%),
+      repeating-linear-gradient(135deg, rgba(31,56,100,.020) 0 2px, transparent 2px 22px),
+      var(--paper);
+    min-height:100dvh;display:flex;flex-direction:column;align-items:center;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+  .wrap{width:100%;max-width:520px;padding:14px 16px 28px;display:flex;flex-direction:column;min-height:100dvh}
+
+  /* Header */
+  header{padding:6px 2px 12px}
+  .kick{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:800}
+  .ttl{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);font-size:25px;line-height:1.1;margin:3px 0 0;letter-spacing:-.01em}
+  .ttl b{color:var(--gold);font-weight:600}
+  .meta{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .bar{flex:1;height:8px;border-radius:99px;background:#e6e2d8;overflow:hidden;border:1px solid var(--line)}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--navy));transition:width .35s ease}
+  .count{font-weight:800;color:var(--navy);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .score{font-weight:800;color:var(--green);font-size:13px;white-space:nowrap}
+
+  /* Card */
+  .stage{flex:1;display:flex;align-items:flex-start;padding-top:6px}
+  .card{
+    width:100%;background:var(--card);border-radius:18px;box-shadow:var(--shadow);
+    border:1px solid #efece4;overflow:hidden;position:relative;animation:pop .32s cubic-bezier(.2,.7,.2,1)
+  }
+  .card:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--navy),var(--accent) 60%,var(--gold))}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+  .card.swipe-l{animation:outL .22s ease forwards}
+  .card.swipe-r{animation:outR .22s ease forwards}
+  @keyframes outL{to{opacity:0;transform:translateX(-26px)}}
+  @keyframes outR{to{opacity:0;transform:translateX(26px)}}
+  .cbody{padding:18px 18px 20px}
+  .pill{display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
+    color:#7a5c00;background:#FBF1D2;border:1px solid #efdfa6;padding:5px 10px;border-radius:99px}
+  .qno{float:right;font-size:12px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:3px}
+  .q{font-family:'Fraunces',serif;font-weight:500;font-size:19px;line-height:1.42;color:var(--navy);margin:14px 0 16px}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;cursor:pointer;
+    background:#fbfaf7;border:1.5px solid #e7e2d8;border-radius:13px;padding:12px 13px;font:inherit;color:var(--ink);
+    font-size:14.5px;line-height:1.34;transition:border-color .15s,background .15s,transform .08s}
+  .opt:active{transform:scale(.992)}
+  .opt .lab{flex:none;width:24px;height:24px;border-radius:7px;background:var(--soft);color:var(--navy);
+    font-weight:800;font-size:13px;display:grid;place-items:center;margin-top:-1px}
+  .opt.correct{background:var(--green-bg);border-color:var(--green)}
+  .opt.correct .lab{background:var(--green);color:#fff}
+  .opt.wrong{background:var(--red-bg);border-color:var(--red)}
+  .opt.wrong .lab{background:var(--red);color:#fff}
+  .opt.dim{opacity:.62}
+  .opt[disabled]{cursor:default}
+
+  .exp{margin-top:15px;border-radius:13px;background:linear-gradient(180deg,#f6f9ff,#eef3fb);
+    border:1px solid #d7e3f5;border-left:5px solid var(--accent);padding:13px 14px;
+    max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .3s ease,margin .3s ease}
+  .exp.show{max-height:420px;opacity:1}
+  .exp .verdict{font-weight:800;font-size:13px;letter-spacing:.02em;margin-bottom:5px}
+  .exp .verdict.ok{color:var(--green)} .exp .verdict.no{color:var(--red)}
+  .exp p{margin:0;font-size:14px;line-height:1.5;color:#33404f}
+  .exp .ans{color:var(--navy);font-weight:700}
+
+  /* Controls */
+  .controls{margin-top:16px;display:flex;align-items:center;gap:10px}
+  .btn{flex:1;border:none;border-radius:13px;padding:14px 12px;font:inherit;font-weight:800;font-size:15px;cursor:pointer;
+    transition:transform .08s,filter .15s,opacity .15s}
+  .btn:active{transform:translateY(1px)}
+  .btn.prev{flex:none;width:54px;background:#fff;border:1.5px solid var(--line);color:var(--navy)}
+  .btn.next{background:var(--navy);color:#fff;box-shadow:0 6px 16px rgba(31,56,100,.25)}
+  .btn.next:disabled{opacity:.45;box-shadow:none}
+  .btn.reveal{background:#fff;border:1.5px solid var(--gold);color:#7a5c00;flex:none;width:auto;padding:14px 16px}
+  .tools{margin-top:11px;display:flex;justify-content:center;gap:18px}
+  .tool{background:none;border:none;font:inherit;font-weight:700;font-size:12.5px;color:var(--muted);
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;letter-spacing:.02em}
+  .tool:active{color:var(--navy)}
+  .tool svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+  .hint{text-align:center;color:#9a9384;font-size:11.5px;margin-top:14px;letter-spacing:.02em}
+
+  /* Done screen */
+  .done{width:100%;background:var(--card);border-radius:18px;box-shadow:var(--shadow);border:1px solid #efece4;
+    padding:30px 22px;text-align:center;animation:pop .35s ease}
+  .done .big{font-family:'Fraunces',serif;font-size:54px;font-weight:600;color:var(--navy);line-height:1}
+  .done .big small{font-size:24px;color:var(--muted)}
+  .done h2{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);margin:6px 0 2px;font-size:23px}
+  .done p{color:var(--muted);font-size:14px;margin:4px 0 18px}
+  .done .row{display:flex;gap:10px}
+  .ring{width:118px;height:118px;margin:4px auto 8px;border-radius:50%;display:grid;place-items:center;
+    background:conic-gradient(var(--gold) var(--deg,0deg), #ece7da 0deg)}
+  .ring .inner{width:96px;height:96px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 1px #efece4}
+  .hidden{display:none!important}
+
+  .hbar{ display:flex; align-items:center; gap:10px; }
+  .htext{ flex:1; min-width:0; }
+  .avatar{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid #BF8F00; box-shadow:0 2px 6px rgba(0,0,0,.28); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="hbar"><div class="htext">
+  <div class="kick">CA Intermediate · Auditing &amp; Ethics</div>
+  <div class="ttl">Chapter 6 — <b>Flashcards</b><br>Audit Documentation</div>
+    </div>
+      <img class="avatar" src="data:image/jpeg;base64,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" alt="CA Sachhin Holmukhe"/>
+    </div>
+    <div class="meta">
+      <div class="bar"><i id="prog"></i></div>
+      <div class="count" id="count">1 / 1</div>
+      <div class="score" id="score">✓ 0</div>
+    </div>
+  </header>
+
+  <div class="stage" id="stage"><!-- card injected --></div>
+
+  <div id="navwrap">
+    <div class="controls">
+      <button class="btn prev" id="prev" aria-label="Previous">‹</button>
+      <button class="btn reveal" id="reveal">Reveal</button>
+      <button class="btn next" id="next" disabled>Next ›</button>
+    </div>
+    <div class="tools">
+      <button class="tool" id="shuffle"><svg viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg>Shuffle</button>
+      <button class="tool" id="restart"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg>Restart</button>
+    </div>
+    <div class="hint">Tap an option to check · swipe left/right to move</div>
+  </div>
+</div>
+
+<script>
+const DECK = [
+ {c:"SA 230", q:"Audit documentation is dealt with by:",
+  o:["SA 200","SA 210","SA 230","SA 240"], a:2,
+  e:"SA 230 ‘Audit Documentation’ deals with the auditor’s responsibility to prepare audit documentation for an audit of financial statements."},
+ {c:"Meaning", q:"‘Audit documentation’ means:",
+  o:["The financial statements","The record of audit procedures performed, evidence obtained and conclusions reached (the working papers)","The engagement letter only","The audit report"], a:1,
+  e:"Audit documentation (working papers) is the record of procedures performed, relevant evidence obtained, and conclusions reached."},
+ {c:"Purposes", q:"Which of the following is a purpose of audit documentation?",
+  o:["Replacing audit evidence","Providing evidence of the basis for the auditor’s conclusions and that the audit was planned & performed per the SAs","Preparing the client’s books","Guaranteeing no fraud"], a:1,
+  e:"Documentation evidences the basis for the auditor’s conclusions and that the audit complied with the SAs and legal/regulatory requirements; it also aids planning, supervision and review."},
+ {c:"Sufficiency of documentation", q:"Audit documentation should be sufficient to enable an experienced auditor, with no previous connection to the audit, to understand:",
+  o:["The client’s marketing strategy","The nature, timing and extent of procedures, their results & evidence, and significant matters and conclusions","The auditor’s personal opinion of management","Only the audit fee"], a:1,
+  e:"SA 230 sets the ‘experienced auditor’ test: documentation must let such a person understand the work done, results, evidence, significant matters and conclusions."},
+ {c:"Audit Note Book", q:"The Audit Note Book is used to record:",
+  o:["The financial statements","Significant matters, queries, errors/irregularities and points needing clarification or future reference","The client’s minutes","The audit fee only"], a:1,
+  e:"The Audit Note Book records unresolved queries, mistakes/irregularities, significant observations and matters for future reference."},
+ {c:"Permanent vs current file", q:"The Memorandum of Association, copies of long-term contracts and the organisation chart are typically kept in the:",
+  o:["Current audit file","Permanent audit file","Engagement letter","Management representation"], a:1,
+  e:"The permanent audit file holds matters of continuing importance (e.g., MOA/AOA, long-term contracts, organisation structure); the current file holds items relating to the current period."},
+ {c:"Current file", q:"Which of the following is generally kept in the current audit file?",
+  o:["The Articles of Association","The current year’s audit programme, working papers and the financial statements","A copy of the lease deed (long-term)","The group structure"], a:1,
+  e:"The current file contains the current period’s audit programme, correspondence, working papers, analyses and the financial statements with the audit report."},
+ {c:"Completion Memorandum", q:"A Completion Memorandum (audit documentation summary) is useful because it:",
+  o:["Replaces the audit file","Summarises the significant matters identified and how they were addressed, aiding review & completion","Prepares the accounts","Is sent to shareholders"], a:1,
+  e:"A Completion Memorandum summarises significant matters and their resolution, facilitating review and confirming the audit objectives are met."},
+ {c:"Misstatements — SA 450", q:"Documentation of misstatements identified during the audit (the trivial threshold, accumulated misstatements, and conclusions on uncorrected ones) is required by:",
+  o:["SA 230 read with SA 450","SA 500","SA 700","SA 260"], a:0,
+  e:"SA 450 read with SA 230 requires documenting the clearly-trivial threshold, all accumulated misstatements, and the conclusion (with basis) on uncorrected misstatements."},
+ {c:"Assembly of file — SQC 1", q:"The final audit file should be assembled on a timely basis, ordinarily within:",
+  o:["30 days of the report date","60 days after the date of the auditor’s report","90 days of the year-end","6 months of the year-end"], a:1,
+  e:"Per SQC 1, the administrative process of assembling the final audit file should be completed ordinarily within 60 days after the date of the auditor’s report."},
+ {c:"Retention — SQC 1", q:"Audit documentation should be retained for a period of not less than:",
+  o:["3 years from the report date","5 years from the year-end","7 years from the date of the auditor’s report","10 years from incorporation"], a:2,
+  e:"SQC 1 requires retention of audit documentation for not less than seven years from the date of the auditor’s report."},
+ {c:"Form of documentation", q:"Audit documentation may be:",
+  o:["Only on paper","On paper, in electronic form, or on other media","Only electronic","Oral"], a:1,
+  e:"There is no requirement that documentation be on paper; it may be on paper, electronic or other media."},
+ {c:"Changes after assembly", q:"After the assembly of the final audit file is complete, the auditor shall NOT:",
+  o:["Retain the file","Delete or discard audit documentation before the end of its retention period","Review the file","Index the file"], a:1,
+  e:"After assembly, the auditor must not delete/discard documentation before the retention period ends; later additions must be documented with who, when and why."},
+ {c:"Ownership & lien", q:"Audit working papers are:",
+  o:["The property of the client","The property of the auditor, who may exercise a lien over them for unpaid fees in respect of work done","Public documents","Owned by the shareholders"], a:1,
+  e:"Working papers are the auditor’s property; the auditor may exercise a particular lien over documents in possession for unpaid fees relating to that work."},
+ {c:"Confidentiality", q:"In relation to working papers, the auditor must:",
+  o:["Share them freely with anyone","Maintain confidentiality and safe custody of the documentation","Publish them","Hand them to competitors"], a:1,
+  e:"The auditor must keep client information confidential and ensure the safe custody of audit documentation (SQC 1 / Code of Ethics)."},
+ {c:"Documenting compliance", q:"Audit documentation provides evidence that the audit was:",
+  o:["Cheap","Planned and performed in accordance with the SAs and applicable legal & regulatory requirements","Completed quickly","Approved by management"], a:1,
+  e:"A key purpose of documentation is to evidence that the audit was planned and performed in accordance with the SAs and applicable requirements."},
+];
+
+let order = DECK.map((_,i)=>i);
+let pos = 0;
+const answered = new Array(DECK.length).fill(null); // stores chosen index (per deck index)
+const stage = document.getElementById('stage');
+const navwrap = document.getElementById('navwrap');
+const elProg = document.getElementById('prog');
+const elCount = document.getElementById('count');
+const elScore = document.getElementById('score');
+const btnPrev = document.getElementById('prev');
+const btnNext = document.getElementById('next');
+const btnReveal = document.getElementById('reveal');
+const LAB=['A','B','C','D'];
+
+function scored(){return answered.filter((v,i)=>v!==null && v==='reveal'?false:(v!==null && v===DECK[i].a)).length;}
+function correctCount(){let n=0;answered.forEach((v,i)=>{if(typeof v==='number' && v===DECK[i].a)n++});return n;}
+function attempted(){return answered.filter(v=>typeof v==='number').length;}
+
+function render(anim){
+  if(pos>=order.length){return finish();}
+  const di = order[pos];
+  const card = DECK[di];
+  const chosen = answered[di]; // number | 'reveal' | null
+  const locked = chosen!==null;
+  elProg.style.width = ((pos)/order.length*100)+'%';
+  elCount.textContent = (pos+1)+' / '+order.length;
+  elScore.textContent = '✓ '+correctCount();
+
+  const opts = card.o.map((txt,i)=>{
+    let cls='opt';
+    if(locked){
+      if(i===card.a) cls+=' correct';
+      else if(typeof chosen==='number' && i===chosen) cls+=' wrong';
+      else cls+=' dim';
+    }
+    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}>
+        <span class="lab">${LAB[i]}</span><span>${txt}</span></button>`;
+  }).join('');
+
+  let expCls = locked?'exp show':'exp';
+  let verdict='';
+  if(locked){
+    if(chosen==='reveal') verdict=`<div class="verdict ok">Answer</div>`;
+    else if(chosen===card.a) verdict=`<div class="verdict ok">✓ Correct</div>`;
+    else verdict=`<div class="verdict no">✗ Not quite</div>`;
+  }
+  const expHtml = `<div class="${expCls}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div>`;
+
+  stage.innerHTML = `<div class="card${anim?'':''}" id="card">
+      <div class="cbody">
+        <span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
+        <div class="q">${card.q}</div>
+        <div class="opts">${opts}</div>
+        ${expHtml}
+      </div></div>`;
+
+  stage.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
+  });
+  btnPrev.disabled = pos===0;
+  btnNext.disabled = !locked;
+  btnNext.textContent = (pos===order.length-1)?'Finish':'Next ›';
+  btnReveal.style.visibility = locked?'hidden':'visible';
+}
+
+function choose(i){
+  const di=order[pos];
+  if(answered[di]!==null) return;
+  answered[di]=i;
+  render();
+}
+function reveal(){
+  const di=order[pos];
+  if(answered[di]!==null) return;
+  answered[di]='reveal';
+  render();
+}
+function go(d,dir){
+  const card=document.getElementById('card');
+  if(card && dir){ card.classList.add(dir==='next'?'swipe-l':'swipe-r'); }
+  setTimeout(()=>{ pos=Math.max(0,Math.min(order.length,pos+d)); render(true); window.scrollTo({top:0,behavior:'smooth'}); }, dir?170:0);
+}
+function finish(){
+  elProg.style.width='100%'; elCount.textContent=order.length+' / '+order.length;
+  const att=attempted(), cor=correctCount();
+  const pct = att? Math.round(cor/att*100):0;
+  elScore.textContent='✓ '+cor;
+  navwrap.classList.add('hidden');
+  stage.innerHTML = `<div class="done">
+    <div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
+    <h2>Deck complete</h2>
+    <p>${cor} correct out of ${att} attempted · ${DECK.length} cards</p>
+    <div class="row">
+      <button class="btn next" id="again">Restart</button>
+      <button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button>
+    </div>
+  </div>`;
+  document.getElementById('again').onclick=()=>{restart(false);};
+  document.getElementById('shuf2').onclick=()=>{restart(true);};
+}
+function restart(shuf){
+  for(let i=0;i<answered.length;i++) answered[i]=null;
+  order = DECK.map((_,i)=>i);
+  if(shuf){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
+  pos=0; navwrap.classList.remove('hidden'); render(true); window.scrollTo({top:0});
+}
+
+btnPrev.onclick=()=>go(-1,'prev');
+btnNext.onclick=()=>go(1,'next');
+btnReveal.onclick=reveal;
+document.getElementById('shuffle').onclick=()=>restart(true);
+document.getElementById('restart').onclick=()=>restart(false);
+
+// swipe
+let sx=0,sy=0;
+stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.5){
+    if(dx<0 && !btnNext.disabled) go(1,'next');
+    else if(dx>0 && pos>0) go(-1,'prev');
+  }
+},{passive:true});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight' && !btnNext.disabled) go(1,'next');
+  if(e.key==='ArrowLeft' && pos>0) go(-1,'prev');
+  if(['1','2','3','4'].includes(e.key)) choose(parseInt(e.key,10)-1);
+  if(e.key.toLowerCase()==='r') reveal();
+});
+
+render(true);
+</script>
+</body>
+</html>

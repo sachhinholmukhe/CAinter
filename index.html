@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#1F3864"/>
+<title>Auditing & Ethics — Digital Learning Companions</title>
+<style>
+  :root{ --navy:#1F3864; --blue:#2E5496; --accent:#2E75B6; --green:#548235; --gold:#BF8F00; --amber:#C55A11;
+         --ink:#13233b; --muted:#6a7a90; --line:#e4eaf2; --bg:#eef2f7; --card:#ffffff; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); -webkit-text-size-adjust:100%; padding-bottom:40px; }
+  header{ background:linear-gradient(135deg,var(--navy),var(--accent)); color:#fff; padding:18px 16px 22px; box-shadow:0 4px 18px rgba(0,0,0,.2); }
+  .hbar{ display:flex; align-items:center; gap:14px; max-width:1100px; margin:0 auto; }
+  .htext{ flex:1; min-width:0; }
+  .avatar{ width:56px; height:56px; border-radius:50%; flex:0 0 56px; object-fit:cover; border:3px solid var(--gold); box-shadow:0 2px 9px rgba(0,0,0,.35); }
+  .kick{ font-size:12px; letter-spacing:.18em; color:#ffe9b0; font-weight:800; }
+  .h1{ font-size:24px; font-weight:800; margin-top:3px; letter-spacing:.01em; }
+  .tag{ font-size:13px; opacity:.92; margin-top:3px; font-style:italic; }
+  .by{ font-size:13px; font-weight:700; color:#ffe9b0; margin-top:2px; }
+  main{ max-width:1100px; margin:0 auto; padding:14px; }
+  .intro{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 15px; font-size:14px; line-height:1.55; color:#2b3d59; margin-bottom:14px; }
+  .intro b{ color:var(--navy); }
+  h2.sec{ font-size:14px; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); margin:18px 6px 10px; font-weight:800; }
+  .grid{ display:grid; gap:12px; grid-template-columns:1fr; }
+  @media(min-width:680px){ .grid{ grid-template-columns:repeat(2,1fr); } .grid.three{ grid-template-columns:repeat(3,1fr); } }
+  @media(min-width:980px){ .grid.four{ grid-template-columns:repeat(4,1fr); } }
+
+  .hcard{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; display:flex; gap:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+  .hcard .hicon{ flex:0 0 54px; height:54px; border-radius:14px; display:grid; place-items:center; font-size:26px; background:linear-gradient(135deg,#dceaf8,#bcd8f3); color:var(--navy); }
+  .hbody{ flex:1; min-width:0; }
+  .htag{ font-size:10.5px; font-weight:800; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; }
+  .httl{ font-size:16px; font-weight:800; color:var(--ink); margin-top:2px; line-height:1.25; }
+  .hsub{ font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.45; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:11px 13px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+  .card .cnum{ font-size:11px; font-weight:800; color:var(--gold); letter-spacing:.08em; }
+  .card .cttl{ font-size:14px; font-weight:700; color:var(--ink); line-height:1.3; margin-top:1px; }
+  .card .cmeta{ font-size:11.5px; color:var(--muted); font-style:italic; margin-top:2px; }
+
+  .ctlrow{ display:flex; gap:7px; margin-top:9px; flex-wrap:wrap; }
+  .btn{ border:none; cursor:pointer; border-radius:8px; padding:7px 11px; font-size:12.5px; font-weight:700; text-decoration:none; display:inline-block; line-height:1; }
+  .btn.open{ background:var(--accent); color:#fff; }
+  .btn.open:hover{ background:#23618f; }
+  .btn.copy{ background:#eef3fb; color:var(--blue); border:1px solid #cfdef3; }
+  .btn.copy.ok{ background:#e6f4dc; color:#2f5417; border-color:#bcdba6; }
+  .fname{ font-size:10.5px; color:#9aa6b8; font-family:Consolas,Menlo,monospace; margin-top:7px; word-break:break-all; }
+
+  .qrtip{ background:#fff7e0; border:1px solid #f0d899; border-radius:12px; padding:11px 13px; font-size:12.5px; line-height:1.5; color:#6b4f0a; margin:14px 6px 6px; }
+  .qrtip b{ color:#7a4f00; }
+  .baseurl{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; margin:14px 6px; }
+  .baseurl label{ font-size:12px; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.08em; }
+  .baseurl input{ width:100%; margin-top:6px; padding:9px 10px; font-size:13.5px; border:1px solid var(--line); border-radius:9px; font-family:Consolas,Menlo,monospace; }
+  .baseurl .hint{ font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.45; }
+  .baseurl input.ok{ border-color:#bcdba6; background:#f5fbef; }
+
+  .foot{ text-align:center; font-size:11px; color:var(--muted); padding:20px 12px 6px; line-height:1.55; }
+  .toast{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--navy); color:#fff; padding:9px 14px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; transition:.25s; pointer-events:none; box-shadow:0 6px 18px rgba(0,0,0,.3); z-index:50; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  @media print{ .btn,.copy,.baseurl,.qrtip{display:none!important;} }
+</style>
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <img class="avatar" src="data:image/jpeg;base64,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" alt="CA Sachhin Holmukhe"/>
+    <div class="htext">
+      <div class="kick">CA INTERMEDIATE · PAPER 5 · GROUP II</div>
+      <div class="h1">Auditing &amp; Ethics — Digital Learning Companions</div>
+      <div class="tag">Understand it.  Remember it.  Score it.</div>
+      <div class="by">by CA Sachhin Holmukhe</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    Every digital companion to the book lives here. Tap <b>Open</b> to use it, or tap <b>Copy link</b> to copy that item’s URL — paste it into any free QR generator (e.g., qr-code-generator.com) to print a per-item QR for your students or course material. Set a <b>base URL</b> below to make the copied links absolute (recommended).
+  </div>
+
+  <div class="baseurl">
+    <label for="base">Base URL (where these files are hosted)</label>
+    <input id="base" type="text" placeholder="https://your-site.netlify.app/  (leave blank to copy file names only)"/>
+    <div class="hint">Once set, every “Copy link” button copies the full URL like <span style="font-family:Consolas,Menlo,monospace">https://your-site.netlify.app/Audit_Language_Bank.html</span>. Saved on this device, so set it once.</div>
+  </div>
+
+  <h2 class="sec">✨ Hero tools — use them daily</h2>
+  <div class="grid three">
+    
+      <div class="hcard" data-file="Audit_Language_Bank.html">
+        <div class="hicon">🗣️</div>
+        <div class="hbody">
+          <div class="htag">SPEAK THE LANGUAGE</div>
+          <div class="httl">Audit Language Bank</div>
+          <div class="hsub">150+ exam phrases & stock sentences, with flashcards, search and mark-to-revise.</div>
+          <div class="ctlrow">
+            <a class="btn open" href="Audit_Language_Bank.html" target="_blank">Open</a>
+            <button class="btn copy" data-file="Audit_Language_Bank.html">Copy link</button>
+          </div>
+          <div class="fname">Audit_Language_Bank.html</div>
+        </div>
+      </div>
+    
+      <div class="hcard" data-file="Audit_Revision_Tracker.html">
+        <div class="hicon">✅</div>
+        <div class="hbody">
+          <div class="htag">TRACK YOUR REVISION</div>
+          <div class="httl">Revision Tracker</div>
+          <div class="hsub">132 topics, each with a 1–3 line note. Mark First/Second/Final read, flag Revise or Confident, get a ‘due to revisit’ nudge.</div>
+          <div class="ctlrow">
+            <a class="btn open" href="Audit_Revision_Tracker.html" target="_blank">Open</a>
+            <button class="btn copy" data-file="Audit_Revision_Tracker.html">Copy link</button>
+          </div>
+          <div class="fname">Audit_Revision_Tracker.html</div>
+        </div>
+      </div>
+    
+      <div class="hcard" data-file="Auditing_Ethics_Chapter_Explainers.html">
+        <div class="hicon">🎬</div>
+        <div class="hbody">
+          <div class="htag">WATCH THE CONCEPT</div>
+          <div class="httl">Chapter Explainers (all 11)</div>
+          <div class="hsub">Short auto-playing scenes for every chapter; optional voice narration. The ‘why’ in 1–2 minutes.</div>
+          <div class="ctlrow">
+            <a class="btn open" href="Auditing_Ethics_Chapter_Explainers.html" target="_blank">Open</a>
+            <button class="btn copy" data-file="Auditing_Ethics_Chapter_Explainers.html">Copy link</button>
+          </div>
+          <div class="fname">Auditing_Ethics_Chapter_Explainers.html</div>
+        </div>
+      </div>
+  </div>
+
+  <h2 class="sec">🎬 Per-chapter explainers</h2>
+  <div class="grid three">
+      <div class="card" data-file="Ch01_Nature_Objective_and_Scope_of_Audit.html">
+        <div class="cnum">Ch 1</div>
+        <div class="cttl">Nature, Objective & Scope of Audit</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch01_Nature_Objective_and_Scope_of_Audit.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch01_Nature_Objective_and_Scope_of_Audit.html">Copy link</button>
+        </div>
+        <div class="fname">Ch01_Nature_Objective_and_Scope_of_Audit.html</div>
+      </div>
+      <div class="card" data-file="Ch02_Audit_Strategy_Planning_and_Programme.html">
+        <div class="cnum">Ch 2</div>
+        <div class="cttl">Audit Strategy, Planning & Programme</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch02_Audit_Strategy_Planning_and_Programme.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch02_Audit_Strategy_Planning_and_Programme.html">Copy link</button>
+        </div>
+        <div class="fname">Ch02_Audit_Strategy_Planning_and_Programme.html</div>
+      </div>
+      <div class="card" data-file="Ch03_Risk_Assessment_and_Internal_Control.html">
+        <div class="cnum">Ch 3</div>
+        <div class="cttl">Risk Assessment & Internal Control</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch03_Risk_Assessment_and_Internal_Control.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch03_Risk_Assessment_and_Internal_Control.html">Copy link</button>
+        </div>
+        <div class="fname">Ch03_Risk_Assessment_and_Internal_Control.html</div>
+      </div>
+      <div class="card" data-file="Ch04_Audit_Evidence.html">
+        <div class="cnum">Ch 4</div>
+        <div class="cttl">Audit Evidence</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch04_Audit_Evidence.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch04_Audit_Evidence.html">Copy link</button>
+        </div>
+        <div class="fname">Ch04_Audit_Evidence.html</div>
+      </div>
+      <div class="card" data-file="Ch05_Audit_of_Items_of_Financial_Statements.html">
+        <div class="cnum">Ch 5</div>
+        <div class="cttl">Audit of Items of Financial Statements</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch05_Audit_of_Items_of_Financial_Statements.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch05_Audit_of_Items_of_Financial_Statements.html">Copy link</button>
+        </div>
+        <div class="fname">Ch05_Audit_of_Items_of_Financial_Statements.html</div>
+      </div>
+      <div class="card" data-file="Ch06_Audit_Documentation.html">
+        <div class="cnum">Ch 6</div>
+        <div class="cttl">Audit Documentation</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch06_Audit_Documentation.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch06_Audit_Documentation.html">Copy link</button>
+        </div>
+        <div class="fname">Ch06_Audit_Documentation.html</div>
+      </div>
+      <div class="card" data-file="Ch07_Completion_and_Review.html">
+        <div class="cnum">Ch 7</div>
+        <div class="cttl">Completion and Review</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch07_Completion_and_Review.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch07_Completion_and_Review.html">Copy link</button>
+        </div>
+        <div class="fname">Ch07_Completion_and_Review.html</div>
+      </div>
+      <div class="card" data-file="Ch08_Audit_Report.html">
+        <div class="cnum">Ch 8</div>
+        <div class="cttl">Audit Report</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch08_Audit_Report.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch08_Audit_Report.html">Copy link</button>
+        </div>
+        <div class="fname">Ch08_Audit_Report.html</div>
+      </div>
+      <div class="card" data-file="Ch09_Special_Features_of_Audit_of_Different_Entities.html">
+        <div class="cnum">Ch 9</div>
+        <div class="cttl">Special Features — Audit of Different Entities</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch09_Special_Features_of_Audit_of_Different_Entities.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch09_Special_Features_of_Audit_of_Different_Entities.html">Copy link</button>
+        </div>
+        <div class="fname">Ch09_Special_Features_of_Audit_of_Different_Entities.html</div>
+      </div>
+      <div class="card" data-file="Ch10_Audit_of_Banks.html">
+        <div class="cnum">Ch 10</div>
+        <div class="cttl">Audit of Banks</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch10_Audit_of_Banks.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch10_Audit_of_Banks.html">Copy link</button>
+        </div>
+        <div class="fname">Ch10_Audit_of_Banks.html</div>
+      </div>
+      <div class="card" data-file="Ch11_Ethics_and_Terms_of_Audit_Engagements.html">
+        <div class="cnum">Ch 11</div>
+        <div class="cttl">Ethics & Terms of Audit Engagements</div>
+        <div class="cmeta">Chapter Explainer</div>
+        <div class="ctlrow">
+          <a class="btn open" href="Ch11_Ethics_and_Terms_of_Audit_Engagements.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="Ch11_Ethics_and_Terms_of_Audit_Engagements.html">Copy link</button>
+        </div>
+        <div class="fname">Ch11_Ethics_and_Terms_of_Audit_Engagements.html</div>
+      </div></div>
+
+  <h2 class="sec">📇 Per-chapter flashcards</h2>
+  <div class="grid three">
+      <div class="card" data-file="CA_Inter_Audit_Ch1_Flashcards.html">
+        <div class="cnum">Ch 1</div>
+        <div class="cttl">Nature, Objective & Scope of Audit</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch1_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch1_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch1_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch2_Flashcards.html">
+        <div class="cnum">Ch 2</div>
+        <div class="cttl">Audit Strategy, Planning & Programme</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch2_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch2_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch2_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch3_Flashcards.html">
+        <div class="cnum">Ch 3</div>
+        <div class="cttl">Risk Assessment & Internal Control</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch3_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch3_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch3_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch4_Flashcards.html">
+        <div class="cnum">Ch 4</div>
+        <div class="cttl">Audit Evidence</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch4_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch4_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch4_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch5_Flashcards.html">
+        <div class="cnum">Ch 5</div>
+        <div class="cttl">Audit of Items of Financial Statements</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch5_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch5_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch5_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch6_Flashcards.html">
+        <div class="cnum">Ch 6</div>
+        <div class="cttl">Audit Documentation</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch6_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch6_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch6_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch7_Flashcards.html">
+        <div class="cnum">Ch 7</div>
+        <div class="cttl">Completion and Review</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch7_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch7_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch7_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch8_Flashcards.html">
+        <div class="cnum">Ch 8</div>
+        <div class="cttl">Audit Report</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch8_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch8_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch8_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch9_Flashcards.html">
+        <div class="cnum">Ch 9</div>
+        <div class="cttl">Special Features — Audit of Different Entities</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch9_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch9_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch9_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch10_Flashcards.html">
+        <div class="cnum">Ch 10</div>
+        <div class="cttl">Audit of Banks</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch10_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch10_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch10_Flashcards.html</div>
+      </div>
+      <div class="card" data-file="CA_Inter_Audit_Ch11_Flashcards.html">
+        <div class="cnum">Ch 11</div>
+        <div class="cttl">Ethics & Terms of Audit Engagements</div>
+        <div class="cmeta">Flashcards</div>
+        <div class="ctlrow">
+          <a class="btn open" href="CA_Inter_Audit_Ch11_Flashcards.html" target="_blank">Open</a>
+          <button class="btn copy" data-file="CA_Inter_Audit_Ch11_Flashcards.html">Copy link</button>
+        </div>
+        <div class="fname">CA_Inter_Audit_Ch11_Flashcards.html</div>
+      </div></div>
+
+  <div class="qrtip">
+    <b>Making the QR codes:</b> hit Copy link on the item you want, paste the URL into your QR tool (e.g., qr-code-generator.com or qrcode-monkey.com), download the PNG, and place it next to that topic in your slides, posters or workbook. One QR per file = one tap to that exact resource.
+  </div>
+</main>
+
+<div class="toast" id="toast">Copied</div>
+
+<div class="foot">
+  Tip: add this page to your home screen for one-tap access. · Audit Language Bank is built for every audit student (CA Inter · CA Final · ACCA &amp; beyond); the other companions follow the CA Inter — Auditing &amp; Ethics syllabus.
+</div>
+
+<script>
+(function(){
+  var BASE_KEY='auditHubBase';
+  var input=document.getElementById('base');
+  try{ var saved=localStorage.getItem(BASE_KEY)||''; input.value=saved; if(saved) input.classList.add('ok'); }catch(e){}
+  input.addEventListener('input', function(){
+    try{ localStorage.setItem(BASE_KEY, input.value.trim()); }catch(e){}
+    input.classList.toggle('ok', !!input.value.trim());
+  });
+  function fullUrl(file){
+    var b=(input.value||'').trim();
+    if(!b) return file;
+    if(!/\/$/.test(b)) b=b+'/';
+    return b+file;
+  }
+  function toast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 1500);
+  }
+  function copy(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).then(function(){return true;}).catch(function(){return false;});
+    }
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    return Promise.resolve(ok);
+  }
+  document.addEventListener('click', function(e){
+    var btn=e.target.closest('.copy'); if(!btn) return;
+    var file=btn.getAttribute('data-file');
+    var url=fullUrl(file);
+    copy(url).then(function(ok){
+      if(ok){ btn.classList.add('ok'); btn.textContent='Copied ✓'; toast('Copied: '+url);
+        setTimeout(function(){ btn.classList.remove('ok'); btn.textContent='Copy link'; }, 1700);
+      } else { toast('Copy failed — long-press the file name'); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
