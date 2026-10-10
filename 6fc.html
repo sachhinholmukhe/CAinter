@@ -112,6 +112,22 @@
   .hbar{ display:flex; align-items:center; gap:10px; }
   .htext{ flex:1; min-width:0; }
   .avatar{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid #BF8F00; box-shadow:0 2px 6px rgba(0,0,0,.28); }
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
 </style>
 </head>
 <body>
@@ -130,6 +146,8 @@
     </div>
   </header>
 
+  <div class="chips" id="chips"></div>
+  <div class="chips" id="chips"></div>
   <div class="stage" id="stage"><!-- card injected --></div>
 
   <div id="navwrap">
@@ -147,187 +165,72 @@
 </div>
 
 <script>
-const DECK = [
- {c:"SA 230", q:"Audit documentation is dealt with by:",
-  o:["SA 200","SA 210","SA 230","SA 240"], a:2,
-  e:"SA 230 ‘Audit Documentation’ deals with the auditor’s responsibility to prepare audit documentation for an audit of financial statements."},
- {c:"Meaning", q:"‘Audit documentation’ means:",
-  o:["The financial statements","The record of audit procedures performed, evidence obtained and conclusions reached (the working papers)","The engagement letter only","The audit report"], a:1,
-  e:"Audit documentation (working papers) is the record of procedures performed, relevant evidence obtained, and conclusions reached."},
- {c:"Purposes", q:"Which of the following is a purpose of audit documentation?",
-  o:["Replacing audit evidence","Providing evidence of the basis for the auditor’s conclusions and that the audit was planned & performed per the SAs","Preparing the client’s books","Guaranteeing no fraud"], a:1,
-  e:"Documentation evidences the basis for the auditor’s conclusions and that the audit complied with the SAs and legal/regulatory requirements; it also aids planning, supervision and review."},
- {c:"Sufficiency of documentation", q:"Audit documentation should be sufficient to enable an experienced auditor, with no previous connection to the audit, to understand:",
-  o:["The client’s marketing strategy","The nature, timing and extent of procedures, their results & evidence, and significant matters and conclusions","The auditor’s personal opinion of management","Only the audit fee"], a:1,
-  e:"SA 230 sets the ‘experienced auditor’ test: documentation must let such a person understand the work done, results, evidence, significant matters and conclusions."},
- {c:"Audit Note Book", q:"The Audit Note Book is used to record:",
-  o:["The financial statements","Significant matters, queries, errors/irregularities and points needing clarification or future reference","The client’s minutes","The audit fee only"], a:1,
-  e:"The Audit Note Book records unresolved queries, mistakes/irregularities, significant observations and matters for future reference."},
- {c:"Permanent vs current file", q:"The Memorandum of Association, copies of long-term contracts and the organisation chart are typically kept in the:",
-  o:["Current audit file","Permanent audit file","Engagement letter","Management representation"], a:1,
-  e:"The permanent audit file holds matters of continuing importance (e.g., MOA/AOA, long-term contracts, organisation structure); the current file holds items relating to the current period."},
- {c:"Current file", q:"Which of the following is generally kept in the current audit file?",
-  o:["The Articles of Association","The current year’s audit programme, working papers and the financial statements","A copy of the lease deed (long-term)","The group structure"], a:1,
-  e:"The current file contains the current period’s audit programme, correspondence, working papers, analyses and the financial statements with the audit report."},
- {c:"Completion Memorandum", q:"A Completion Memorandum (audit documentation summary) is useful because it:",
-  o:["Replaces the audit file","Summarises the significant matters identified and how they were addressed, aiding review & completion","Prepares the accounts","Is sent to shareholders"], a:1,
-  e:"A Completion Memorandum summarises significant matters and their resolution, facilitating review and confirming the audit objectives are met."},
- {c:"Misstatements — SA 450", q:"Documentation of misstatements identified during the audit (the trivial threshold, accumulated misstatements, and conclusions on uncorrected ones) is required by:",
-  o:["SA 230 read with SA 450","SA 500","SA 700","SA 260"], a:0,
-  e:"SA 450 read with SA 230 requires documenting the clearly-trivial threshold, all accumulated misstatements, and the conclusion (with basis) on uncorrected misstatements."},
- {c:"Assembly of file — SQC 1", q:"The final audit file should be assembled on a timely basis, ordinarily within:",
-  o:["30 days of the report date","60 days after the date of the auditor’s report","90 days of the year-end","6 months of the year-end"], a:1,
-  e:"Per SQC 1, the administrative process of assembling the final audit file should be completed ordinarily within 60 days after the date of the auditor’s report."},
- {c:"Retention — SQC 1", q:"Audit documentation should be retained for a period of not less than:",
-  o:["3 years from the report date","5 years from the year-end","7 years from the date of the auditor’s report","10 years from incorporation"], a:2,
-  e:"SQC 1 requires retention of audit documentation for not less than seven years from the date of the auditor’s report."},
- {c:"Form of documentation", q:"Audit documentation may be:",
-  o:["Only on paper","On paper, in electronic form, or on other media","Only electronic","Oral"], a:1,
-  e:"There is no requirement that documentation be on paper; it may be on paper, electronic or other media."},
- {c:"Changes after assembly", q:"After the assembly of the final audit file is complete, the auditor shall NOT:",
-  o:["Retain the file","Delete or discard audit documentation before the end of its retention period","Review the file","Index the file"], a:1,
-  e:"After assembly, the auditor must not delete/discard documentation before the retention period ends; later additions must be documented with who, when and why."},
- {c:"Ownership & lien", q:"Audit working papers are:",
-  o:["The property of the client","The property of the auditor, who may exercise a lien over them for unpaid fees in respect of work done","Public documents","Owned by the shareholders"], a:1,
-  e:"Working papers are the auditor’s property; the auditor may exercise a particular lien over documents in possession for unpaid fees relating to that work."},
- {c:"Confidentiality", q:"In relation to working papers, the auditor must:",
-  o:["Share them freely with anyone","Maintain confidentiality and safe custody of the documentation","Publish them","Hand them to competitors"], a:1,
-  e:"The auditor must keep client information confidential and ensure the safe custody of audit documentation (SQC 1 / Code of Ethics)."},
- {c:"Documenting compliance", q:"Audit documentation provides evidence that the audit was:",
-  o:["Cheap","Planned and performed in accordance with the SAs and applicable legal & regulatory requirements","Completed quickly","Approved by management"], a:1,
-  e:"A key purpose of documentation is to evidence that the audit was planned and performed in accordance with the SAs and applicable requirements."},
-];
+const DECK = [{"c": "Meaning", "t": "Meaning &amp; Objective", "q": "Audit documentation is best described as the record of:", "o": ["Accounting entries passed, balances finalised and reports issued", "Client transactions recorded, vouchers filed and ledgers closed", "Management decisions taken, controls designed and policies adopted", "Audit procedures performed, evidence obtained and conclusions reached"], "a": 3, "e": "Also called working papers."}, {"c": "Meaning", "t": "Meaning &amp; Objective", "q": "Terms such as 'working papers' or 'work papers' are used to describe:", "o": ["The management representation letter", "The audit programme only", "Audit documentation", "The financial statements audited"], "a": 2, "e": "Same concept."}, {"c": "Objective", "t": "Meaning &amp; Objective", "q": "The auditor prepares documentation to provide a sufficient and appropriate record of:", "o": ["The basis for the management's estimates", "The basis for the auditor's report", "The basis for the audit fee charged", "The basis for the entity's accounting policies"], "a": 1, "e": "Plus evidence that the audit was planned and performed per SAs."}, {"c": "Objective", "t": "Meaning &amp; Objective", "q": "Documentation serves as evidence that the audit was:", "o": ["Planned and performed per SAs and applicable legal requirements", "Supervised by the partner of the firm at every stage of the audit", "Reviewed and approved by the board and those charged with governance", "Completed within the budgeted time and fees agreed with the client"], "a": 0, "e": "Compliance evidence."}, {"c": "Objective", "t": "Meaning &amp; Objective", "q": "Which is NOT an objective of preparing audit documentation?", "o": ["Evidencing the basis of the conclusions on overall objectives", "Enabling the management to rely on it for preparing the FS", "Providing a record of the basis for the auditor's report", "Providing evidence of compliance with SAs and the law"], "a": 1, "e": "Documentation is for the auditor, not a substitute for management's records."}, {"c": "Purpose", "t": "Purpose", "q": "Which is a purpose of audit documentation?", "o": ["Enabling the management to prepare the accounts", "Reducing the audit fee payable by the client", "Assisting the team to plan and perform the audit", "Replacing the need for a management representation"], "a": 2, "e": "Also direction, supervision and review."}, {"c": "Purpose", "t": "Purpose", "q": "Documentation helps the engagement team become accountable for:", "o": ["The client's internal controls", "The client's compliance with laws", "The client's accounting records", "Its own work"], "a": 3, "e": "Accountability."}, {"c": "Purpose", "t": "Purpose", "q": "Retaining a record of matters of continuing significance helps in:", "o": ["Future audits", "Framing the client's accounting policies", "Preparation of the client's budgets", "Fixing the client's dividend policy"], "a": 0, "e": "Continuing significance."}, {"c": "Purpose", "t": "Purpose", "q": "Quality control reviews and inspections under SQC 1 are facilitated by:", "o": ["Audit documentation", "The engagement letter alone", "Management representation", "The client's board minutes"], "a": 0, "e": "External inspections are also supported."}, {"c": "Purpose", "t": "Purpose", "q": "Which is NOT a purpose of audit documentation?", "o": ["Supporting external inspections under law or regulation", "Enabling the entity to avoid statutory audit in later years", "Facilitating quality control reviews under SQC 1", "Helping team members direct, supervise and review the work"], "a": 1, "e": "Others are purposes."}, {"c": "Experienced auditor", "t": "Form, Content &amp; Extent", "q": "The test for the extent of documentation is whether it enables:", "o": ["The regulator to approve the audit report issued by the firm", "The management of the entity to understand the audit findings", "An experienced auditor with no previous connection to understand the audit", "The engagement partner of the same audit to recollect the audit"], "a": 2, "e": "Experienced-auditor test."}, {"c": "Experienced auditor", "t": "Form, Content &amp; Extent", "q": "The experienced auditor should understand the nature, timing and extent of procedures, the results and:", "o": ["Client's business plans, projections and expansion strategy decisions", "Audit fee, billing and timing of collection from the client entity", "Reasons for the selection of the auditor by the members of the entity", "Significant matters, conclusions and significant professional judgments"], "a": 3, "e": "SA 230 requirement."}, {"c": "Experienced auditor", "t": "Form, Content &amp; Extent", "q": "While documenting the nature, timing and extent of procedures, which is NOT required to be recorded?", "o": ["Identifying characteristics of items tested", "Who reviewed the work, when and to what extent", "Who performed the work and when completed", "The audit fee agreed with the client"], "a": 3, "e": "Three specific records required."}, {"c": "Experienced auditor", "t": "Form, Content &amp; Extent", "q": "Recording who performed the work and the date of completion helps in:", "o": ["Computing the audit fee and billing the client on time", "Establishing accountability and tracing the audit trail", "Assessing the competence of the client's staff involved", "Evidencing that the client has cooperated fully in the audit"], "a": 1, "e": "Details."}, {"c": "Experienced auditor", "t": "Form, Content &amp; Extent", "q": "For a sample of purchase orders tested, the identifying characteristic could be:", "o": ["The purchase order number", "The fee for the audit of the year", "The name of the audit partner", "The date of appointment of the auditor"], "a": 0, "e": "Identify the specific item tested."}, {"c": "Significant matters", "t": "Form, Content &amp; Extent", "q": "The auditor must document discussions of significant matters with:", "o": ["Management only, since the others are not concerned with it", "The engagement team only, since discussions are internal ones", "Management, those charged with governance and others", "The regulator only, since the matters are reported to it"], "a": 2, "e": "Include nature and when/with whom discussed."}, {"c": "Significant matters", "t": "Form, Content &amp; Extent", "q": "If information is inconsistent with the final conclusion on a significant matter, the auditor should:", "o": ["Ignore it since the conclusion is already reached", "Report it to the management without documenting it", "Document how the inconsistency was addressed", "Remove the inconsistent information from the file"], "a": 2, "e": "Inconsistent information."}, {"c": "Significant matters", "t": "Form, Content &amp; Extent", "q": "A resolved discussion with the CFO on a significant matter:", "o": ["Need not be documented since the matter is resolved", "Must still be documented in the working papers", "Is to be documented only if the report is modified", "Is to be documented only if the auditor disagrees"], "a": 1, "e": "Resolution is what the file should evidence."}, {"c": "Significant matters", "t": "Form, Content &amp; Extent", "q": "The working papers on a discussion of a significant matter should record the nature of the issue, the date and:", "o": ["The person with whom it was discussed and how it was resolved", "The qualification of the person and the views of the staff", "The cost of the matter and the tax effect on the company", "The fee for the discussion and the decision of the CFO"], "a": 0, "e": "Nature / date / person."}, {"c": "Factors", "t": "Form, Content &amp; Extent", "q": "The form, content and extent of documentation depend on:", "o": ["Number of shareholders, dividend policy and credit rating", "Age of the entity, number of branches and quality of its staff", "Number of partners in the firm, fee and location of the office", "Size and complexity of the entity, risks, and audit methodology"], "a": 3, "e": "Factors (a)–(g)."}, {"c": "Factors", "t": "Form, Content &amp; Extent", "q": "Which factor does NOT influence the form, content and extent of documentation?", "o": ["The identified risks of material misstatement", "The significance of the audit evidence obtained", "The audit fee agreed with the client", "The nature and extent of exceptions identified"], "a": 2, "e": "Others are listed factors."}, {"c": "Factors", "t": "Form, Content &amp; Extent", "q": "A conclusion not easily determinable from the work performed or evidence obtained:", "o": ["Needs no documentation since it is a conclusion only", "Requires documenting the conclusion or its basis", "Is to be communicated orally to those charged with governance", "Is to be documented only in the engagement letter"], "a": 1, "e": "Factor (f)."}, {"c": "Factors", "t": "Form, Content &amp; Extent", "q": "Higher assessed risks of material misstatement generally lead to documentation that is:", "o": ["Prepared only by the partner", "Unaffected by risk", "Less extensive", "More extensive"], "a": 3, "e": "Factor (c)."}, {"c": "Timely", "t": "Timely Prep &amp; Audit File", "q": "Audit documentation should be prepared:", "o": ["Promptly, on a timely basis", "At the end of the financial year", "At the time of the next audit", "After the report is issued to the members"], "a": 0, "e": "Timely preparation."}, {"c": "Timely", "t": "Timely Prep &amp; Audit File", "q": "Timely documentation facilitates effective review of evidence and:", "o": ["Reduction of audit fee before the report is finalised", "Approval by the management before the report is dated", "Release of the report before the evidence is evaluated", "Informed conclusions before the report is finalised"], "a": 3, "e": "Benefits."}, {"c": "Timely", "t": "Timely Prep &amp; Audit File", "q": "Documentation prepared immediately after performing the work is likely to be:", "o": ["Of the same accuracy as documentation prepared later", "Unnecessary if the working papers are reviewed later", "More accurate than documentation prepared later", "Less accurate than documentation prepared later"], "a": 2, "e": "Contemporaneous."}, {"c": "Audit file", "t": "Timely Prep &amp; Audit File", "q": "An audit file is one or more folders or storage media containing:", "o": ["The financial statements and books of account of the entity", "The records that comprise audit documentation for a specific engagement", "The correspondence with the regulators of the entity audited", "The audit documentation of all clients of the firm for the year"], "a": 1, "e": "Physical or electronic."}, {"c": "Audit file", "t": "Timely Prep &amp; Audit File", "q": "An audit file may be maintained in:", "o": ["Physical or electronic form", "Physical form only", "Handwritten form only", "Electronic form only"], "a": 0, "e": "Either form."}, {"c": "Assembly", "t": "Assembly, Retention &amp; Ownership", "q": "The final audit file should be assembled:", "o": ["At the end of the financial year of the entity", "Before the auditor's report is issued and signed", "Before the next audit of the entity begins", "Promptly after the auditor's report is issued"], "a": 3, "e": "Not before the report."}, {"c": "Assembly", "t": "Assembly, Retention &amp; Ownership", "q": "As per SQC 1, the assembly of the final audit file should be completed within:", "o": ["90 days of the auditor's report", "180 days of the auditor's report", "60 days of the auditor's report", "30 days of the auditor's report"], "a": 2, "e": "60 days to assemble (SQC 1); the file is not a place for new work."}, {"c": "Assembly", "t": "Assembly, Retention &amp; Ownership", "q": "Assembly of the final audit file is:", "o": ["A client task to be carried out by the management of the entity", "An administrative task with no new procedures or conclusions", "A substantive task to carry out the final audit procedures", "A regulatory task to be carried out by the oversight body"], "a": 1, "e": "Administrative."}, {"c": "Assembly", "t": "Assembly, Retention &amp; Ownership", "q": "Changes can be made to documentation during final assembly only if they are:", "o": ["Administrative, e.g. indexing and cross-referencing", "Substantive, e.g. fresh procedures and conclusions", "Requested by the management of the entity", "Approved by the audit committee of the entity"], "a": 0, "e": "Administrative changes only."}, {"c": "Assembly", "t": "Assembly, Retention &amp; Ownership", "q": "Which of the following changes is permissible during final assembly?", "o": ["Adding new conclusions after the report", "Adding new substantive procedures", "Deleting superseded working papers", "Cross-referencing working papers"], "a": 3, "e": "Deleting is not permitted before retention ends."}, {"c": "Retention", "t": "Assembly, Retention &amp; Ownership", "q": "Audit documentation should be retained for at least:", "o": ["Seven years from the date of the auditor's report", "Five years from the date of the auditor's report", "Three years from the end of the financial year", "Ten years from the date of the auditor's report"], "a": 0, "e": "Retention period under SQC 1."}, {"c": "Retention", "t": "Assembly, Retention &amp; Ownership", "q": "In the case of a group audit, the retention period of seven years runs from:", "o": ["The date of the auditor's or group auditor's report, whichever is earlier", "The date of the auditor's or group auditor's report, whichever is later", "The date of the AGM at which the group accounts are adopted", "The end of the financial year of the group entity audited"], "a": 1, "e": "Whichever is later."}, {"c": "Retention", "t": "Assembly, Retention &amp; Ownership", "q": "Once the final audit file is assembled, documentation:", "o": ["May be discarded after the annual general meeting is held", "May be discarded at the request of the client of the firm", "Must not be deleted or discarded before the retention period ends", "May be discarded after 60 days from the date of the report"], "a": 2, "e": "No deletion."}, {"c": "Retention", "t": "Assembly, Retention &amp; Ownership", "q": "Which statement on the 60 days and seven years is correct?", "o": ["60 days is for assembly; seven years is for retention", "60 days is for retention; seven years is for assembly", "Both relate to the assembly of the final audit file", "Both relate to the retention of the audit file"], "a": 0, "e": "Mix-up is common."}, {"c": "Ownership", "t": "Assembly, Retention &amp; Ownership", "q": "As per SQC 1, audit documentation is the property of:", "o": ["The client, unless the auditor and the client agree otherwise", "The audit committee, unless the board of directors decides", "The regulator, unless the entity applies for return of them", "The auditor, unless law or regulation specifies otherwise"], "a": 3, "e": "Auditor's property."}, {"c": "Ownership", "t": "Assembly, Retention &amp; Ownership", "q": "The auditor may share portions of audit documentation with the client if doing so does not compromise:", "o": ["The fee payable by the client or the interest of the auditor", "The appointment of the auditor or the term of the engagement", "The validity of the work or, in assurance engagements, independence", "The disclosure of the financial results or the date of the report"], "a": 2, "e": "Discretionary disclosure."}, {"c": "Ownership", "t": "Assembly, Retention &amp; Ownership", "q": "A client demands the auditor's working papers as a matter of right. The auditor:", "o": ["Must hand over, if the audit committee asks for them", "Is not bound to hand over, as they are the auditor's property", "Must hand over, as they are the client's property", "Must hand over, if the fees are paid in full to the firm"], "a": 1, "e": "Discretion unless law requires."}, {"c": "Judgement", "t": "Form, Content &amp; Extent", "q": "Documenting significant professional judgements helps to:", "o": ["Reduce the extent of audit procedures to be performed by the team", "Explain the auditor's conclusions and strengthen the judgement quality", "Shift the responsibility for the judgements to the management", "Avoid review by the engagement quality control reviewer"], "a": 1, "e": "Section 7."}, {"c": "Judgement", "t": "Form, Content &amp; Extent", "q": "The assessment of whether a matter is significant requires:", "o": ["The consent of the management to the assessment made", "A uniform checklist applicable to all audit engagements", "An objective analysis of the facts and circumstances", "The approval of the regulator of the matters decided"], "a": 2, "e": "Objective analysis."}, {"c": "Judgement", "t": "Form, Content &amp; Extent", "q": "The degree of professional judgement involved in the work influences:", "o": ["The fee for the audit and the appointment of the team", "The date of the report and the place of its signing", "The frequency of AGM and the notice period to members", "The form, content and extent of the documentation"], "a": 3, "e": "Judgement drives documentation."}, {"c": "Completion memo", "t": "Form, Content &amp; Extent", "q": "A completion memorandum is a tool that gives:", "o": ["A concise overview of significant matters and how they were addressed", "A detailed list of all transactions tested and the sample selected", "A summary of the fees billed and the time spent on the audit", "A copy of the financial statements with the auditor's comments"], "a": 0, "e": "Audit documentation summary."}, {"c": "Completion memo", "t": "Form, Content &amp; Extent", "q": "A completion memorandum assists the auditor in considering whether:", "o": ["All the controls of the entity are operating effectively", "All the management's estimates are the correct ones", "All the transactions of the entity have been recorded", "All relevant SA objectives have been met"], "a": 3, "e": "Benefits."}, {"c": "Completion memo", "t": "Form, Content &amp; Extent", "q": "A completion memorandum is particularly useful in:", "o": ["Large and complex audits, to facilitate review and inspection", "Small audits, to eliminate the need for review and inspection", "Any audit, to replace the working papers and the audit programme", "Special audits, to replace the report of the auditor to members"], "a": 0, "e": "Efficient review."}, {"c": "Scenario", "t": "Scenarios", "q": "Oakridge: an issue on interest cost of restructured loans was discussed with the CFO and resolved. The auditor:", "o": ["Need not document since the issue is resolved in the discussion", "Must document nature, date, person and resolution of the discussion", "Must document only the final accounting entry passed for the issue", "Must document only if the CFO insists on it in the representation"], "a": 1, "e": "Illustration 1."}, {"c": "Scenario", "t": "Scenarios", "q": "Crestwell: the report is dated 15 July 2022; the file was assembled only after a regulator's letter six months later. The first breach is of:", "o": ["The seven-year retention period under SQC 1", "The 90-day reporting time frame under the SA 700", "The 60-day assembly time frame under SQC 1", "The 30-day filing time frame under the Companies Act"], "a": 2, "e": "Illustration 2."}, {"c": "Scenario", "t": "Scenarios", "q": "In Crestwell, the auditor inserted additional papers bearing the current date after the report. This:", "o": ["Is permissible if the papers are marked as late additions", "Is permissible if the papers are necessary for the audit file", "Is permissible if the regulator has asked for the audit file", "Is not permissible and destroys the integrity of the audit file"], "a": 3, "e": "Only administrative changes are allowed."}, {"c": "Scenario", "t": "Scenarios", "q": "In Crestwell, preparing papers long after the audit raises a concern on:", "o": ["Materiality of the misstatements in the FS", "Contemporaneity and accuracy of documentation", "Independence of the auditor from the entity", "Competence of the management of the entity"], "a": 1, "e": "Reliability falls with delay."}, {"c": "Scenario", "t": "Scenarios", "q": "A staff member wants to delete a superseded working paper two months after assembly. The auditor should:", "o": ["Allow it, as the 60-day assembly window has now closed", "Allow it, if the engagement partner approves the deletion", "Not allow it, as deletion is barred before retention ends", "Allow it, if the paper is not relevant to the conclusion"], "a": 2, "e": "Retention."}, {"c": "Scenario", "t": "Scenarios", "q": "A junior records only 'checked' against a sample, with no item details. This fails the requirement to record:", "o": ["Identifying characteristics of the specific items tested", "The rotation schedule of the team members of the audit", "The details of the regulatory filings by the entity", "The audit fee and billing particulars of the engagement"], "a": 0, "e": "Documentation details."}, {"c": "Scenario", "t": "Scenarios", "q": "A file note reads 'discussed with management; no issues'. What is missing?", "o": ["Nature of the matter, date, and the person it was discussed with", "The accounting policy, the tax effect and the dividend impact", "The auditor's independence declaration and engagement letter", "The fee, the time spent and the billing details of the discussion"], "a": 0, "e": "Significant matter discussions."}];
 
-let order = DECK.map((_,i)=>i);
-let pos = 0;
-const answered = new Array(DECK.length).fill(null); // stores chosen index (per deck index)
-const stage = document.getElementById('stage');
-const navwrap = document.getElementById('navwrap');
-const elProg = document.getElementById('prog');
-const elCount = document.getElementById('count');
-const elScore = document.getElementById('score');
-const btnPrev = document.getElementById('prev');
-const btnNext = document.getElementById('next');
-const btnReveal = document.getElementById('reveal');
 const LAB=['A','B','C','D'];
-
-function scored(){return answered.filter((v,i)=>v!==null && v==='reveal'?false:(v!==null && v===DECK[i].a)).length;}
-function correctCount(){let n=0;answered.forEach((v,i)=>{if(typeof v==='number' && v===DECK[i].a)n++});return n;}
-function attempted(){return answered.filter(v=>typeof v==='number').length;}
-
-function render(anim){
-  if(pos>=order.length){return finish();}
-  const di = order[pos];
-  const card = DECK[di];
-  const chosen = answered[di]; // number | 'reveal' | null
-  const locked = chosen!==null;
-  elProg.style.width = ((pos)/order.length*100)+'%';
-  elCount.textContent = (pos+1)+' / '+order.length;
-  elScore.textContent = '✓ '+correctCount();
-
-  const opts = card.o.map((txt,i)=>{
-    let cls='opt';
-    if(locked){
-      if(i===card.a) cls+=' correct';
-      else if(typeof chosen==='number' && i===chosen) cls+=' wrong';
-      else cls+=' dim';
-    }
-    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}>
-        <span class="lab">${LAB[i]}</span><span>${txt}</span></button>`;
-  }).join('');
-
-  let expCls = locked?'exp show':'exp';
+let cur='All', order=[], pos=0;
+const answered=new Array(DECK.length).fill(null);
+const $=id=>document.getElementById(id);
+const stage=$('stage'),navwrap=$('navwrap'),elProg=$('prog'),elCount=$('count'),elScore=$('score'),
+      btnPrev=$('prev'),btnNext=$('next'),btnReveal=$('reveal'),chipsEl=$('chips');
+function build(shuf){
+  order=[];DECK.forEach((c,i)=>{if(cur==='All'||c.t===cur)order.push(i);});
+  if(shuf){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}}
+  pos=0;
+}
+function drawChips(){
+  const tags=['All',...new Set(DECK.map(c=>c.t))];
+  chipsEl.innerHTML=tags.map(t=>{const n=t==='All'?DECK.length:DECK.filter(c=>c.t===t).length;
+    return `<button class="chip${t===cur?' on':''}" data-t="${t.replace(/"/g,'&quot;')}">${t}<small>${n}</small></button>`}).join('');
+  chipsEl.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cur=b.dataset.t;navwrap.classList.remove('hidden');build(false);drawChips();render(true);});
+}
+function correctCount(){let n=0;order.forEach(i=>{if(answered[i]===DECK[i].a)n++});return n;}
+function attempted(){return order.filter(i=>typeof answered[i]==='number').length;}
+function render(){
+  if(pos>=order.length)return finish();
+  const di=order[pos],card=DECK[di],chosen=answered[di],locked=chosen!==null;
+  elProg.style.width=(pos/order.length*100)+'%';
+  elCount.textContent=(pos+1)+' / '+order.length;
+  elScore.textContent='✓ '+correctCount();
+  const opts=card.o.map((txt,i)=>{let cls='opt';
+    if(locked){if(i===card.a)cls+=' correct';else if(typeof chosen==='number'&&i===chosen)cls+=' wrong';else cls+=' dim';}
+    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}><span class="lab">${LAB[i]}</span><span>${txt}</span></button>`}).join('');
   let verdict='';
-  if(locked){
-    if(chosen==='reveal') verdict=`<div class="verdict ok">Answer</div>`;
-    else if(chosen===card.a) verdict=`<div class="verdict ok">✓ Correct</div>`;
-    else verdict=`<div class="verdict no">✗ Not quite</div>`;
-  }
-  const expHtml = `<div class="${expCls}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div>`;
-
-  stage.innerHTML = `<div class="card${anim?'':''}" id="card">
-      <div class="cbody">
-        <span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
-        <div class="q">${card.q}</div>
-        <div class="opts">${opts}</div>
-        ${expHtml}
-      </div></div>`;
-
-  stage.querySelectorAll('.opt').forEach(b=>{
-    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
-  });
-  btnPrev.disabled = pos===0;
-  btnNext.disabled = !locked;
-  btnNext.textContent = (pos===order.length-1)?'Finish':'Next ›';
-  btnReveal.style.visibility = locked?'hidden':'visible';
+  if(locked){verdict=chosen==='reveal'?'<div class="verdict ok">Answer</div>':(chosen===card.a?'<div class="verdict ok">✓ Correct</div>':'<div class="verdict no">✗ Not quite</div>');}
+  stage.innerHTML=`<div class="card" id="card"><div class="cbody"><span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
+    <div class="q">${card.q}</div><div class="opts">${opts}</div>
+    <div class="${locked?'exp show':'exp'}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div></div></div>`;
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.i));
+  btnPrev.disabled=pos===0;btnNext.disabled=!locked;
+  btnNext.textContent=(pos===order.length-1)?'Finish':'Next ›';
+  btnReveal.style.visibility=locked?'hidden':'visible';
 }
-
-function choose(i){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]=i;
-  render();
-}
-function reveal(){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]='reveal';
-  render();
-}
-function go(d,dir){
-  const card=document.getElementById('card');
-  if(card && dir){ card.classList.add(dir==='next'?'swipe-l':'swipe-r'); }
-  setTimeout(()=>{ pos=Math.max(0,Math.min(order.length,pos+d)); render(true); window.scrollTo({top:0,behavior:'smooth'}); }, dir?170:0);
-}
+function choose(i){const di=order[pos];if(i>3||answered[di]!==null)return;answered[di]=i;render();}
+function reveal(){const di=order[pos];if(answered[di]!==null)return;answered[di]='reveal';render();}
+function go(d,dir){const c=$('card');if(c&&dir)c.classList.add(dir==='next'?'swipe-l':'swipe-r');
+  setTimeout(()=>{pos=Math.max(0,Math.min(order.length,pos+d));render();window.scrollTo({top:0,behavior:'smooth'});},dir?170:0);}
 function finish(){
-  elProg.style.width='100%'; elCount.textContent=order.length+' / '+order.length;
-  const att=attempted(), cor=correctCount();
-  const pct = att? Math.round(cor/att*100):0;
-  elScore.textContent='✓ '+cor;
-  navwrap.classList.add('hidden');
-  stage.innerHTML = `<div class="done">
-    <div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
-    <h2>Deck complete</h2>
-    <p>${cor} correct out of ${att} attempted · ${DECK.length} cards</p>
-    <div class="row">
-      <button class="btn next" id="again">Restart</button>
-      <button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button>
-    </div>
-  </div>`;
-  document.getElementById('again').onclick=()=>{restart(false);};
-  document.getElementById('shuf2').onclick=()=>{restart(true);};
+  elProg.style.width='100%';elCount.textContent=order.length+' / '+order.length;
+  const att=attempted(),cor=correctCount(),pct=att?Math.round(cor/att*100):0;
+  elScore.textContent='✓ '+cor;navwrap.classList.add('hidden');
+  stage.innerHTML=`<div class="done"><div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
+  <h2>${cur==='All'?'Deck':'Topic'} complete</h2><p>${cor} correct out of ${att} attempted · ${order.length} cards${cur==='All'?'':' ('+cur+')'}</p>
+  <div class="row"><button class="btn next" id="again">Restart</button><button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button></div></div>`;
+  $('again').onclick=()=>restart(false);$('shuf2').onclick=()=>restart(true);
 }
-function restart(shuf){
-  for(let i=0;i<answered.length;i++) answered[i]=null;
-  order = DECK.map((_,i)=>i);
-  if(shuf){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
-  pos=0; navwrap.classList.remove('hidden'); render(true); window.scrollTo({top:0});
-}
-
-btnPrev.onclick=()=>go(-1,'prev');
-btnNext.onclick=()=>go(1,'next');
-btnReveal.onclick=reveal;
-document.getElementById('shuffle').onclick=()=>restart(true);
-document.getElementById('restart').onclick=()=>restart(false);
-
-// swipe
+function restart(shuf){order.forEach(i=>answered[i]=null);navwrap.classList.remove('hidden');build(shuf);render();window.scrollTo({top:0});}
+btnPrev.onclick=()=>go(-1,'prev');btnNext.onclick=()=>go(1,'next');btnReveal.onclick=reveal;
+$('shuffle').onclick=()=>restart(true);$('restart').onclick=()=>restart(false);
 let sx=0,sy=0;
 stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-stage.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.5){
-    if(dx<0 && !btnNext.disabled) go(1,'next');
-    else if(dx>0 && pos>0) go(-1,'prev');
-  }
-},{passive:true});
+stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0&&!btnNext.disabled)go(1,'next');else if(dx>0&&pos>0)go(-1,'prev');}},{passive:true});
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight' && !btnNext.disabled) go(1,'next');
-  if(e.key==='ArrowLeft' && pos>0) go(-1,'prev');
-  if(['1','2','3','4'].includes(e.key)) choose(parseInt(e.key,10)-1);
-  if(e.key.toLowerCase()==='r') reveal();
-});
-
-render(true);
+  if(e.key==='ArrowRight'&&!btnNext.disabled)go(1,'next');
+  if(e.key==='ArrowLeft'&&pos>0)go(-1,'prev');
+  if(['1','2','3','4'].includes(e.key))choose(+e.key-1);
+  if(e.key.toLowerCase()==='r')reveal();});
+build(false);drawChips();render();
 </script>
 </body>
 </html>

@@ -112,6 +112,22 @@
   .hbar{ display:flex; align-items:center; gap:10px; }
   .htext{ flex:1; min-width:0; }
   .avatar{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid #BF8F00; box-shadow:0 2px 6px rgba(0,0,0,.28); }
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
 </style>
 </head>
 <body>
@@ -119,7 +135,7 @@
   <header>
     <div class="hbar"><div class="htext">
   <div class="kick">CA Intermediate · Auditing &amp; Ethics</div>
-  <div class="ttl">Chapter 11 — <b>Flashcards</b><br>Ethics & Terms of Audit Engagements</div>
+  <div class="ttl">Chapter 11 — <b>Flashcards</b><br>Ethics and Terms of Audit Engagements</div>
     </div>
       <img class="avatar" src="data:image/jpeg;base64,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" alt="CA Sachhin Holmukhe"/>
     </div>
@@ -130,6 +146,8 @@
     </div>
   </header>
 
+  <div class="chips" id="chips"></div>
+  <div class="chips" id="chips"></div>
   <div class="stage" id="stage"><!-- card injected --></div>
 
   <div id="navwrap">
@@ -147,202 +165,72 @@
 </div>
 
 <script>
-const DECK = [
- {c:"Fundamental principles", q:"The fundamental principles of professional ethics under the Code are:",
-  o:["Integrity, objectivity, professional competence & due care, confidentiality and professional behaviour","Honesty and hard work only","Independence and profit","Secrecy and loyalty"], a:0,
-  e:"The five fundamental principles are integrity, objectivity, professional competence & due care, confidentiality, and professional behaviour."},
- {c:"Integrity", q:"The principle of integrity requires a professional accountant to be:",
-  o:["Profitable","Straightforward and honest in all professional and business relationships","Always agreeable to the client","Silent on errors"], a:1,
-  e:"Integrity imposes an obligation to be straightforward and honest in all professional and business relationships."},
- {c:"Objectivity", q:"The principle of objectivity requires the accountant not to allow ___ to override professional judgement.",
-  o:["The audit fee","Bias, conflict of interest or undue influence of others","The deadline","The firm’s size"], a:1,
-  e:"Objectivity means not allowing bias, conflict of interest or the undue influence of others to override professional or business judgement."},
- {c:"Confidentiality", q:"The principle of confidentiality permits disclosure of client information when:",
-  o:["A friend asks","There is a legal or professional right or duty to disclose, or the client authorises it","It is convenient","The information is interesting"], a:1,
-  e:"Confidential information may be disclosed where authorised by the client, or required/permitted by law or professional duty."},
- {c:"Threats — self-review", q:"An auditor auditing financial systems that the same firm designed faces which threat to independence?",
-  o:["Self-interest threat","Self-review threat","Advocacy threat","Intimidation threat"], a:1,
-  e:"A self-review threat arises when the auditor must evaluate work previously done by the same firm/individual (e.g., a system it designed)."},
- {c:"Threats — self-interest", q:"A financial interest in the client, or undue dependence on fees, creates a:",
-  o:["Self-review threat","Self-interest threat","Familiarity threat","Advocacy threat"], a:1,
-  e:"A self-interest threat arises from a financial or other interest that could inappropriately influence judgement (e.g., shareholding, fee dependence)."},
- {c:"Threats — familiarity", q:"A long association with the client, or a close relationship with its staff, creates a:",
-  o:["Advocacy threat","Familiarity threat","Intimidation threat","Self-review threat"], a:1,
-  e:"A familiarity threat arises from a long or close relationship that makes the auditor too sympathetic to the client’s interests."},
- {c:"Threats — advocacy & intimidation", q:"Promoting a client’s position (e.g., its shares) creates an advocacy threat; a threat of dismissal or pressure creates a/an:",
-  o:["Self-interest threat","Intimidation threat","Self-review threat","Familiarity threat"], a:1,
-  e:"An intimidation threat arises when the auditor is deterred from acting objectively by actual or perceived pressures (e.g., threat of replacement)."},
- {c:"Independence", q:"For an audit engagement, the auditor must be independent in:",
-  o:["Appearance only","Both mind (actual independence) and appearance","Mind only","Neither"], a:1,
-  e:"Independence comprises independence of mind (the right mental state) and independence in appearance (avoiding circumstances a reasonable third party would see as compromising)."},
- {c:"Engagement terms — SA 210", q:"Agreeing the terms of audit engagements is dealt with by:",
-  o:["SA 200","SA 210","SA 220","SA 230"], a:1,
-  e:"SA 210 ‘Agreeing the Terms of Audit Engagements’ deals with the preconditions for an audit and the engagement letter."},
- {c:"Preconditions for an audit", q:"To establish whether the preconditions for an audit are present, the auditor must determine that the FRF is acceptable and obtain management’s agreement that it acknowledges its responsibility for:",
-  o:["Paying the fee","Preparing the FS, internal control, and providing access to information & persons","Selecting the auditor","Marketing"], a:1,
-  e:"Preconditions: an acceptable framework, plus management’s acknowledgement of responsibility for the FS, for internal control, and for providing the auditor access to information and persons."},
- {c:"Engagement letter", q:"The audit engagement letter primarily records:",
-  o:["The audit opinion","The objective & scope of the audit, the responsibilities of the auditor & management, and the FRF and report format","The financial statements","The bank balance"], a:1,
-  e:"The engagement letter sets out the objective/scope, the respective responsibilities, the applicable framework, and the expected form & content of reports."},
- {c:"Recurring audits", q:"For a recurring audit, the auditor may decide not to send a new engagement letter each year unless:",
-  o:["The client requests it always","There is a revision of terms, a change in management/ownership, a recent change in law/FRF or scope, or signs of misunderstanding","The fee changes","The auditor wishes to"], a:1,
-  e:"A fresh letter is appropriate where terms are revised, there’s a change in management/ownership/nature/size, a recent change in law/FRF, or indications of misunderstanding."},
- {c:"Change in terms", q:"A client’s request to change the engagement to a lower assurance level merely to avoid a qualified opinion:",
-  o:["Should be accepted","Has no reasonable justification and should not be agreed to","Is mandatory","Reduces the fee legitimately"], a:1,
-  e:"A change lacking reasonable justification — e.g., to escape a modified opinion — should not be agreed; only genuine changes in circumstances or misunderstanding justify a change."},
- {c:"Quality control — SA 220", q:"Quality control for an audit of financial statements (engagement level) is dealt with by:",
-  o:["SA 200","SA 210","SA 220","SQC 1"], a:2,
-  e:"SA 220 ‘Quality Control for an Audit of Financial Statements’ deals with the engagement team’s quality-control responsibilities; SQC 1 operates at the firm level."},
- {c:"Acceptance & continuance", q:"Before accepting/continuing an engagement, the firm should consider client integrity, its own competence & resources, and:",
-  o:["Only the fee","Compliance with relevant ethical requirements, including independence","The client’s share price","The weather"], a:1,
-  e:"Acceptance/continuance considers client integrity, the firm’s competence & resources, and the ability to comply with ethical requirements (esp. independence)."},
- {c:"EQCR", q:"An Engagement Quality Control Review (EQCR) is mandatory for the audit of:",
-  o:["All companies","Listed entities (and other engagements meeting the firm’s criteria)","Only small firms","Government only"], a:1,
-  e:"For listed entities (and engagements meeting the firm’s criteria), an EQCR — an objective evaluation of significant judgements & conclusions — is required before the report is dated."},
- {c:"Professional skepticism", q:"Professional skepticism requires the auditor to:",
-  o:["Assume management is dishonest","Maintain a questioning mind, be alert to possible misstatement, and critically assess audit evidence","Accept all explanations","Avoid asking questions"], a:1,
-  e:"Professional skepticism is a questioning mind and a critical assessment of evidence — neither assuming dishonesty nor unquestioning honesty."},
- {c:"Prohibited services — Sec 144", q:"Under Section 144, an auditor of a company shall NOT provide which service to the company?",
-  o:["Statutory audit","Internal audit or book-keeping services","Attending the AGM","Signing the audit report"], a:1,
-  e:"Section 144 prohibits the auditor from rendering services such as accounting/book-keeping, internal audit, design of financial information systems, actuarial, investment advisory/banking, management and outsourced financial services."},
- {c:"Right to attend GM — Sec 146", q:"Under Section 146, the auditor has the right to:",
-  o:["Attend only meetings where the audited accounts are discussed","Receive notices of, and attend, any general meeting, and be heard on matters concerning him as auditor","Vote at the meeting","Appoint directors"], a:1,
-  e:"Section 146 gives the auditor the right to receive notices of, and attend, any general meeting, and to be heard on any part of the business that concerns him as auditor."},
- {c:"Professional judgement", q:"Professional judgement is applied by the auditor in:",
-  o:["Setting the fee only","Decisions on materiality, audit risk, the nature/timing/extent of procedures and evaluating evidence & conclusions","Preparing the accounts","Choosing the office colour"], a:1,
-  e:"Professional judgement — informed by training, knowledge and experience — guides the key audit decisions throughout the engagement (SA 200)."},
-];
+const DECK = [{"c": "Meaning", "t": "Fundamental Principles", "q": "Ethics refers to:", "o": ["Moral principles guiding a person's behaviour and actions", "Technical standards prescribed for auditing practice", "Disciplinary procedures applied to the erring members", "Statutory rules enforced by the courts on professionals"], "a": 0, "e": "Introduction."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Which is NOT a fundamental principle of professional ethics?", "o": ["Objectivity", "Independence", "Confidentiality", "Integrity"], "a": 1, "e": "Five: integrity, objectivity, competence &amp; due care, confidentiality, professional behaviour."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Being straightforward and honest in all professional dealings is:", "o": ["Professional behaviour", "Confidentiality", "Integrity", "Objectivity"], "a": 2, "e": "Integrity."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Not letting bias, conflict of interest or undue influence override professional judgment is:", "o": ["Integrity", "Confidentiality", "Professional competence", "Objectivity"], "a": 3, "e": "Objectivity."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Keeping knowledge up to date and performing duties thoroughly and in a timely manner is:", "o": ["Objectivity", "Professional competence and due care", "Professional behaviour", "Integrity"], "a": 1, "e": "Competence."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Complying with laws and avoiding conduct that discredits the profession is:", "o": ["Professional behaviour", "Confidentiality", "Professional competence", "Integrity"], "a": 0, "e": "Behaviour."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Confidentiality may be overridden when disclosure is:", "o": ["Requested by the client's competitors for commercial purposes", "Preferred by the auditor for the sake of the audit firm's growth", "Required by law, or there is a professional duty or right to disclose", "Suggested by a colleague who is in the same audit firm as him"], "a": 2, "e": "Confidentiality."}, {"c": "Principles", "t": "Fundamental Principles", "q": "Which is NOT a situation where confidentiality may be overridden?", "o": ["Where there is a professional duty or right to disclose", "Where disclosure is required by law", "Where law permits disclosure with client consent", "To benefit another client of the firm in a similar dispute"], "a": 3, "e": "Confidentiality exceptions."}, {"c": "Independence", "t": "Independence &amp; Threats", "q": "Independence of mind allows the auditor to express an opinion without being affected by:", "o": ["Influences that compromise professional judgment", "Fees that are charged for the audit engagement", "Laws that are applicable to the audit engagement", "Staff that are assigned for the audit engagement"], "a": 0, "e": "Independence of mind."}, {"c": "Independence", "t": "Independence &amp; Threats", "q": "Independence in appearance is about avoiding situations where:", "o": ["A reasonable and informed investor may doubt the auditor's tenure or experience", "A reasonable and informed regulator may doubt the auditor's size or location", "A reasonable and informed client may doubt the auditor's fees or timeliness", "A reasonable and informed third party may doubt the auditor's integrity or objectivity"], "a": 3, "e": "Appearance."}, {"c": "Independence", "t": "Independence &amp; Threats", "q": "For an auditor, independence must be:", "o": ["Apparent, with the genuineness being of no concern", "Legal, with the state of mind being of no concern", "Genuine and also appear genuine to others", "Genuine, with the appearance being of no concern"], "a": 2, "e": "Both halves."}, {"c": "Independence", "t": "Independence &amp; Threats", "q": "Independence is best described as:", "o": ["A matter of the audit fee, beyond the character", "A state of mind and personal character, beyond rules", "A matter of the firm size, beyond the personal view", "A set of legal rules, beyond the state of mind"], "a": 1, "e": "Independence."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Holding a direct financial interest in the audit client is a:", "o": ["Advocacy threat", "Familiarity threat", "Self-interest threat", "Self-review threat"], "a": 2, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Over-reliance on fees from a single client is a:", "o": ["Intimidation threat", "Advocacy threat", "Familiarity threat", "Self-interest threat"], "a": 3, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Contingent fees tied to audit outcomes give rise to a:", "o": ["Self-interest threat", "Advocacy threat", "Intimidation threat", "Self-review threat"], "a": 0, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "An auditor reviewing work he did as a director of the client earlier faces a:", "o": ["Familiarity threat", "Self-review threat", "Self-interest threat", "Advocacy threat"], "a": 1, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Providing internal audit services to the same client that is then audited is a:", "o": ["Intimidation threat", "Self-review threat", "Advocacy threat", "Familiarity threat"], "a": 1, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Promoting or defending the client's interests in legal disputes is an:", "o": ["Self-review threat", "Intimidation threat", "Self-interest threat", "Advocacy threat"], "a": 3, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Dealing in the shares of the audit client is an example of an:", "o": ["Advocacy threat", "Self-review threat", "Familiarity threat", "Intimidation threat"], "a": 0, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "A close relative of a team member holding a senior role at the client is a:", "o": ["Self-review threat", "Advocacy threat", "Familiarity threat", "Intimidation threat"], "a": 2, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Receiving significant gifts or hospitality from the client is a:", "o": ["Self-review threat", "Intimidation threat", "Self-interest threat", "Familiarity threat"], "a": 3, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Pressure to reduce audit work because of lower fees is an:", "o": ["Self-interest threat", "Intimidation threat", "Familiarity threat", "Advocacy threat"], "a": 1, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Threat of replacement over a disagreement on accounting is an:", "o": ["Self-review threat", "Familiarity threat", "Intimidation threat", "Advocacy threat"], "a": 2, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "A loan from the audit client to the auditor is a:", "o": ["Self-interest threat", "Intimidation threat", "Advocacy threat", "Self-review threat"], "a": 0, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "A former partner of the firm now working with the client is a:", "o": ["Intimidation threat", "Familiarity threat", "Self-interest threat", "Advocacy threat"], "a": 1, "e": "Threats."}, {"c": "Threats", "t": "Independence &amp; Threats", "q": "Which is NOT one of the five threats to independence?", "o": ["Compliance threat", "Advocacy threat", "Intimidation threat", "Self-interest threat"], "a": 0, "e": "Five threats."}, {"c": "Safeguards", "t": "Safeguards &amp; Skepticism", "q": "The decision ladder when a threat is identified is:", "o": ["Avoid, apply safeguards, continue, and otherwise eliminate", "Eliminate, apply safeguards, continue, and otherwise avoid", "Avoid, eliminate, apply safeguards, and otherwise decline", "Apply safeguards, avoid, eliminate, and otherwise continue"], "a": 2, "e": "Exam tip."}, {"c": "Safeguards", "t": "Safeguards &amp; Skepticism", "q": "When safeguards are applied to reduce a threat, the auditor should:", "o": ["Apply them only after the audit report has been signed", "Communicate them to the client without keeping any record", "Apply them only if the client agrees to the proposed ones", "Document them as proof of adherence to ethical standards"], "a": 3, "e": "Safeguards."}, {"c": "Safeguards", "t": "Safeguards &amp; Skepticism", "q": "If effective safeguards cannot be applied, the auditor should:", "o": ["Accept the work with a disclosure", "Not accept the work", "Accept with a higher fee", "Accept with an additional team"], "a": 1, "e": "Reject work."}, {"c": "Skepticism", "t": "Safeguards &amp; Skepticism", "q": "Professional skepticism is an attitude involving:", "o": ["A trusting mind and general acceptance of management evidence", "A neutral mind and general reliance on past experience", "A suspicious mind and general rejection of management evidence", "A questioning mind and critical assessment of audit evidence"], "a": 3, "e": "Skepticism."}, {"c": "Skepticism", "t": "Safeguards &amp; Skepticism", "q": "Past experience of management's honesty:", "o": ["Reduces the need to question to the minimum extent required", "Replaces the need to evaluate the evidence in the later years", "Does not eliminate the need to question and evaluate evidence", "Eliminates the need to question and evaluate the evidence"], "a": 2, "e": "Cautious statement."}, {"c": "Skepticism", "t": "Safeguards &amp; Skepticism", "q": "Alertness to evidence includes noting evidence that:", "o": ["Conflicts with other evidence, or questions reliability of documents", "Matches management views, or confirms reliability of responses", "Repeats prior year findings, or confirms reliability of controls", "Supports other evidence, or confirms reliability of documents"], "a": 0, "e": "Skepticism."}, {"c": "Skepticism", "t": "Safeguards &amp; Skepticism", "q": "A single fraud-prone document supporting a significant amount calls for:", "o": ["Less testing", "Closer scrutiny", "Greater reliance", "Prior approval"], "a": 1, "e": "Critical assessment."}, {"c": "Skepticism", "t": "Safeguards &amp; Skepticism", "q": "Professional skepticism helps the auditor to avoid:", "o": ["Communication when reporting to the governance", "Documentation when preparing the working papers", "Overgeneralisation when drawing conclusions", "Verification when gathering the evidence"], "a": 2, "e": "Why it matters."}, {"c": "SA 210", "t": "SA 210 · Terms of Engagement", "q": "SA 210 deals with:", "o": ["Quality control for an audit of FS", "Communication with governance", "Audit documentation", "Agreeing the terms of audit engagements"], "a": 3, "e": "SA 210."}, {"c": "Preconditions", "t": "SA 210 · Terms of Engagement", "q": "The preconditions for an audit are an acceptable financial reporting framework and:", "o": ["Management's agreement to the premise on which an audit is conducted", "The regulator's permission for the scope on which an audit is conducted", "The auditor's consent to the timeline on which an audit is conducted", "Management's approval of the audit fee on which an audit is conducted"], "a": 0, "e": "Preconditions."}, {"c": "Preconditions", "t": "SA 210 · Terms of Engagement", "q": "Management's agreement to the premise includes responsibility for FS, internal control and:", "o": ["Providing the auditor with a reasonable fee and timely payment of it", "Providing the auditor with a draft of the audit report and the opinion", "Providing the auditor with a copy of the minutes and the audit plan", "Providing the auditor with access to all relevant information and persons"], "a": 3, "e": "Preconditions."}, {"c": "Preconditions", "t": "SA 210 · Terms of Engagement", "q": "Which is NOT a precondition for an audit?", "o": ["The auditor's agreement to give an unmodified opinion", "Management's responsibility for internal control", "An acceptable financial reporting framework", "Management's responsibility for the FS"], "a": 0, "e": "Others are preconditions."}, {"c": "Preconditions", "t": "SA 210 · Terms of Engagement", "q": "If preconditions are not present and cannot be resolved with management, the auditor:", "o": ["Accepts the engagement after informing the regulator of it", "Accepts the engagement with a modified opinion at the end", "Does not accept the engagement, unless required by law", "Accepts the engagement with an additional fee for the risk"], "a": 2, "e": "Decline."}, {"c": "Preconditions", "t": "SA 210 · Terms of Engagement", "q": "A pre-acceptance scope limitation that would lead to a disclaimer results in:", "o": ["Accepting the engagement and adding an EOM in the end report", "Not accepting the engagement, unless required by law", "Accepting the engagement and disclaiming the opinion at the end", "Accepting the engagement and qualifying the opinion at the end"], "a": 1, "e": "Cautious statement."}, {"c": "Letter", "t": "SA 210 · Terms of Engagement", "q": "The audit engagement letter sets out the objective and scope, responsibilities of the auditor and management, the framework and:", "o": ["The expected form and content of the auditor's reports", "The expected date and venue of the annual general meeting", "The expected fee and timing of the payment of the audit", "The expected rotation and tenure of the audit partners"], "a": 0, "e": "Engagement letter."}, {"c": "Letter", "t": "SA 210 · Terms of Engagement", "q": "Unless required by law, an audit is:", "o": ["A voluntary activity carried out by the auditor on his own", "A statutory duty imposed on the auditor by the government", "A contractual agreement between the auditor and the client", "A regulatory process initiated by the registrar of companies"], "a": 2, "e": "Contractual."}, {"c": "Letter", "t": "SA 210 · Terms of Engagement", "q": "Management's refusal to acknowledge its responsibilities in writing leads the auditor to:", "o": ["Accept and rely on the past acknowledgment", "Discuss and, if unresolved, not accept the engagement", "Accept and qualify the report at the end of the audit", "Accept and obtain the same acknowledgment orally"], "a": 1, "e": "Illustration 4."}, {"c": "Change", "t": "Change of Terms &amp; Recurring", "q": "The auditor should not agree to a change in the terms of the engagement unless there is:", "o": ["A higher fee", "A client request", "A partner's approval", "A reasonable justification"], "a": 3, "e": "Change in terms."}, {"c": "Change", "t": "Change of Terms &amp; Recurring", "q": "Which is a reasonable justification for a change in the terms?", "o": ["A wish to hide the insufficiency of audit evidence", "A wish to avoid a qualified opinion on the report", "A wish to reduce the audit work and the fee payable", "A change in circumstances affecting the entity's needs"], "a": 3, "e": "Reasonable."}, {"c": "Change", "t": "Change of Terms &amp; Recurring", "q": "Changing from audit to review to avoid a qualified opinion due to insufficient evidence is:", "o": ["Not justified", "Optional", "Justified", "Mandatory"], "a": 0, "e": "Exam tip."}, {"c": "Change", "t": "Change of Terms &amp; Recurring", "q": "If a change to a lower level of assurance is agreed, the final report:", "o": ["Reflects both engagements and refers to the audit procedures", "Reflects the new engagement but refers to the original audit", "Reflects the new engagement and does not refer to the original audit", "Reflects the old engagement and refers to the original audit"], "a": 2, "e": "Change."}, {"c": "Change", "t": "Change of Terms &amp; Recurring", "q": "If the change in terms cannot be agreed, the auditor:", "o": ["Withdraws and does not report to any other person or authority", "Withdraws where permitted, and considers reporting to the parties concerned", "Continues with a review and does not refer to the audit work", "Continues the original audit and adds a paragraph in his report"], "a": 1, "e": "Recourse."}, {"c": "Recurring", "t": "Change of Terms &amp; Recurring", "q": "In recurring audits, the auditor should:", "o": ["Issue a revised letter only if the audit fee has been changed", "Rely on the original letter for the entire tenure of the audit", "Obtain a new engagement letter every year without any review", "Periodically review the terms and remind the entity of them"], "a": 3, "e": "Recurring."}, {"c": "Recurring", "t": "Change of Terms &amp; Recurring", "q": "Which calls for a revision or reminder of terms in recurring audits?", "o": ["A significant change in senior management or ownership", "A routine change in the audit staff of the firm", "A usual change in the venue of the audit work", "A normal rise in the quantum of the audit fee"], "a": 0, "e": "Recurring."}, {"c": "Recurring", "t": "Change of Terms &amp; Recurring", "q": "Which does NOT call for a revision of terms in a recurring audit?", "o": ["A change in the financial reporting framework", "A change in the audit staff assigned by the firm", "A new or changed legal or regulatory requirement", "A significant change in the nature or size of business"], "a": 1, "e": "Recurring."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "SQC 1 applies to:", "o": ["Public sector audits, covering banks alone", "A single audit engagement, covering one audit", "The entire firm, covering all engagements", "Listed entities, covering their audit alone"], "a": 2, "e": "SQC 1 vs SA 220."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "SA 220 focuses on quality control within:", "o": ["The ICAI", "The entire audit firm", "The audit committee", "An individual audit engagement"], "a": 3, "e": "SA 220."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "The six elements of SQC 1 are leadership, ethical requirements, acceptance and continuance, human resources, engagement performance and:", "o": ["Planning", "Staffing", "Monitoring", "Reporting"], "a": 2, "e": "Memory aid."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Promoting an internal culture of quality, led by managing partners, is the element of:", "o": ["Monitoring", "Leadership responsibilities for quality", "Ethical requirements", "Human resources"], "a": 1, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Obtaining annual written confirmations of independence from personnel is part of:", "o": ["Ethical requirements", "Monitoring", "Human resources", "Engagement performance"], "a": 0, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Assessing client integrity, firm's competence and resources before accepting a client is:", "o": ["Human resources policies of the firm and its staff", "Acceptance and continuance of client relationships", "Engagement performance standards for the audit team", "Leadership responsibilities for quality in the firm"], "a": 1, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Recruitment, training, performance evaluation and compensation fall under:", "o": ["Human resources", "Leadership", "Monitoring", "Ethical requirements"], "a": 0, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Supervision, consultation and engagement quality control review fall under:", "o": ["Human resources", "Ethical requirements", "Engagement performance", "Monitoring"], "a": 2, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Periodic inspection of completed engagements is part of:", "o": ["Human resources", "Leadership", "Engagement performance", "Monitoring"], "a": 3, "e": "Elements."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Under SA 220, overall quality of the engagement is the responsibility of:", "o": ["The engagement manager", "The audit committee", "The firm's managing partner", "The engagement partner"], "a": 3, "e": "SA 220."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "An engagement quality control reviewer is appointed for:", "o": ["Listed entities and other qualifying engagements", "Every engagement irrespective of its size", "Sole proprietorships and charitable trusts", "Small private companies and partnerships"], "a": 0, "e": "SA 220."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "Before accepting an audit, the engagement partner obtains information on client integrity, team competence, ethical compliance and:", "o": ["Staff turnover from previous audits", "Significant issues from previous audits", "Fee levels from previous audits", "Tax disputes from previous audits"], "a": 1, "e": "SA 220."}, {"c": "Quality", "t": "SQC 1 · SA 220", "q": "The engagement partner who finds an unmitigated threat to independence should:", "o": ["Record it in the file and continue the audit on the original terms", "Report it to the regulator and continue the audit on the terms", "Report it within the firm and decide the action, including withdrawal", "Report it to the client and continue the audit on the terms"], "a": 2, "e": "SA 220."}, {"c": "Scenario", "t": "Scenarios", "q": "CA Raghav certified plant cost at ₹9 crore against ₹15 crore per records to save fees for the client. This breaches:", "o": ["Competence", "Integrity", "Confidentiality", "Objectivity"], "a": 1, "e": "Illustration 1."}, {"c": "Scenario", "t": "Scenarios", "q": "CA Sameer became the nominee of the substantial shares of the audit client. The threat and the course of action are:", "o": ["Self-review threat; retain the shares and appoint a second auditor", "Familiarity threat; retain the shares and obtain the consent of the client", "Advocacy threat; retain the shares and disclose them in the audit report", "Self-interest threat; sell the shares before accepting the appointment"], "a": 3, "e": "Illustration 2."}, {"c": "Scenario", "t": "Scenarios", "q": "CA Vikram relied solely on the management representation letter about tax matters under appeal. This shows:", "o": ["Lack of professional skepticism", "Lack of confidentiality", "Lack of independence", "Lack of integrity"], "a": 0, "e": "Illustration 3."}, {"c": "Scenario", "t": "Scenarios", "q": "In the tax-appeal case, the additional procedures could include:", "o": ["Reviewing correspondence with the suppliers and purchase orders", "Reviewing correspondence with the customers and sales invoices", "Reviewing correspondence with tax authorities and legal opinions", "Reviewing correspondence with the bankers and valuation reports"], "a": 2, "e": "Illustration 3."}, {"c": "Scenario", "t": "Scenarios", "q": "Management of XYZ Enterprises refuses to acknowledge its responsibilities in writing. The auditor should:", "o": ["Accept the engagement and rely on an oral acknowledgment", "Accept the engagement and disclaim the opinion at the end", "Not accept the engagement, unless required by law", "Accept the engagement and qualify the report at the end"], "a": 2, "e": "Illustration 4."}, {"c": "Scenario", "t": "Scenarios", "q": "CA Neha finds that NIA and ED are investigating a prospective client for terror funding. She should:", "o": ["Accept the engagement with an Emphasis of Matter in the report", "Accept the engagement after obtaining a management representation", "Accept the engagement with a higher fee for the audit risk", "Not accept the engagement, as client integrity is doubtful"], "a": 3, "e": "Illustration 5."}, {"c": "Scenario", "t": "Scenarios", "q": "A firm proposes to accept fin-tech audits without the capability for them. It should:", "o": ["Accept and rely on the client's IT staff for the audit work", "Not accept until it develops competence and resources", "Accept and learn the technology while performing the audit", "Accept and charge a higher fee to cover the learning cost"], "a": 1, "e": "Illustration 6."}, {"c": "Scenario", "t": "Scenarios", "q": "A client requests a last-minute downgrade from audit to review because evidence for inventory is missing. The auditor should:", "o": ["Refuse, as the change masks a problem of insufficient evidence", "Accept, and issue the review report with a reference to the audit", "Accept, as the client is free to decide the level of assurance", "Accept, as the review is a lower level of work than the audit"], "a": 0, "e": "Exam tip."}, {"c": "Scenario", "t": "Scenarios", "q": "A team member's brother is the CFO of the audit client. This is a:", "o": ["Self-review threat to be addressed by safeguards or removal from the team", "Advocacy threat to be addressed by safeguards or removal from the team", "Intimidation threat to be addressed by safeguards or removal from the team", "Familiarity threat to be addressed by safeguards or removal from the team"], "a": 3, "e": "Threat."}, {"c": "Scenario", "t": "Scenarios", "q": "The audit client threatens to replace the auditor if a provision is insisted on. This is an intimidation threat; the auditor should:", "o": ["Stay objective and, if the threat cannot be reduced, withdraw", "Seek the client's consent and keep the client for the sake of the fee", "Drop the provision and keep the client for the sake of the fee", "Reduce the audit work and keep the client for the sake of the fee"], "a": 0, "e": "Threat."}];
 
-let order = DECK.map((_,i)=>i);
-let pos = 0;
-const answered = new Array(DECK.length).fill(null); // stores chosen index (per deck index)
-const stage = document.getElementById('stage');
-const navwrap = document.getElementById('navwrap');
-const elProg = document.getElementById('prog');
-const elCount = document.getElementById('count');
-const elScore = document.getElementById('score');
-const btnPrev = document.getElementById('prev');
-const btnNext = document.getElementById('next');
-const btnReveal = document.getElementById('reveal');
 const LAB=['A','B','C','D'];
-
-function scored(){return answered.filter((v,i)=>v!==null && v==='reveal'?false:(v!==null && v===DECK[i].a)).length;}
-function correctCount(){let n=0;answered.forEach((v,i)=>{if(typeof v==='number' && v===DECK[i].a)n++});return n;}
-function attempted(){return answered.filter(v=>typeof v==='number').length;}
-
-function render(anim){
-  if(pos>=order.length){return finish();}
-  const di = order[pos];
-  const card = DECK[di];
-  const chosen = answered[di]; // number | 'reveal' | null
-  const locked = chosen!==null;
-  elProg.style.width = ((pos)/order.length*100)+'%';
-  elCount.textContent = (pos+1)+' / '+order.length;
-  elScore.textContent = '✓ '+correctCount();
-
-  const opts = card.o.map((txt,i)=>{
-    let cls='opt';
-    if(locked){
-      if(i===card.a) cls+=' correct';
-      else if(typeof chosen==='number' && i===chosen) cls+=' wrong';
-      else cls+=' dim';
-    }
-    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}>
-        <span class="lab">${LAB[i]}</span><span>${txt}</span></button>`;
-  }).join('');
-
-  let expCls = locked?'exp show':'exp';
+let cur='All', order=[], pos=0;
+const answered=new Array(DECK.length).fill(null);
+const $=id=>document.getElementById(id);
+const stage=$('stage'),navwrap=$('navwrap'),elProg=$('prog'),elCount=$('count'),elScore=$('score'),
+      btnPrev=$('prev'),btnNext=$('next'),btnReveal=$('reveal'),chipsEl=$('chips');
+function build(shuf){
+  order=[];DECK.forEach((c,i)=>{if(cur==='All'||c.t===cur)order.push(i);});
+  if(shuf){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}}
+  pos=0;
+}
+function drawChips(){
+  const tags=['All',...new Set(DECK.map(c=>c.t))];
+  chipsEl.innerHTML=tags.map(t=>{const n=t==='All'?DECK.length:DECK.filter(c=>c.t===t).length;
+    return `<button class="chip${t===cur?' on':''}" data-t="${t.replace(/"/g,'&quot;')}">${t}<small>${n}</small></button>`}).join('');
+  chipsEl.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cur=b.dataset.t;navwrap.classList.remove('hidden');build(false);drawChips();render(true);});
+}
+function correctCount(){let n=0;order.forEach(i=>{if(answered[i]===DECK[i].a)n++});return n;}
+function attempted(){return order.filter(i=>typeof answered[i]==='number').length;}
+function render(){
+  if(pos>=order.length)return finish();
+  const di=order[pos],card=DECK[di],chosen=answered[di],locked=chosen!==null;
+  elProg.style.width=(pos/order.length*100)+'%';
+  elCount.textContent=(pos+1)+' / '+order.length;
+  elScore.textContent='✓ '+correctCount();
+  const opts=card.o.map((txt,i)=>{let cls='opt';
+    if(locked){if(i===card.a)cls+=' correct';else if(typeof chosen==='number'&&i===chosen)cls+=' wrong';else cls+=' dim';}
+    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}><span class="lab">${LAB[i]}</span><span>${txt}</span></button>`}).join('');
   let verdict='';
-  if(locked){
-    if(chosen==='reveal') verdict=`<div class="verdict ok">Answer</div>`;
-    else if(chosen===card.a) verdict=`<div class="verdict ok">✓ Correct</div>`;
-    else verdict=`<div class="verdict no">✗ Not quite</div>`;
-  }
-  const expHtml = `<div class="${expCls}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div>`;
-
-  stage.innerHTML = `<div class="card${anim?'':''}" id="card">
-      <div class="cbody">
-        <span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
-        <div class="q">${card.q}</div>
-        <div class="opts">${opts}</div>
-        ${expHtml}
-      </div></div>`;
-
-  stage.querySelectorAll('.opt').forEach(b=>{
-    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
-  });
-  btnPrev.disabled = pos===0;
-  btnNext.disabled = !locked;
-  btnNext.textContent = (pos===order.length-1)?'Finish':'Next ›';
-  btnReveal.style.visibility = locked?'hidden':'visible';
+  if(locked){verdict=chosen==='reveal'?'<div class="verdict ok">Answer</div>':(chosen===card.a?'<div class="verdict ok">✓ Correct</div>':'<div class="verdict no">✗ Not quite</div>');}
+  stage.innerHTML=`<div class="card" id="card"><div class="cbody"><span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
+    <div class="q">${card.q}</div><div class="opts">${opts}</div>
+    <div class="${locked?'exp show':'exp'}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div></div></div>`;
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.i));
+  btnPrev.disabled=pos===0;btnNext.disabled=!locked;
+  btnNext.textContent=(pos===order.length-1)?'Finish':'Next ›';
+  btnReveal.style.visibility=locked?'hidden':'visible';
 }
-
-function choose(i){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]=i;
-  render();
-}
-function reveal(){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]='reveal';
-  render();
-}
-function go(d,dir){
-  const card=document.getElementById('card');
-  if(card && dir){ card.classList.add(dir==='next'?'swipe-l':'swipe-r'); }
-  setTimeout(()=>{ pos=Math.max(0,Math.min(order.length,pos+d)); render(true); window.scrollTo({top:0,behavior:'smooth'}); }, dir?170:0);
-}
+function choose(i){const di=order[pos];if(i>3||answered[di]!==null)return;answered[di]=i;render();}
+function reveal(){const di=order[pos];if(answered[di]!==null)return;answered[di]='reveal';render();}
+function go(d,dir){const c=$('card');if(c&&dir)c.classList.add(dir==='next'?'swipe-l':'swipe-r');
+  setTimeout(()=>{pos=Math.max(0,Math.min(order.length,pos+d));render();window.scrollTo({top:0,behavior:'smooth'});},dir?170:0);}
 function finish(){
-  elProg.style.width='100%'; elCount.textContent=order.length+' / '+order.length;
-  const att=attempted(), cor=correctCount();
-  const pct = att? Math.round(cor/att*100):0;
-  elScore.textContent='✓ '+cor;
-  navwrap.classList.add('hidden');
-  stage.innerHTML = `<div class="done">
-    <div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
-    <h2>Deck complete</h2>
-    <p>${cor} correct out of ${att} attempted · ${DECK.length} cards</p>
-    <div class="row">
-      <button class="btn next" id="again">Restart</button>
-      <button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button>
-    </div>
-  </div>`;
-  document.getElementById('again').onclick=()=>{restart(false);};
-  document.getElementById('shuf2').onclick=()=>{restart(true);};
+  elProg.style.width='100%';elCount.textContent=order.length+' / '+order.length;
+  const att=attempted(),cor=correctCount(),pct=att?Math.round(cor/att*100):0;
+  elScore.textContent='✓ '+cor;navwrap.classList.add('hidden');
+  stage.innerHTML=`<div class="done"><div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
+  <h2>${cur==='All'?'Deck':'Topic'} complete</h2><p>${cor} correct out of ${att} attempted · ${order.length} cards${cur==='All'?'':' ('+cur+')'}</p>
+  <div class="row"><button class="btn next" id="again">Restart</button><button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button></div></div>`;
+  $('again').onclick=()=>restart(false);$('shuf2').onclick=()=>restart(true);
 }
-function restart(shuf){
-  for(let i=0;i<answered.length;i++) answered[i]=null;
-  order = DECK.map((_,i)=>i);
-  if(shuf){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
-  pos=0; navwrap.classList.remove('hidden'); render(true); window.scrollTo({top:0});
-}
-
-btnPrev.onclick=()=>go(-1,'prev');
-btnNext.onclick=()=>go(1,'next');
-btnReveal.onclick=reveal;
-document.getElementById('shuffle').onclick=()=>restart(true);
-document.getElementById('restart').onclick=()=>restart(false);
-
-// swipe
+function restart(shuf){order.forEach(i=>answered[i]=null);navwrap.classList.remove('hidden');build(shuf);render();window.scrollTo({top:0});}
+btnPrev.onclick=()=>go(-1,'prev');btnNext.onclick=()=>go(1,'next');btnReveal.onclick=reveal;
+$('shuffle').onclick=()=>restart(true);$('restart').onclick=()=>restart(false);
 let sx=0,sy=0;
 stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-stage.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.5){
-    if(dx<0 && !btnNext.disabled) go(1,'next');
-    else if(dx>0 && pos>0) go(-1,'prev');
-  }
-},{passive:true});
+stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0&&!btnNext.disabled)go(1,'next');else if(dx>0&&pos>0)go(-1,'prev');}},{passive:true});
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight' && !btnNext.disabled) go(1,'next');
-  if(e.key==='ArrowLeft' && pos>0) go(-1,'prev');
-  if(['1','2','3','4'].includes(e.key)) choose(parseInt(e.key,10)-1);
-  if(e.key.toLowerCase()==='r') reveal();
-});
-
-render(true);
+  if(e.key==='ArrowRight'&&!btnNext.disabled)go(1,'next');
+  if(e.key==='ArrowLeft'&&pos>0)go(-1,'prev');
+  if(['1','2','3','4'].includes(e.key))choose(+e.key-1);
+  if(e.key.toLowerCase()==='r')reveal();});
+build(false);drawChips();render();
 </script>
 </body>
 </html>

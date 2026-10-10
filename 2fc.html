@@ -112,6 +112,22 @@
   .hbar{ display:flex; align-items:center; gap:10px; }
   .htext{ flex:1; min-width:0; }
   .avatar{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid #BF8F00; box-shadow:0 2px 6px rgba(0,0,0,.28); }
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
 </style>
 </head>
 <body>
@@ -130,6 +146,8 @@
     </div>
   </header>
 
+  <div class="chips" id="chips"></div>
+  <div class="chips" id="chips"></div>
   <div class="stage" id="stage"><!-- card injected --></div>
 
   <div id="navwrap">
@@ -147,229 +165,72 @@
 </div>
 
 <script>
-const DECK = [
- {c:"Planning standard", q:"Planning an audit involves establishing the overall audit strategy and developing an audit plan. The Standard that deals with this is:",
-  o:["SA 200","SA 300","SA 315","SA 330"], a:1,
-  e:"SA 300 ‘Planning an Audit of Financial Statements’ governs the overall audit strategy and the audit plan."},
- {c:"Benefits of planning", q:"Which of the following is NOT a benefit of adequate audit planning?",
-  o:["Devoting appropriate attention to important areas","Identifying and resolving potential problems on a timely basis","Guaranteeing the detection of all frauds and errors","Selecting team members and assigning work appropriately"], a:2,
-  e:"Planning improves effectiveness but cannot guarantee detection of all fraud/error — an audit gives reasonable, not absolute, assurance."},
- {c:"Nature of planning", q:"Audit planning is best described as:",
-  o:["A discrete phase performed only at the start","A continual and iterative process throughout the audit","A step performed only after fieldwork ends","The sole responsibility of the audit assistant"], a:1,
-  e:"Planning is not a discrete phase — it is continual and iterative, and may be revised as the audit progresses."},
- {c:"Strategy vs plan", q:"The overall audit strategy:",
-  o:["Is more detailed than the audit plan","Sets the scope, timing and direction of the audit and guides the audit plan","Lists the specific procedures for each financial-statement item","Is prepared only for listed companies"], a:1,
-  e:"The strategy sets the scope, timing and direction; the audit plan is the more detailed document (nature, timing and extent of procedures)."},
- {c:"Content of the plan", q:"The audit plan includes a description of:",
-  o:["The firm’s quality-control policies","The planned nature, timing and extent of risk-assessment and further audit procedures","The engagement letter","The management representation letter"], a:1,
-  e:"The audit plan describes planned risk-assessment procedures, further audit procedures at the assertion level, and other planned procedures."},
- {c:"Preliminary activities", q:"Which is a preliminary engagement activity performed at the beginning of the current audit?",
-  o:["Issuing the audit report","Procedures on client continuance, ethical requirements (incl. independence) and the terms of engagement","Verifying closing inventory","Obtaining written representations"], a:1,
-  e:"Preliminary engagement activities are client continuance, compliance with ethics/independence, and understanding the terms of engagement (SA 210)."},
- {c:"Establishing strategy", q:"In establishing the overall audit strategy, which matter would the auditor consider?",
-  o:["The characteristics of the engagement that define its scope","The colour scheme of the audit report","The personal preferences of the client’s staff","The auditor’s holiday schedule"], a:0,
-  e:"The strategy considers engagement characteristics (scope), reporting objectives & timing, significant factors, preliminary activities, and the nature/timing/extent of resources."},
- {c:"Resources & team", q:"Determining the appropriate engagement team and assigning work to its members is part of:",
-  o:["The audit report","Establishing the overall audit strategy (ascertaining resources)","Written representations","The management letter"], a:1,
-  e:"Ascertaining the nature, timing and extent of resources — including team selection and assignment — is part of establishing the strategy."},
- {c:"Direction & review", q:"The extent of direction, supervision of team members and review of their work mainly varies with:",
-  o:["The auditor’s age","The assessed risks of material misstatement and the capabilities/competence of the team","The client’s turnover alone","The colour of the working papers"], a:1,
-  e:"Direction, supervision and review depend on the entity’s size/complexity, the area audited, the assessed risks, and the team’s capabilities."},
- {c:"Documentation (SA 300)", q:"Under SA 300, the auditor documents the overall strategy, the audit plan and:",
-  o:["Nothing else","Any significant changes made during the audit and the reasons for them","The client’s bank statements","The names of all shareholders"], a:1,
-  e:"SA 300 requires documenting the strategy, the plan, and significant changes to them during the audit with the reasons."},
- {c:"Audit programme", q:"An audit programme is:",
-  o:["A software package used for audits","A detailed written plan of the audit procedures (instructions) to be applied","The audit report","The engagement letter"], a:1,
-  e:"An audit programme is a written set of instructions/procedures to be carried out by members of the audit team."},
- {c:"Programme — advantages", q:"Which is an advantage of an audit programme?",
-  o:["It makes the audit rigid and unchangeable","It ensures uniform coverage, that no area is missed, and fixes responsibility for the work","It removes the need for audit evidence","It guarantees a clean opinion"], a:1,
-  e:"Advantages include uniform coverage, division and fixing of responsibility, ease of supervision & review, and evidence of work performed."},
- {c:"Programme — drawbacks", q:"A possible disadvantage of a rigid audit programme is that:",
-  o:["Work may become mechanical and staff may not exercise initiative","It improves efficiency","It fixes responsibility","It assists planning"], a:0,
-  e:"Rigidity can make the work mechanical and let inefficient staff hide behind the programme — so it should be flexible and periodically reviewed."},
- {c:"Constructing programme", q:"While constructing an audit programme, the auditor should:",
-  o:["Ignore the internal control system","Stay within the engagement’s scope & limitations and consider the entity’s internal control","Copy last year’s programme without any change","Avoid coordinating with the client"], a:1,
-  e:"The programme must reflect the engagement’s scope and limitations and the entity’s controls, and be tailored — not blindly copied."},
- {c:"Flexibility", q:"An audit programme should be:",
-  o:["Fixed permanently and never altered","Periodically reviewed and revised to suit changes in the client’s circumstances","Prepared by the client","Kept secret from the engagement team"], a:1,
-  e:"The programme should be reviewed and revised as the client’s business and circumstances change."},
- {c:"Changes during audit", q:"If, during the audit, the auditor obtains information that differs significantly from that used in planning, the auditor should:",
-  o:["Ignore it","Modify the overall strategy and the audit plan as necessary","Issue the report immediately","Resign from the engagement"], a:1,
-  e:"Planning is iterative; the strategy and plan are revised whenever significant new information arises."},
- {c:"Knowledge of business", q:"Obtaining knowledge of the client’s business helps the auditor to:",
-  o:["Prepare the client’s accounts","Identify areas needing special consideration, assess risks and plan effectively","Guarantee that no fraud exists","Replace the internal auditor"], a:1,
-  e:"Understanding the business helps the auditor spot risk areas and design appropriate procedures during planning."},
- {c:"Materiality (SA 320)", q:"The auditor determines materiality:",
-  o:["Only at the end of the audit","When planning the audit, revising it as the audit progresses if needed","Never","Only for listed companies"], a:1,
-  e:"Under SA 320, materiality is set during planning and revised if new information or changed circumstances warrant it."},
- {c:"Performance materiality", q:"Performance materiality is set:",
-  o:["Higher than overall materiality","At an amount below overall materiality to reduce the risk that aggregate uncorrected & undetected misstatements exceed materiality","Equal to the audit fee","By the client"], a:1,
-  e:"Performance materiality is kept below overall materiality to allow for the aggregation of individually immaterial misstatements."},
- {c:"Interim work", q:"Performing some audit procedures before the period-end (e.g., preliminary analytical review, certain control tests) is called:",
-  o:["Final audit","Interim audit work","Surprise check","Continuous audit"], a:1,
-  e:"Interim work is performed before the year-end to ease the final audit and surface issues early."},
- {c:"Continuous audit", q:"A continuous audit is one where:",
-  o:["The audit is done once a year after the accounts are closed","The auditor’s staff attend the client at regular intervals during the period to check transactions as they occur","The audit never ends","The client audits itself"], a:1,
-  e:"In a continuous audit the auditor visits at regular intervals through the year — suited to large entities with voluminous transactions."},
- {c:"Surprise checks", q:"Surprise checks are mainly intended to:",
-  o:["Replace the audit programme","Test whether internal control is operating effectively and act as a moral check on staff","Reduce the audit fee","Prepare the financial statements"], a:1,
-  e:"Surprise checks test the real operation of internal controls and deter manipulation/fraud by acting as a moral check."},
- {c:"Test checking", q:"Test checking refers to:",
-  o:["Checking 100% of transactions","Examining a representative sample of transactions to draw a conclusion about the whole","Ignoring high-value items","Checking only the trial balance"], a:1,
-  e:"Test checking examines selected representative items to form a conclusion about the population, relying on sampling and internal control."},
- {c:"Senior involvement", q:"SA 300 requires the engagement partner and key team members to be involved in planning because:",
-  o:["It reduces the audit fee","Their experience and insight enhance the effectiveness and efficiency of planning","The law says only partners may do all the work","Assistants cannot be trusted"], a:1,
-  e:"Involving the engagement partner and key members brings their experience and insight to bear, improving the planning process."},
- {c:"Recurring audits", q:"For a recurring (continuing) audit, preliminary engagement activities help the auditor to:",
-  o:["Skip the engagement letter forever","Decide on client continuance and confirm no issues affecting independence have arisen","Avoid planning altogether","Prepare the books of account"], a:1,
-  e:"Even for continuing audits, the auditor reconsiders client continuance and ethics/independence before proceeding."},
- {c:"Strategy ↔ plan", q:"Which statement about the relationship between the strategy and the plan is correct?",
-  o:["They are unrelated documents","They are inter-related — a change in one may lead to a change in the other","The plan is prepared before the strategy","Only the plan needs to be documented"], a:1,
-  e:"The overall strategy and the detailed plan are closely inter-related; changes in one affect the other, and both are documented."},
- {c:"Programme as evidence", q:"A completed and initialled audit programme serves as:",
-  o:["The financial statements","Evidence of the work performed and a means of fixing responsibility","The management representation","The engagement letter"], a:1,
-  e:"When completed and initialled, the programme evidences the procedures performed and identifies who performed them."},
- {c:"Tailoring", q:"An audit programme designed for one client:",
-  o:["Can be used for every client without any change","Should be tailored to the specific client, its business and its internal control","Is prohibited by law","Must be approved by the client’s board"], a:1,
-  e:"Programmes must be tailored; a standard programme applied blindly may miss client-specific risks."},
- {c:"Planning & risk", q:"Adequate planning benefits the audit by helping to:",
-  o:["Eliminate audit risk entirely","Reduce audit risk to an acceptably low level by directing effort to higher-risk areas","Avoid obtaining audit evidence","Shorten the audit report"], a:1,
-  e:"Planning channels effort toward higher-risk areas, helping reduce audit risk to an acceptably low level — it cannot eliminate it."},
- {c:"Sequence", q:"Which generally comes first in the planning process?",
-  o:["Developing the detailed audit plan","Performing preliminary engagement activities and establishing the overall audit strategy","Issuing the audit opinion","Verifying assets"], a:1,
-  e:"The auditor first performs preliminary engagement activities and sets the overall strategy, then develops the detailed audit plan."},
-];
+const DECK = [{"c": "Three tools", "t": "Strategy, Plan, Programme", "q": "Which one-line summary of the three planning tools is correct?", "o": ["Strategy = checklist, Plan = direction, Programme = roadmap", "Strategy = direction, Plan = roadmap, Programme = checklist", "Strategy = direction, Plan = checklist, Programme = roadmap", "Strategy = roadmap, Plan = checklist, Programme = direction"], "a": 1, "e": "Road-trip analogy: destination and route, turn-by-turn map with timings, checklist of stops."}, {"c": "Three tools", "t": "Strategy, Plan, Programme", "q": "Deciding to put experienced staff on intangible assets and R&amp;D costs is an example of:", "o": ["Verification steps in the audit programme", "Timing of procedures in the audit plan", "Resource allocation in the audit strategy", "Documentation of changes in the audit plan"], "a": 2, "e": "Resource allocation (team, time, supervision) belongs to the overall audit strategy."}, {"c": "Three tools", "t": "Strategy, Plan, Programme", "q": "Performing inventory counts close to the year-end to capture obsolescence is a decision of:", "o": ["The audit strategy", "The engagement letter", "The audit report", "The audit plan"], "a": 3, "e": "Timing, nature and extent of procedures belong to the audit plan."}, {"c": "Three tools", "t": "Strategy, Plan, Programme", "q": "Selecting a sample of sales transactions to verify revenue recognition criteria is a step of:", "o": ["The audit programme", "The audit strategy", "The representation letter", "The management letter"], "a": 0, "e": "The programme lists the specific tasks and procedures to be performed."}, {"c": "Objective", "t": "SA 300 &amp; Benefits", "q": "The auditor's objective under SA 300 is to:", "o": ["Plan the audit so that it is completed within the budgeted time", "Plan the audit so that every transaction can be checked", "Plan the audit so that management is not disturbed", "Plan the audit so that it is performed in an effective manner"], "a": 3, "e": "SA 300: plan so that the audit is performed in an effective manner."}, {"c": "Benefits of planning", "t": "SA 300 &amp; Benefits", "q": "Which is NOT a benefit of adequate planning?", "o": ["Attention to the important areas of the audit", "Guaranteeing that no material misstatement remains in the FS", "Selection of team members with the right skills", "Timely identification and resolution of problems"], "a": 1, "e": "Planning reduces audit risk to an acceptably low level; it cannot guarantee zero risk."}, {"c": "Benefits of planning", "t": "SA 300 &amp; Benefits", "q": "Adequate planning helps the auditor choose team members who have:", "o": ["The right skills and experience for specific tasks", "The same level of seniority for every task", "The least experience so as to reduce the audit cost", "The prior relationship with the client's management"], "a": 0, "e": "Planning matches skills and experience to audit tasks."}, {"c": "Benefits of planning", "t": "SA 300 &amp; Benefits", "q": "Planning helps in the coordination of:", "o": ["The work of the tax authorities and the Registrar", "The work of the management and the Board", "The work of component auditors and experts", "The work of the lenders and the regulators"], "a": 2, "e": "Coordination with other auditors and experts such as valuers."}, {"c": "Benefits of planning", "t": "SA 300 &amp; Benefits", "q": "Well-planned audit work reduces the risk of:", "o": ["An undetected fraud by employees", "An inappropriate audit opinion", "An unfavourable audit opinion", "An uncorrected misstatement by management"], "a": 1, "e": "Planning reduces audit risk and the risk of an inappropriate opinion."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "Audit planning is:", "o": ["A continuous and iterative process", "A one-time activity at the start", "A process done after fieldwork", "A process done only for new clients"], "a": 0, "e": "Planning starts soon after the previous audit ends and continues until the current audit is finished."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "Planning for the next audit normally starts:", "o": ["When the engagement letter is signed", "When the draft FS are received", "When the year-end inventory count is done", "Soon after the previous audit ends"], "a": 3, "e": "Planning is a cycle which begins at the conclusion of the previous audit."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "Which is NOT a key planning activity listed in the chapter?", "o": ["Deciding on the analytical procedures to be used", "Deciding on the involvement of experts in the audit", "Finalising the opinion paragraph of the report", "Determining materiality for the audit of the FS"], "a": 2, "e": "Opinion formation is at the completion stage, not planning."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "Telecom companies are regulated by TRAI and banks by RBI. Knowing this is part of:", "o": ["Assessing the internal control of the entity", "Understanding legal and regulatory requirements", "Determining materiality for the FS", "Involving experts in the audit work"], "a": 1, "e": "An example given for understanding legal requirements."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "Discussing planning details with management is:", "o": ["Prohibited, since it would impair the auditor's independence", "Useful only where the entity is a large or listed company", "Compulsory in every audit before the fieldwork is started", "Useful for coordination, but must not compromise objectivity"], "a": 3, "e": "Coordination is welcome; loss of independence is not."}, {"c": "Nature of planning", "t": "Nature of Planning", "q": "The engagement partner and key team members:", "o": ["Should plan only for high-risk areas", "Should be kept out of planning to save time", "Should be involved in planning the audit", "Should plan after the fieldwork is started"], "a": 2, "e": "Their experience makes planning more effective and efficient."}, {"c": "Elements", "t": "Preliminary &amp; Planning Activities", "q": "The elements of planning are:", "o": ["Preliminary engagement activities and planning activities", "Fieldwork activities and completion activities", "Risk assessment activities and substantive activities", "Strategy activities and reporting activities"], "a": 0, "e": "Two elements of the planning process."}, {"c": "Preliminary activities", "t": "Preliminary &amp; Planning Activities", "q": "Which is NOT a preliminary engagement activity?", "o": ["Preparing the detailed audit programme", "Evaluating compliance with ethical requirements", "Understanding the terms of engagement", "Procedures on continuance of the client"], "a": 0, "e": "The three preliminary checks: continuance, ethics/independence, terms of engagement."}, {"c": "Preliminary activities", "t": "Preliminary &amp; Planning Activities", "q": "The engagement letter is sent to:", "o": ["Obtain management representations on all the matters", "Outline what will be done and avoid misunderstanding", "Document the audit programme to be followed by the team", "Obtain evidence about the balances in the FS reported"], "a": 1, "e": "Establishing an understanding of the terms of engagement."}, {"c": "Preliminary activities", "t": "Preliminary &amp; Planning Activities", "q": "Evaluating compliance with ethical requirements includes:", "o": ["Ensuring continuity and fixing the audit staff", "Ensuring profitability and fixing the audit fees", "Ensuring independence and fixing any lapses by the team", "Ensuring efficiency and fixing the audit timetable"], "a": 2, "e": "Independence and ethics are checked before planning begins."}, {"c": "Overall strategy", "t": "Preliminary &amp; Planning Activities", "q": "Establishing the overall audit strategy involves deciding:", "o": ["Which banks, how many confirmations, and when to send them", "Which accounts, how many opinions, and when to report them", "Which experts, how many working papers, and when to file them", "Which team members, how many resources, and when to use them"], "a": 3, "e": "Strategy covers the deployment of resources: who, how many and when."}, {"c": "Overall strategy", "t": "Preliminary &amp; Planning Activities", "q": "Plans for supervision and review, team meetings and quality checks fall under:", "o": ["Managing resources in the audit strategy", "Nature of procedures in the audit programme", "Timing of procedures in the audit plan", "Reporting objectives of the engagement"], "a": 0, "e": "Managing resources includes how work will be supervised and reviewed."}, {"c": "Overall strategy", "t": "Preliminary &amp; Planning Activities", "q": "The 'scope of the engagement' factor in the strategy includes:", "o": ["The errors, frauds and irregularities noticed in the audit", "The reporting framework, business areas and industry requirements", "The audit fee, billing schedule and partner rotation", "The sampling size, test counts and extent of procedures"], "a": 1, "e": "Scope: what the audit will cover, including framework and industry requirements."}, {"c": "Overall strategy", "t": "Preliminary &amp; Planning Activities", "q": "Planning the timing of the audit and communication based on the entity's reporting schedule is a 'factor' under:", "o": ["Resources needed", "Preliminary activities", "Significant factors", "Reporting objectives"], "a": 3, "e": "Reporting objectives determine timing and communication."}, {"c": "Overall strategy", "t": "Preliminary &amp; Planning Activities", "q": "Volume of transactions, industry changes and updates in reporting standards are examples of:", "o": ["Resources needed", "Reporting objectives", "Significant factors", "Preliminary activities"], "a": 2, "e": "Significant factors direct the efforts of the engagement team."}, {"c": "Strategy vs Plan", "t": "Strategy vs Plan", "q": "Which describes the audit strategy and NOT the audit plan?", "o": ["Developed from the strategy and adjusted as needed", "A broad approach that sets the scope, timing and direction", "Specific procedures, timing and resource use", "Detailed steps showing how the strategy is to be executed"], "a": 1, "e": "The strategy is general and high-level; the plan is specific and detailed."}, {"c": "Strategy vs Plan", "t": "Strategy vs Plan", "q": "Which is established first?", "o": ["The audit report", "The audit plan", "The audit programme", "The audit strategy"], "a": 3, "e": "Strategy is established first to guide the audit; the plan is developed from it."}, {"c": "Strategy vs Plan", "t": "Strategy vs Plan", "q": "Which statement about their relationship is correct?", "o": ["A change in the strategy may require a change in the plan", "The plan informs the strategy in all cases", "The strategy informs only the audit programme", "A change in the plan never affects the strategy"], "a": 0, "e": "Changes in one may need changes in the other."}, {"c": "Strategy vs Plan", "t": "Strategy vs Plan", "q": "X lets the finance head of ABC Ltd. prepare the audit strategy and the detailed procedures, and adopts both. This is:", "o": ["Correct — the auditor can adopt it if he is satisfied", "Incorrect — only the strategy needs the auditor's own preparation", "Incorrect — the auditor must prepare the strategy and the plan himself", "Correct — the finance head knows the business better"], "a": 2, "e": "The strategy and plan are the auditor's responsibility; outsourcing compromises effectiveness and independence."}, {"c": "Changes in planning", "t": "Strategy vs Plan", "q": "The audit strategy and plan:", "o": ["May be updated and changed as the audit proceeds", "May be changed only with the client's consent", "Must be revised only at the year-end", "Must be fixed once approved by the partner"], "a": 0, "e": "Planning is dynamic; unexpected events or new evidence may require changes."}, {"c": "Changes in planning", "t": "Strategy vs Plan", "q": "Detailed checks reveal inconsistencies with the earlier test of controls. The auditor should:", "o": ["Discard the earlier test of controls from the file", "Inform the management and stop further testing", "Continue with the original plan to meet the deadline", "Adjust the audit plan to address the new concerns"], "a": 3, "e": "New evidence that alters risk assessment may need a change in the plan."}, {"c": "Supervision", "t": "Supervision &amp; Documentation", "q": "Which factor does NOT influence the extent of supervision?", "o": ["The size and complexity of the entity", "The audit fee agreed for the engagement", "The competence of the individual team members", "The assessed risks of material misstatement"], "a": 1, "e": "Factors: size/complexity, area of audit, assessed risk, team capabilities."}, {"c": "Supervision", "t": "Supervision &amp; Documentation", "q": "Supervision should be greater where:", "o": ["The assessed risks are higher and the team members are more experienced", "The assessed risks are lower and the team members are more experienced", "The assessed risks are higher and the team members are less experienced", "The assessed risks are lower and the team members are less experienced"], "a": 2, "e": "Higher risk and lower competence need more direction, supervision and review."}, {"c": "Documentation", "t": "Supervision &amp; Documentation", "q": "Which of these must be documented in planning?", "o": ["The audit plan and significant changes only, but not the strategy", "The overall audit strategy and the audit plan only, but not any changes", "The overall audit strategy, the audit plan and significant changes with reasons", "The overall audit strategy and significant changes only, not the plan"], "a": 2, "e": "Changes must be recorded with the reasons so the team understands how the final plan was decided."}, {"c": "Documentation", "t": "Supervision &amp; Documentation", "q": "Standard audit programmes and checklists may be used in documenting the plan if they are:", "o": ["Tailored to the specific engagement", "Used without any changes by the team", "Approved by the client's management", "Filed with the Registrar of Companies"], "a": 0, "e": "Standard programmes are tailored to the particular engagement."}, {"c": "Documentation", "t": "Supervision &amp; Documentation", "q": "Documenting the strategy and plan helps with:", "o": ["Communication to the Registrar, approval and signature, and finality", "Communication to the team, review and approval, and adaptability", "Communication to the client, certification and filing, and reliability", "Communication to the lenders, valuation and tax filing, and stability"], "a": 1, "e": "Documentation communicates the plan, enables review and records changes."}, {"c": "Audit programme", "t": "Audit Programme", "q": "An audit programme is:", "o": ["A summary of the key decisions taken for the overall audit approach", "A report of the findings of the audit made to the management", "A broad statement of the scope, timing and direction of the audit", "A detailed checklist of steps for examining and verifying the records"], "a": 3, "e": "It ensures that necessary procedures are completed efficiently and systematically."}, {"c": "Audit programme", "t": "Audit Programme", "q": "A universal, one-size-fits-all audit programme is not practical because:", "o": ["Standards differ widely in coverage, number and content", "Clients differ widely in fees, timing and location", "Auditors differ widely in experience, seniority and skills", "Businesses differ widely in size, complexity and internal controls"], "a": 3, "e": "Each programme is customised to the specific business."}, {"c": "Audit programme", "t": "Audit Programme", "q": "Audit assistants who notice a significant issue outside the programme should:", "o": ["Wait for the next year's audit to deal with it", "Ignore it as it is outside their instructions", "Note and report it, keeping an open mind", "Correct it themselves without telling anyone"], "a": 2, "e": "Open-mindedness is the cure for the rigidity of a programme."}, {"c": "Audit programme", "t": "Audit Programme", "q": "Failing to review the audit programme periodically may lead to:", "o": ["Negligence because the audit relies on obsolete procedures", "Lower fees because the audit uses fewer procedures", "Delay in the audit because the audit uses more procedures", "Qualified report because the audit uses new procedures"], "a": 0, "e": "Periodic review avoids obsolescence."}, {"c": "Audit programme", "t": "Audit Programme", "q": "Which procedure has a FIXED timing in an audit programme?", "o": ["Test of arithmetical accuracy", "Observation of inventory", "Confirmation of balances", "Review of minutes"], "a": 1, "e": "Timing is usually flexible, but inventory observation is fixed."}, {"c": "Constructing", "t": "Audit Programme", "q": "Which is NOT a point to consider while constructing an audit programme?", "o": ["Staying within the scope of the assignment given", "Applying only the necessary steps for the situation", "Maximising the number of steps to cover every risk", "Identifying the best available evidence for verification"], "a": 2, "e": "'Efficiency' means only the necessary steps are applied."}, {"c": "Constructing", "t": "Audit Programme", "q": "Anticipating possible errors and coordinating procedures related to interconnected items are:", "o": ["Benefits of planning an audit of the FS", "Points to consider in constructing the programme", "Disadvantages of an audit programme in practice", "Preliminary engagement activities of the auditor"], "a": 1, "e": "Both are listed among the seven points."}, {"c": "Advantages", "t": "Audit Programme", "q": "Assistants signing the programme provides:", "o": ["Perspective on the overall work to be performed", "Protection against charges of negligence", "Guidance for audits of the subsequent years", "Accountability and traceability of the work done"], "a": 3, "e": "Sign-off accepts responsibility and makes work traceable."}, {"c": "Advantages", "t": "Audit Programme", "q": "An audit programme can serve as evidence of:", "o": ["Due diligence and care in case of negligence charges", "Compliance and disclosure in case of regulatory charges", "Independence and integrity in case of conflict charges", "Competence and experience in case of tender selection"], "a": 0, "e": "Legal protection is an advantage of the programme."}, {"c": "Advantages", "t": "Audit Programme", "q": "The advantage that reduces the risk of overlooking records is:", "o": ["Control over the progress of various audits", "A clear set of instructions to the assistants", "A systematic approach, replacing a 'mental' plan", "Easier selection of assistants on capability"], "a": 2, "e": "A written programme avoids reliance on a mental plan."}, {"c": "Disadvantages", "t": "Audit Programme", "q": "Which is a disadvantage of an audit programme?", "o": ["It may be reviewed by the principal to control progress", "It may be signed by assistants accepting responsibility", "It may be used for audits in the subsequent years", "It may be completed mechanically without understanding the purpose"], "a": 3, "e": "Disadvantages: mechanical work, rigidity, staff dependency, initiative suppression."}, {"c": "Disadvantages", "t": "Audit Programme", "q": "Rigidity of the audit programme is overcome by:", "o": ["Periodic review and open-minded assistants", "Replacement of assistants with senior personnel", "Reduction in the number of steps in the programme", "Increased supervision and review by the partner"], "a": 0, "e": "Pair each disadvantage with its cure for extra marks."}, {"c": "Evidence types", "t": "Evidence in the Programme", "q": "Which is NOT among the ten types of audit evidence the programme is designed to gather?", "o": ["Third-party statements from outsiders", "Management's performance bonus", "Documentary examination of records", "Physical examination of the assets"], "a": 1, "e": "Types: documentary, physical, management statements, third-party, calculations, internal controls, inter-relationships, subsidiary records, minutes, subsequent actions."}, {"c": "Evidence types", "t": "Evidence in the Programme", "q": "Inspecting inventory or equipment is:", "o": ["Physical examination", "Documentary examination", "Third-party statement", "Arithmetical calculation"], "a": 0, "e": "Physical examination relates to tangible assets."}, {"c": "Evidence types", "t": "Evidence in the Programme", "q": "Confirmations from customers and suppliers are:", "o": ["Management statements", "Documentary examination", "Third-party statements", "Subsidiary records"], "a": 2, "e": "External parties' confirmations or explanations."}, {"c": "Evidence types", "t": "Evidence in the Programme", "q": "Reviewing minutes of meetings is classified as:", "o": ["A type of substantive procedure only", "A type of analytical review", "A type of internal control", "A type of audit evidence"], "a": 3, "e": "Minutes are one of the ten types of evidence in the programme."}, {"c": "Evidence types", "t": "Evidence in the Programme", "q": "Considering actions taken after the transaction to assess its accuracy is:", "o": ["Inter-relationship of data", "Subsequent actions", "Management statements", "Subsidiary records"], "a": 1, "e": "Subsequent actions of the client or others."}, {"c": "Weighing evidence", "t": "Evidence in the Programme", "q": "In weighing evidence, the auditor should:", "o": ["Assess reliability and relevance, and consider all evidence not only the client's", "Rely on the client's evidence as it is the most readily available", "Collect the maximum volume of evidence regardless of its reliability", "Prefer the evidence that supports the management's assertions"], "a": 0, "e": "Comprehensive evaluation and prioritisation of verification."}, {"c": "Weighing evidence", "t": "Evidence in the Programme", "q": "The best evidence for testing accuracy is determined by:", "o": ["The client's accounting software design", "The auditor's expertise and experience", "The management's choice and preference", "The engagement letter's terms of work"], "a": 1, "e": "The programme is crafted on the auditor's expertise, nature of transactions and available evidence."}, {"c": "Case study", "t": "Case Studies", "q": "MG &amp; Co. audits a defence-equipment manufacturer and feels experts are needed. This consideration is:", "o": ["Part of audit completion under SA 450", "Part of the audit programme under SA 500", "Part of the audit report under SA 700", "Part of audit planning under SA 300"], "a": 3, "e": "Deciding on experts is part of establishing the strategy and the plan."}, {"c": "Case study", "t": "Case Studies", "q": "CA Kartik plans control testing but never tells management, seeking a surprise. His approach is:", "o": ["Appropriate — management should not be told of any procedure planned", "Appropriate — surprise requires that nothing be disclosed to management", "Not appropriate — management should know the intent; timing stays flexible", "Not appropriate — management should also be told the exact dates fixed"], "a": 2, "e": "Communicate the intent to test controls; keep timing flexible to preserve some surprise."}, {"c": "Case study", "t": "Case Studies", "q": "CA Mary inquires of the in-house legal counsel on pending litigation to assess risks of misstatement. This is:", "o": ["An analytical procedure to be included and documented in the report", "A substantive procedure to be included and documented in the audit programme", "A test of controls to be included and documented in the strategy", "A risk assessment procedure to be included and documented in the audit plan"], "a": 3, "e": "SA 300: the plan includes risk assessment procedures, documented."}, {"c": "Case study", "t": "Case Studies", "q": "A social media company must set up a grievance redressal mechanism; non-compliance may cause liabilities. The auditor should:", "o": ["Consider this in the overall audit strategy as a regulatory change", "Consider this only if the company is penalised in the year", "Consider this outside the audit as it is a legal matter", "Consider this only in the audit report as an emphasis matter"], "a": 0, "e": "Changes in laws are significant factors for the strategy; assess non-compliance risk."}, {"c": "Case study", "t": "Case Studies", "q": "Rohit notices e-way bills cancelled within 24 hours in March, not in his programme, and keeps quiet. His attitude is:", "o": ["Proper — he is only a trainee and cannot take a view", "Not proper — he should report it as a potential fraud indicator", "Not proper — he should correct the sales entries himself", "Proper — he should stick to the items given in the programme"], "a": 1, "e": "SA 240, SA 230 and SA 200: remain alert, document and report; exercise professional skepticism."}, {"c": "Case study", "t": "Case Studies", "q": "Rohit's duty to report an unusual finding arises mainly from:", "o": ["Expectations of the engagement letter", "Compliance with the client's instructions", "Professional skepticism and thoroughness", "Fixed procedures set out in the programme"], "a": 2, "e": "SA 200 emphasises professional skepticism."}];
 
-let order = DECK.map((_,i)=>i);
-let pos = 0;
-const answered = new Array(DECK.length).fill(null); // stores chosen index (per deck index)
-const stage = document.getElementById('stage');
-const navwrap = document.getElementById('navwrap');
-const elProg = document.getElementById('prog');
-const elCount = document.getElementById('count');
-const elScore = document.getElementById('score');
-const btnPrev = document.getElementById('prev');
-const btnNext = document.getElementById('next');
-const btnReveal = document.getElementById('reveal');
 const LAB=['A','B','C','D'];
-
-function scored(){return answered.filter((v,i)=>v!==null && v==='reveal'?false:(v!==null && v===DECK[i].a)).length;}
-function correctCount(){let n=0;answered.forEach((v,i)=>{if(typeof v==='number' && v===DECK[i].a)n++});return n;}
-function attempted(){return answered.filter(v=>typeof v==='number').length;}
-
-function render(anim){
-  if(pos>=order.length){return finish();}
-  const di = order[pos];
-  const card = DECK[di];
-  const chosen = answered[di]; // number | 'reveal' | null
-  const locked = chosen!==null;
-  elProg.style.width = ((pos)/order.length*100)+'%';
-  elCount.textContent = (pos+1)+' / '+order.length;
-  elScore.textContent = '✓ '+correctCount();
-
-  const opts = card.o.map((txt,i)=>{
-    let cls='opt';
-    if(locked){
-      if(i===card.a) cls+=' correct';
-      else if(typeof chosen==='number' && i===chosen) cls+=' wrong';
-      else cls+=' dim';
-    }
-    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}>
-        <span class="lab">${LAB[i]}</span><span>${txt}</span></button>`;
-  }).join('');
-
-  let expCls = locked?'exp show':'exp';
+let cur='All', order=[], pos=0;
+const answered=new Array(DECK.length).fill(null);
+const $=id=>document.getElementById(id);
+const stage=$('stage'),navwrap=$('navwrap'),elProg=$('prog'),elCount=$('count'),elScore=$('score'),
+      btnPrev=$('prev'),btnNext=$('next'),btnReveal=$('reveal'),chipsEl=$('chips');
+function build(shuf){
+  order=[];DECK.forEach((c,i)=>{if(cur==='All'||c.t===cur)order.push(i);});
+  if(shuf){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}}
+  pos=0;
+}
+function drawChips(){
+  const tags=['All',...new Set(DECK.map(c=>c.t))];
+  chipsEl.innerHTML=tags.map(t=>{const n=t==='All'?DECK.length:DECK.filter(c=>c.t===t).length;
+    return `<button class="chip${t===cur?' on':''}" data-t="${t.replace(/"/g,'&quot;')}">${t}<small>${n}</small></button>`}).join('');
+  chipsEl.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cur=b.dataset.t;navwrap.classList.remove('hidden');build(false);drawChips();render(true);});
+}
+function correctCount(){let n=0;order.forEach(i=>{if(answered[i]===DECK[i].a)n++});return n;}
+function attempted(){return order.filter(i=>typeof answered[i]==='number').length;}
+function render(){
+  if(pos>=order.length)return finish();
+  const di=order[pos],card=DECK[di],chosen=answered[di],locked=chosen!==null;
+  elProg.style.width=(pos/order.length*100)+'%';
+  elCount.textContent=(pos+1)+' / '+order.length;
+  elScore.textContent='✓ '+correctCount();
+  const opts=card.o.map((txt,i)=>{let cls='opt';
+    if(locked){if(i===card.a)cls+=' correct';else if(typeof chosen==='number'&&i===chosen)cls+=' wrong';else cls+=' dim';}
+    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}><span class="lab">${LAB[i]}</span><span>${txt}</span></button>`}).join('');
   let verdict='';
-  if(locked){
-    if(chosen==='reveal') verdict=`<div class="verdict ok">Answer</div>`;
-    else if(chosen===card.a) verdict=`<div class="verdict ok">✓ Correct</div>`;
-    else verdict=`<div class="verdict no">✗ Not quite</div>`;
-  }
-  const expHtml = `<div class="${expCls}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div>`;
-
-  stage.innerHTML = `<div class="card${anim?'':''}" id="card">
-      <div class="cbody">
-        <span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
-        <div class="q">${card.q}</div>
-        <div class="opts">${opts}</div>
-        ${expHtml}
-      </div></div>`;
-
-  stage.querySelectorAll('.opt').forEach(b=>{
-    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
-  });
-  btnPrev.disabled = pos===0;
-  btnNext.disabled = !locked;
-  btnNext.textContent = (pos===order.length-1)?'Finish':'Next ›';
-  btnReveal.style.visibility = locked?'hidden':'visible';
+  if(locked){verdict=chosen==='reveal'?'<div class="verdict ok">Answer</div>':(chosen===card.a?'<div class="verdict ok">✓ Correct</div>':'<div class="verdict no">✗ Not quite</div>');}
+  stage.innerHTML=`<div class="card" id="card"><div class="cbody"><span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
+    <div class="q">${card.q}</div><div class="opts">${opts}</div>
+    <div class="${locked?'exp show':'exp'}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div></div></div>`;
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.i));
+  btnPrev.disabled=pos===0;btnNext.disabled=!locked;
+  btnNext.textContent=(pos===order.length-1)?'Finish':'Next ›';
+  btnReveal.style.visibility=locked?'hidden':'visible';
 }
-
-function choose(i){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]=i;
-  render();
-}
-function reveal(){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]='reveal';
-  render();
-}
-function go(d,dir){
-  const card=document.getElementById('card');
-  if(card && dir){ card.classList.add(dir==='next'?'swipe-l':'swipe-r'); }
-  setTimeout(()=>{ pos=Math.max(0,Math.min(order.length,pos+d)); render(true); window.scrollTo({top:0,behavior:'smooth'}); }, dir?170:0);
-}
+function choose(i){const di=order[pos];if(i>3||answered[di]!==null)return;answered[di]=i;render();}
+function reveal(){const di=order[pos];if(answered[di]!==null)return;answered[di]='reveal';render();}
+function go(d,dir){const c=$('card');if(c&&dir)c.classList.add(dir==='next'?'swipe-l':'swipe-r');
+  setTimeout(()=>{pos=Math.max(0,Math.min(order.length,pos+d));render();window.scrollTo({top:0,behavior:'smooth'});},dir?170:0);}
 function finish(){
-  elProg.style.width='100%'; elCount.textContent=order.length+' / '+order.length;
-  const att=attempted(), cor=correctCount();
-  const pct = att? Math.round(cor/att*100):0;
-  elScore.textContent='✓ '+cor;
-  navwrap.classList.add('hidden');
-  stage.innerHTML = `<div class="done">
-    <div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
-    <h2>Deck complete</h2>
-    <p>${cor} correct out of ${att} attempted · ${DECK.length} cards</p>
-    <div class="row">
-      <button class="btn next" id="again">Restart</button>
-      <button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button>
-    </div>
-  </div>`;
-  document.getElementById('again').onclick=()=>{restart(false);};
-  document.getElementById('shuf2').onclick=()=>{restart(true);};
+  elProg.style.width='100%';elCount.textContent=order.length+' / '+order.length;
+  const att=attempted(),cor=correctCount(),pct=att?Math.round(cor/att*100):0;
+  elScore.textContent='✓ '+cor;navwrap.classList.add('hidden');
+  stage.innerHTML=`<div class="done"><div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
+  <h2>${cur==='All'?'Deck':'Topic'} complete</h2><p>${cor} correct out of ${att} attempted · ${order.length} cards${cur==='All'?'':' ('+cur+')'}</p>
+  <div class="row"><button class="btn next" id="again">Restart</button><button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button></div></div>`;
+  $('again').onclick=()=>restart(false);$('shuf2').onclick=()=>restart(true);
 }
-function restart(shuf){
-  for(let i=0;i<answered.length;i++) answered[i]=null;
-  order = DECK.map((_,i)=>i);
-  if(shuf){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
-  pos=0; navwrap.classList.remove('hidden'); render(true); window.scrollTo({top:0});
-}
-
-btnPrev.onclick=()=>go(-1,'prev');
-btnNext.onclick=()=>go(1,'next');
-btnReveal.onclick=reveal;
-document.getElementById('shuffle').onclick=()=>restart(true);
-document.getElementById('restart').onclick=()=>restart(false);
-
-// swipe
+function restart(shuf){order.forEach(i=>answered[i]=null);navwrap.classList.remove('hidden');build(shuf);render();window.scrollTo({top:0});}
+btnPrev.onclick=()=>go(-1,'prev');btnNext.onclick=()=>go(1,'next');btnReveal.onclick=reveal;
+$('shuffle').onclick=()=>restart(true);$('restart').onclick=()=>restart(false);
 let sx=0,sy=0;
 stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-stage.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.5){
-    if(dx<0 && !btnNext.disabled) go(1,'next');
-    else if(dx>0 && pos>0) go(-1,'prev');
-  }
-},{passive:true});
+stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0&&!btnNext.disabled)go(1,'next');else if(dx>0&&pos>0)go(-1,'prev');}},{passive:true});
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight' && !btnNext.disabled) go(1,'next');
-  if(e.key==='ArrowLeft' && pos>0) go(-1,'prev');
-  if(['1','2','3','4'].includes(e.key)) choose(parseInt(e.key,10)-1);
-  if(e.key.toLowerCase()==='r') reveal();
-});
-
-render(true);
+  if(e.key==='ArrowRight'&&!btnNext.disabled)go(1,'next');
+  if(e.key==='ArrowLeft'&&pos>0)go(-1,'prev');
+  if(['1','2','3','4'].includes(e.key))choose(+e.key-1);
+  if(e.key.toLowerCase()==='r')reveal();});
+build(false);drawChips();render();
 </script>
 </body>
 </html>

@@ -112,6 +112,22 @@
   .hbar{ display:flex; align-items:center; gap:10px; }
   .htext{ flex:1; min-width:0; }
   .avatar{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; object-fit:cover; border:2px solid #BF8F00; box-shadow:0 2px 6px rgba(0,0,0,.28); }
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
+
+  .exp.show{max-height:700px}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 12px 'Mulish',sans-serif;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+  .chip small{color:var(--muted);font-weight:700;margin-left:3px}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.on small{color:#cfd9ee}
 </style>
 </head>
 <body>
@@ -130,6 +146,8 @@
     </div>
   </header>
 
+  <div class="chips" id="chips"></div>
+  <div class="chips" id="chips"></div>
   <div class="stage" id="stage"><!-- card injected --></div>
 
   <div id="navwrap">
@@ -147,235 +165,72 @@
 </div>
 
 <script>
-const DECK = [
- {c:"Meaning of audit", q:"The word ‘audit’ is derived from the Latin word ‘audire’. What does it mean?",
-  o:["To verify","To hear","To examine","To certify"], a:1,
-  e:"‘Audire’ means ‘to hear’. Historically, accounts were read out and ‘heard’ by the auditor — the term reflects audit’s origin."},
- {c:"Objective (SA 200)", q:"As per SA 200, the purpose of an audit is to enhance users’ confidence in the financial statements. This is achieved by:",
-  o:["The auditor preparing the financial statements","The auditor guaranteeing their accuracy","Expressing an opinion on whether the FS are prepared, in all material respects, per the applicable framework","Certifying that no fraud exists"], a:2,
-  e:"The auditor expresses an opinion on whether the FS are prepared, in all material respects, in accordance with the applicable financial reporting framework — not a guarantee or certificate."},
- {c:"Reasonable assurance", q:"An audit conducted in accordance with the SAs is designed to obtain:",
-  o:["Absolute assurance","Reasonable assurance","Limited assurance","No assurance"], a:1,
-  e:"An audit provides reasonable assurance — a high, but not absolute, level of assurance — because of the inherent limitations of an audit."},
- {c:"Why not absolute", q:"An audit cannot provide absolute assurance mainly because:",
-  o:["Auditors are not competent enough","Of the inherent limitations of an audit","The law does not permit it","Management never cooperates"], a:1,
-  e:"Inherent limitations — judgement in financial reporting, sampling, persuasive evidence and future events — mean only reasonable assurance is achievable."},
- {c:"Nature of evidence", q:"Which statement about audit evidence is correct?",
-  o:["All audit evidence is conclusive","Most audit evidence is persuasive rather than conclusive","Audit evidence is never reliable","Evidence must cover 100% of transactions"], a:1,
-  e:"Because of the nature of audit procedures, most evidence is persuasive rather than conclusive — a key contributor to the inherent limitations."},
- {c:"Inherent limitations", q:"Which of the following is NOT a source of the inherent limitations of an audit?",
-  o:["The nature of financial reporting (judgements & estimates)","The nature of audit procedures (sampling, reliance on management)","The auditor lacking professional qualification","Timeliness of reporting and the balance between cost and benefit"], a:2,
-  e:"Inherent limitations arise from the nature of financial reporting, the nature of audit procedures, and timeliness/cost — not from the auditor lacking qualifications."},
- {c:"Future events", q:"A company that was a going concern on the report date collapses a year later due to new technology. Which inherent limitation does this illustrate?",
-  o:["Sampling risk","Future events","Management fraud","Non-compliance with AS"], a:1,
-  e:"Future events or conditions may cause an entity to cease to continue; their later occurrence does not, by itself, indicate any failure by the auditor."},
- {c:"Internal control limits", q:"Even a well-designed internal control system has inherent limitations because:",
-  o:["Controls are never documented","Of management override and the possibility of collusion","Auditors do not test controls","Controls are illegal"], a:1,
-  e:"Internal control can be defeated by management override or by collusion among people — adding to the audit’s inherent limitations."},
- {c:"Management’s responsibility", q:"Responsibility for preparing financial statements that give a true and fair view rests with:",
-  o:["The statutory auditor","Management and those charged with governance","The internal auditor","The Central Government"], a:1,
-  e:"Management (with those charged with governance) is responsible for preparing the FS and for internal control; the auditor’s job is to express an opinion."},
- {c:"True & fair", q:"To form an opinion on ‘true and fair’, which would the auditor NOT specifically consider?",
-  o:["Assets are neither over- nor under-valued","Accounting policies are consistently applied","Material items are properly disclosed","The company will earn profits next year"], a:3,
-  e:"‘True & fair’ concerns proper valuation, consistency and disclosure — it is not a forecast of future profitability."},
- {c:"Scope of audit", q:"The scope of an audit of financial statements is determined by:",
-  o:["The auditor alone, at his discretion","The engagement terms, the requirements of relevant law, and the pronouncements of ICAI","The management of the entity","The shareholders at the general meeting"], a:1,
-  e:"Scope is governed by the terms of engagement, applicable statutes/regulations and the Standards/pronouncements of ICAI."},
- {c:"Aspects covered", q:"Which of the following is NOT an aspect to be covered in an audit?",
-  o:["Examining the accounting & internal control systems","Verifying the existence & value of assets and liabilities","Preparing the entity’s books of account","Checking compliance with statutory requirements"], a:2,
-  e:"The auditor does not prepare the books — that would impair independence. He examines controls, verifies items, checks compliance and reports."},
- {c:"Errors — commission", q:"Recording a purchase of ₹5,000 as ₹500 in the purchase book is an example of:",
-  o:["Error of omission","Error of principle","Error of commission","Compensating error"], a:2,
-  e:"An error of commission arises from incorrect recording, posting, casting or totalling — here, a wrong amount has been recorded."},
- {c:"Errors — principle", q:"Treating a capital expenditure as a revenue expenditure is an:",
-  o:["Error of commission","Error of principle","Error of omission","Compensating error"], a:1,
-  e:"An error of principle arises when an entry violates accounting principles — e.g., misclassifying capital vs revenue items."},
- {c:"Errors — compensating", q:"An error that is counter-balanced by another error so the trial balance still agrees is a:",
-  o:["Compensating error","Error of omission","Error of duplication","Error of principle"], a:0,
-  e:"Compensating errors offset each other in amount, so the trial balance is not disturbed and the errors are harder to detect."},
- {c:"Fraud — types", q:"Theft of an entity’s assets, often by employees, is termed:",
-  o:["Fraudulent financial reporting","Misappropriation of assets","Error of commission","Window dressing"], a:1,
-  e:"Misappropriation of assets (e.g., embezzlement) is one type of fraud; the other is fraudulent financial reporting (intentional misstatement of the FS)."},
- {c:"Fraud — responsibility", q:"Primary responsibility for the prevention and detection of fraud rests with:",
-  o:["The statutory auditor","Those charged with governance and management","The internal auditor only","The Comptroller & Auditor General"], a:1,
-  e:"Per SA 240, prevention/detection of fraud is primarily the responsibility of TCWG and management; the auditor only obtains reasonable assurance."},
- {c:"Materiality (SA 320)", q:"Misstatements are material if, individually or in aggregate, they could reasonably be expected to:",
-  o:["Be detected by sampling","Influence the economic decisions of users taken on the basis of the FS","Require restatement of prior periods","Attract a penalty under the Companies Act"], a:1,
-  e:"Materiality is judged by whether a misstatement could influence users’ economic decisions; it depends on both the size and the nature of the item."},
- {c:"Audit & accounting", q:"“Auditing begins where accounting ends.” This means that:",
-  o:["Auditing and accounting are unrelated","The auditor reviews and reports on financial information after the accounting process","Auditors must prepare the accounts first","Accounting is more important than auditing"], a:1,
-  e:"Once accounting produces the financial statements, auditing examines and reports on them — hence audit begins where accounting ends."},
- {c:"Related disciplines", q:"Appreciating the effect of price-level changes and economic conditions on an entity links auditing most closely with:",
-  o:["Law","Economics","Behavioural science","Statistics"], a:1,
-  e:"Auditing is closely related to economics — the auditor must understand the entity’s economic environment to assess its affairs."},
- {c:"Related disciplines", q:"In making enquiries and dealing with client staff, the auditor draws on principles of:",
-  o:["Mathematics","Behavioural science","Production","Law"], a:1,
-  e:"Auditing is linked to behavioural science because the auditor constantly interacts with people and must understand human behaviour."},
- {c:"Standards framework", q:"Standards on Quality Control (SQC 1) apply to:",
-  o:["Only listed companies","All firms, for audits, reviews, other assurance and related-services engagements","Only statutory audits","Only government audits"], a:1,
-  e:"SQC 1 applies to all firms in respect of audits and reviews of historical financial information, and other assurance and related-services engagements."},
- {c:"Engagement standards", q:"Standards on Auditing (SAs) apply to:",
-  o:["Reviews of historical financial information","Audits of historical financial information","Compilation engagements","Agreed-upon procedures"], a:1,
-  e:"SAs apply to audits of historical financial information; SREs to reviews, SAEs to other assurance engagements, and SRSs to related services."},
- {c:"Assurance levels", q:"A ‘review’ engagement provides:",
-  o:["Absolute assurance","Reasonable assurance","Limited assurance","No assurance"], a:2,
-  e:"A review is a limited assurance engagement, expressed in a negative form (‘nothing has come to our attention’), whereas an audit gives reasonable assurance."},
- {c:"Related services", q:"Which engagement does NOT provide any assurance?",
-  o:["Audit","Review","Agreed-upon procedures","Examination giving a conclusion on subject matter"], a:2,
-  e:"Agreed-upon procedures and compilation engagements are ‘related services’ — they provide no assurance; the user draws their own conclusions."},
- {c:"Assurance elements", q:"Which of the following is an element of an assurance engagement?",
-  o:["A two-party relationship","A three-party relationship (practitioner, responsible party, intended users)","Absence of any criteria","An oral report only"], a:1,
-  e:"An assurance engagement has five elements: a three-party relationship, an underlying subject matter, suitable criteria, sufficient appropriate evidence, and a written assurance report."},
- {c:"Professional skepticism", q:"An attitude that includes a questioning mind and alertness to conditions indicating possible misstatement is called:",
-  o:["Professional judgement","Professional skepticism","Due diligence","Reasonable assurance"], a:1,
-  e:"SA 200 defines professional skepticism — a questioning mind and a critical assessment of audit evidence throughout the audit."},
- {c:"Professional judgement", q:"Deciding the nature, timing and extent of audit procedures requires the auditor to exercise:",
-  o:["Professional skepticism only","Professional judgement","Absolute assurance","Management’s discretion"], a:1,
-  e:"Professional judgement — applying relevant training, knowledge and experience — is essential for the key decisions in an audit (SA 200)."},
- {c:"Audit vs investigation", q:"Which statement distinguishing audit from investigation is correct?",
-  o:["An audit is for a special purpose; an investigation is general","An investigation has a specific objective and may go beyond the books of account","An investigation always gives absolute assurance","Audit and investigation are identical"], a:1,
-  e:"An investigation is a critical examination with a special objective (e.g., suspected fraud, a proposed acquisition), usually more intensive and often beyond the books — unlike a routine audit."},
- {c:"Statutory audit", q:"An audit required and governed by the provisions of a statute is a:",
-  o:["Voluntary audit","Statutory audit","Internal audit","Management audit"], a:1,
-  e:"A statutory audit is mandated by law (e.g., the Companies Act); its scope cannot be curtailed by any agreement between the parties."},
- {c:"Internal vs statutory", q:"Which is true of the internal auditor compared with the statutory auditor?",
-  o:["The internal auditor is appointed by the shareholders","The internal auditor reports to management/TCWG, while the statutory auditor reports to the shareholders","The internal auditor expresses a true & fair opinion to members","The internal auditor’s scope is fixed by statute"], a:1,
-  e:"The internal auditor is appointed by, and reports to, management/TCWG; the statutory auditor is appointed by, and reports to, the shareholders."},
- {c:"Principles of audit", q:"The basic principle requiring the auditor to be straightforward, honest and unbiased is:",
-  o:["Confidentiality","Integrity, objectivity & independence","Documentation","Skills & competence"], a:1,
-  e:"Integrity, objectivity and independence is a fundamental principle governing an audit — the auditor must be honest, fair and free from bias."},
-];
+const DECK = [{"c": "Origin", "t": "Origin &amp; Meaning", "q": "The word 'audit' comes from the Latin word 'audire', which means:", "o": ["To certify", "To verify", "To record", "To hear"], "a": 3, "e": "Medieval auditors literally listened as accounts were read aloud to detect errors."}, {"c": "Origin", "t": "Origin &amp; Meaning", "q": "Kautilya's Arthashastra, referring to yearly accounting and audit, belongs to:", "o": ["4th century BC India", "12th century AD India", "18th century AD Britain", "19th century AD Britain"], "a": 0, "e": "Ancient Indian roots of audit; Arthashastra mentions yearly accounts and audits."}, {"c": "Origin", "t": "Origin &amp; Meaning", "q": "The Institute of Chartered Accountants of India was set up in:", "o": ["1956", "1860", "1949", "1913"], "a": 2, "e": "ICAI was established in 1949; British India appointed its first Auditor General in 1860."}, {"c": "Meaning", "t": "Origin &amp; Meaning", "q": "As defined, an audit is an independent examination of the financial information of:", "o": ["A profit-oriented entity only, with a view to certifying its accounts", "Any entity, whatever its size or legal form, with a view to expressing an opinion", "Any entity above a size threshold, with a view to detecting fraud", "A company only, with a view to preparing its financial statements"], "a": 1, "e": "The definition covers profit-oriented or not, irrespective of size or legal form."}, {"c": "Meaning", "t": "Origin &amp; Meaning", "q": "What does the auditor do with the financial statements prepared by management?", "o": ["Guarantees their accuracy", "Approves and publishes them", "Prepares and certifies them", "Expresses an opinion on them"], "a": 3, "e": "The auditor does not prepare or certify accounts; he forms and reports an opinion."}, {"c": "Meaning", "t": "Origin &amp; Meaning", "q": "The statement 'audit begins where accounting ends' means that:", "o": ["Accounting and audit are performed at the same time by one person", "Accounting records the transactions and audit then examines them", "Audit records the transactions and accounting then examines them", "Audit is needed only where no accounting records exist"], "a": 1, "e": "Accountancy produces the statements; audit independently examines them."}, {"c": "Meaning", "t": "Origin &amp; Meaning", "q": "Which of the following is a duty of the auditor in forming an opinion?", "o": ["Verifying that entries are backed by sufficient appropriate evidence", "Safeguarding the assets of the entity from misuse", "Preparing the classification of items in the statements", "Approving the accounting policies on behalf of the management"], "a": 0, "e": "Management prepares and safeguards; the auditor substantiates entries and checks classification and fairness."}, {"c": "Independence", "t": "Independence", "q": "Independence of the auditor is best described as:", "o": ["Freedom from fees so that the engagement is carried out at no cost", "Freedom from management so that no discussions are needed", "Freedom from influence so that judgment is objective and unbiased", "Freedom from rules so that procedures can be chosen as he likes"], "a": 2, "e": "Independence = objectivity = no bias."}, {"c": "Independence", "t": "Independence", "q": "An auditor's CEO-client appoints the CEO's sister's firm as auditor. The main threat is:", "o": ["Familial", "Business", "Financial", "Employment"], "a": 0, "e": "Family ties create a conflict of interest."}, {"c": "Independence", "t": "Independence", "q": "Ms. Meera audits LMN Corp. and owns substantial shares in it. The threat is:", "o": ["Employment", "Familial", "Financial", "Business"], "a": 2, "e": "Self-interest — a rosy report protects her own shareholding."}, {"c": "Independence", "t": "Independence", "q": "Mr. Sameer audits BuildWell Ltd. and also runs a consultancy serving it. The threat is:", "o": ["Financial", "Business", "Employment", "Familial"], "a": 1, "e": "He may go soft on the audit to protect the consultancy income."}, {"c": "Independence", "t": "Independence", "q": "Ms. Neha audits XYZ Technologies where she recently was the CFO. The threat is:", "o": ["Financial", "Business", "Familial", "Employment"], "a": 3, "e": "Familiarity/self-review: she may be reviewing her own past work."}, {"c": "Users", "t": "Users &amp; Related Subjects", "q": "Which user of financial statements is mainly interested in liquidity, debt levels and repayment capacity?", "o": ["Employees and unions", "Regulators and tax authorities", "Creditors and lenders", "Investors and shareholders"], "a": 2, "e": "Lenders judge creditworthiness; investors look at earnings, growth and dividends."}, {"c": "Users", "t": "Users &amp; Related Subjects", "q": "Which user is mainly interested in standards compliance and tax obligations?", "o": ["Employees", "Customers", "Investors", "Regulators"], "a": 3, "e": "Regulators check legal and regulatory compliance."}, {"c": "Users", "t": "Users &amp; Related Subjects", "q": "CSR and environmental impact in the statements are of most interest to:", "o": ["The public and community", "Customers and suppliers", "Investors and lenders", "Management and the Board"], "a": 0, "e": "The public wants to understand economic and social impact."}, {"c": "Other subjects", "t": "Users &amp; Related Subjects", "q": "Sampling makes an audit feasible and keeps it scientific. This is the contribution of:", "o": ["Economics", "Statistics", "Financial management", "Behavioural science"], "a": 1, "e": "Statistics supports sampling; behavioural science supports inquiry and communication."}, {"c": "Other subjects", "t": "Users &amp; Related Subjects", "q": "Which subject helps the auditor in inquiring of people and reading behaviour?", "o": ["Statistics and sampling", "Economics", "Production management", "Behavioural science"], "a": 3, "e": "Audit involves inquiry of people, so communication and reading behaviour matter."}, {"c": "Other subjects", "t": "Users &amp; Related Subjects", "q": "ERP and IT systems audit is an application of the link between audit and:", "o": ["Law and regulation", "Accountancy and costing", "Data processing (EDP / IT)", "Economics and policy"], "a": 2, "e": "IT audit is a growing discipline as finance goes digital."}, {"c": "Objective", "t": "SA 200 &amp; Assurance", "q": "Which is one of the two objectives of the auditor under SA 200?", "o": ["Prepare the FS to be reported on to the shareholders", "Obtain reasonable assurance that the FS are free from material misstatement", "Obtain absolute assurance that the FS are free from every misstatement", "Detect every fraud and report each one to the Registrar"], "a": 1, "e": "Objectives: (1) reasonable assurance; (2) report and communicate as the SAs require."}, {"c": "Reasonable assurance", "t": "SA 200 &amp; Assurance", "q": "Reasonable assurance is:", "o": ["High, but not total, confidence that the FS are free from material misstatement", "Moderate confidence obtained from a review of the draft FS only", "Complete certainty that the FS are free from any error whatsoever", "Low confidence obtained from enquiry and analytical procedures alone"], "a": 0, "e": "It is the standard model of auditing; absolute assurance is impractical."}, {"c": "Reasonable assurance", "t": "SA 200 &amp; Assurance", "q": "Absolute assurance is NOT achievable in an audit because it would require:", "o": ["Reliance on management and would be quick to complete", "Sampling of items and would be inexpensive to carry out", "Judgment by the auditor and would be easy to document", "100% verification of everything and would be prohibitively costly"], "a": 3, "e": "Sampling and human limits make it impossible; it would eliminate judgment."}, {"c": "Reasonable assurance", "t": "SA 200 &amp; Assurance", "q": "Which feature is of reasonable assurance and NOT of absolute assurance?", "o": ["Removes the need for professional judgment", "Accepts a small risk of undetected misstatement", "Assumes zero risk of undetected misstatement", "Requires 100% verification of all transactions"], "a": 1, "e": "Reasonable assurance accepts a small residual risk and relies heavily on judgment."}, {"c": "Misstatement", "t": "Misstatement &amp; Framework", "q": "A misstatement is a difference between the reported item and the framework's requirement in respect of:", "o": ["Amount, authorisation, posting or documentation", "Audit, compilation, review or certification", "Amount, classification, presentation or disclosure", "Accuracy, completeness, validity or cut-off"], "a": 2, "e": "A-C-P-D: Amount, Classification, Presentation, Disclosure."}, {"c": "Misstatement", "t": "Misstatement &amp; Framework", "q": "Which is NOT one of the four forms a misstatement can take?", "o": ["Inefficient management of working capital", "Omission of necessary information", "Inaccurate processing of data", "Misapplication of accounting policies"], "a": 0, "e": "Forms: inaccuracies, omissions, misapplication of policies, inappropriate judgments/estimates."}, {"c": "Misstatement", "t": "Misstatement &amp; Framework", "q": "A misstatement is considered material if it could:", "o": ["Be detected by a test of controls", "Influence the economic decisions of users", "Be corrected before the end of the audit", "Be traced to a single transaction"], "a": 1, "e": "The test is user decision-based."}, {"c": "Framework", "t": "Misstatement &amp; Framework", "q": "The financial reporting framework is:", "o": ["The criteria used to prepare and audit the statements", "The sampling plan used to select items to be audited", "The working paper file maintained by the auditor", "The engagement letter agreed with the management"], "a": 0, "e": "Recognition, measurement, presentation and disclosure criteria — the benchmark for evaluating the FS."}, {"c": "Framework", "t": "Misstatement &amp; Framework", "q": "Which of these is NOT a component of the financial reporting framework?", "o": ["Accounting standards", "Industry guidelines of RBI and IRDAI", "Companies Act, 2013 and Income-tax Act, 1961", "The auditor's own audit programme"], "a": 3, "e": "The framework is the entity's criteria; the audit programme is the auditor's own plan."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "Why can't an auditor give absolute assurance or 'certify' the FS?", "o": ["Because of the reluctance of the management", "Because of the size of the entity being audited", "Because of the inherent limitations of an audit", "Because of the cost of the audit to the entity"], "a": 2, "e": "Four forms of the same question, one answer: inherent limitations."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "How many heads of inherent limitations does the chapter list?", "o": ["Six", "Three", "Five", "Four"], "a": 2, "e": "Nature of financial reporting, nature of audit procedures, not an investigation, timeliness and relevance, future events."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "Collusion that defeats internal controls falls under which head?", "o": ["Timeliness of information", "Audit is not an investigation", "Future events", "Nature of financial reporting"], "a": 3, "e": "Subjective judgments and control override are features of financial reporting."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "Sampling and reliance on management's information fall under:", "o": ["Timeliness and relevance", "Nature of audit procedures", "Nature of financial reporting", "Future events"], "a": 1, "e": "Auditors test on a sample; they are also not forgery experts."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "The auditor's lack of legal power to compel disclosure shows that:", "o": ["Audit is not an investigation", "Audit is a guarantee of accuracy", "Audit is a check on the management", "Audit is a form of inspection"], "a": 0, "e": "No power of search or compulsion, so fraud cannot be guaranteed to surface."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "Market shifts after the audit that change the financial health of the entity fall under:", "o": ["Nature of audit procedures used", "Future events beyond the audit date", "Nature of financial reporting done", "Timeliness and relevance of information"], "a": 1, "e": "Future events are outside the auditor's control."}, {"c": "Limitations", "t": "Inherent Limitations", "q": "In 'Few Auditors Never Trust Forecasts', the letter 'T' stands for:", "o": ["Truth and fairness of the statements", "Transactions with related parties", "Timeliness and relevance of information", "Testing of controls by the auditor"], "a": 2, "e": "F-A-N-T-F: Financial reporting, Audit procedures, Not investigation, Timeliness, Future events."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "In the mnemonic EMBIT C LAGI SR, the letter 'E' stands for:", "o": ["Evaluation of controls", "Evidence and documentation", "Efficiency in reporting", "Error and fraud detection"], "a": 3, "e": "E-M-B-I-T-C-L-A-G-I-S-R."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "Audited accounts help a business obtain bank credit. This benefit is:", "o": ["Borrowing facilities", "Licences", "Insurance claim settlement", "Tax settlement"], "a": 0, "e": "B = Borrowing facilities."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "Insurers rely on audited figures to settle claims for loss of stock. This benefit is:", "o": ["Licences from regulators", "Insurance claim settlement", "Settlement of disputes", "Tax settlement benefit"], "a": 1, "e": "I = Insurance claim settlement."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "Audit gives credible evidence in a dispute with partners or suppliers. The benefit is:", "o": ["Settlement of disputes", "Advisory role of auditor", "Moral check on conduct", "Records kept up to date"], "a": 0, "e": "S = Settlement of disputes."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "Reliable audited data used for mergers and acquisitions is the benefit of:", "o": ["Confidence of the users", "Licences from regulators", "Goodwill and business valuation", "Internal control evaluation"], "a": 2, "e": "G = Goodwill and valuation."}, {"c": "Benefits", "t": "Benefits of Audit", "q": "Which is NOT a benefit of audit?", "o": ["Support for accurate tax reporting", "Credible evidence in disputes with others", "Easier borrowing from banks and lenders", "Guarantee that no fraud exists in the entity"], "a": 3, "e": "An audit cannot guarantee freedom from fraud."}, {"c": "Mandatory vs Voluntary", "t": "Mandatory vs Voluntary", "q": "Statutory audit of a company under the Companies Act, 2013 is mandatory:", "o": ["For listed companies above a net worth threshold", "For every company, with no turnover threshold", "For public companies, with no turnover threshold", "For companies above a turnover threshold only"], "a": 1, "e": "The threshold concept belongs to tax audit, not company audit."}, {"c": "Mandatory vs Voluntary", "t": "Mandatory vs Voluntary", "q": "Tax audit under Sec 44AB of the Income-tax Act, 1961 is:", "o": ["Based on turnover thresholds", "Mandatory for every company", "Mandatory for every business", "Voluntary for every professional"], "a": 0, "e": "Tax audit is turnover-threshold based."}, {"c": "Mandatory vs Voluntary", "t": "Mandatory vs Voluntary", "q": "A statement 'a company must be audited only if its turnover crosses a threshold' is wrong because it:", "o": ["Mixes up company audit with internal audit", "Mixes up company audit with cost audit", "Mixes up company audit with tax audit", "Mixes up company audit with secretarial audit"], "a": 2, "e": "Statutory company audit: Sec 139/143/129; tax audit: Sec 44AB."}, {"c": "Appointment", "t": "Mandatory vs Voluntary", "q": "Who appoints the auditor of a company?", "o": ["The Board at its first meeting", "The Registrar of Companies", "The Central Government", "The shareholders at the AGM"], "a": 3, "e": "Company auditors are appointed by shareholders at the AGM."}, {"c": "Appointment", "t": "Mandatory vs Voluntary", "q": "The auditor of a government entity is appointed by:", "o": ["The Comptroller and Auditor General of India", "The Registrar of Companies", "The Institute of Chartered Accountants of India", "The Central Vigilance Commission"], "a": 0, "e": "CAG audits government finances."}, {"c": "Appointment", "t": "Mandatory vs Voluntary", "q": "The audit report of a partnership firm is addressed to:", "o": ["The members", "The Income-tax department", "The partners", "The Registrar of Firms"], "a": 2, "e": "The partners appoint the auditor and receive the report."}, {"c": "Scope", "t": "Scope &amp; GPFS", "q": "Which of the following is within the scope of the auditor?", "o": ["Authenticating documents as a forgery expert", "Conducting an official investigation with search powers", "Assessing the physical condition of machinery and buildings", "Evaluating internal controls and verifying disclosure"], "a": 3, "e": "Physical condition, forgery and investigation need other expertise or powers."}, {"c": "Scope", "t": "Scope &amp; GPFS", "q": "Which is OUTSIDE the scope of an audit?", "o": ["Reviewing historical information for consistency across periods", "Detecting every specific fraud through targeted fraud hunting", "Verifying the accuracy of the summaries and policies", "Checking compliance with the Companies Act and RBI norms"], "a": 1, "e": "Audit focuses on the overall true and fair view, not targeted fraud hunting."}, {"c": "Scope", "t": "Scope &amp; GPFS", "q": "Clean Earth Ltd. did not disclose an NGT notice with a heavy penalty and said the auditor was going beyond scope. The auditor is:", "o": ["Wrong to examine it, since a legal notice is outside scope", "Wrong to examine it, unless the amount is paid during the year", "Right to examine it, since a potential material liability is within scope", "Right to examine it, only if the Board asks for it in writing"], "a": 2, "e": "Scope is defined by impact on the FS, not by the label of the topic."}, {"c": "GPFS", "t": "Scope &amp; GPFS", "q": "General purpose financial statements are prepared to meet:", "o": ["The common needs of a wide range of users", "The needs of regulators for supervision only", "The needs of management for internal use", "The specific needs of one particular user"], "a": 0, "e": "Statements prepared for one particular user's need become special purpose statements."}, {"c": "GPFS", "t": "Scope &amp; GPFS", "q": "Which is NOT part of a complete set of financial statements under IAS 1?", "o": ["Accounting policies and explanatory notes", "A cash flow statement", "A balance sheet", "A directors' report on the entity"], "a": 3, "e": "Complete set: balance sheet, income statement, changes in equity, cash flow statement, policies and notes."}, {"c": "Responsibility", "t": "Scope &amp; GPFS", "q": "Which is the responsibility of management and NOT of the auditor?", "o": ["Expressing an opinion on whether the FS give a true and fair view", "Maintaining adequate accounting records and internal controls", "Obtaining reasonable assurance on whether the FS are misstated", "Communicating the findings of the audit in a written report"], "a": 1, "e": "Management prepares and controls; the auditor opines."}, {"c": "Responsibility", "t": "Scope &amp; GPFS", "q": "Which statement is correct?", "o": ["An audit does not relieve management of its responsibilities", "An audit relieves management of its responsibility for the FS", "The opinion reflects on the efficiency of the management", "The opinion is a guarantee of the future viability of the entity"], "a": 0, "e": "The opinion speaks only to whether the FS are true and fair."}, {"c": "Qualities", "t": "Scope &amp; GPFS", "q": "In the chapter, which is NOT a personal attribute of an auditor?", "o": ["Integrity and discretion", "Judgment and patience", "Aggressive bargaining", "Tact and caution"], "a": 2, "e": "Personal attributes include tact, caution, firmness, good temper, integrity, discretion, industry, judgment, patience and reliability."}, {"c": "AASB", "t": "Standards &amp; SQC", "q": "Standards on Auditing (SAs) issued by the AASB are numbered in the range:", "o": ["3000–3699", "2000–2699", "1000–1999", "100–999"], "a": 3, "e": "SAs 100–999; SREs 2000–2699; SAEs 3000–3699; SRSs 4000–4699."}, {"c": "AASB", "t": "Standards &amp; SQC", "q": "Review of historical financial information is governed by:", "o": ["Standards on Assurance Engagements", "Standards on Review Engagements", "Standards on Related Services", "Standards on Auditing"], "a": 1, "e": "SREs are numbered 2000–2699 and give limited assurance."}, {"c": "AASB", "t": "Standards &amp; SQC", "q": "Agreed-upon procedures are governed by:", "o": ["Standards on Assurance Engagements", "Standards on Review Engagements", "Standards on Related Services", "Standards on Auditing"], "a": 2, "e": "SRSs are numbered 4000–4699 and give no assurance."}, {"c": "AASB", "t": "Standards &amp; SQC", "q": "Assurance engagements other than audit or review of historical information are governed by:", "o": ["Standards on Related Services", "Standards on Auditing", "Standards on Review Engagements", "Standards on Assurance Engagements"], "a": 3, "e": "SAEs 3000–3699 give limited assurance."}, {"c": "SA series", "t": "Standards &amp; SQC", "q": "Which series of SAs relates to risk assessment and response to assessed risks?", "o": ["500–599", "300–499", "200–299", "700–799"], "a": 1, "e": "200–299 general principles; 300–499 risk assessment; 500–599 audit evidence; 600–699 using work of others; 700–799 conclusions and reporting."}, {"c": "SA series", "t": "Standards &amp; SQC", "q": "The SAs on audit evidence fall in the range:", "o": ["500–599", "500–580", "600–699", "400–499"], "a": 0, "e": "The audit evidence band is 500–599."}, {"c": "SA series", "t": "Standards &amp; SQC", "q": "SAs dealing with audit conclusions and reporting are in the series:", "o": ["700–799", "800–899", "500–599", "600–699"], "a": 0, "e": "700–799 conclusions and reporting; 800–899 specialised areas."}, {"c": "Issuing SAs", "t": "Standards &amp; SQC", "q": "In the process of issuing an SA, which step comes immediately after the Exposure Draft is circulated to members for comment?", "o": ["The draft is submitted to the Council of the Institute", "The AASB identifies the area needing a new SA", "The SA is issued under the authority of the Council", "AASB finalises the draft considering the comments"], "a": 3, "e": "Flow: identify area → exposure draft → circulate → finalise → Council → issue."}, {"c": "Issuing SAs", "t": "Standards &amp; SQC", "q": "An SA is issued under the authority of:", "o": ["The Auditing and Assurance Standards Board", "The Study Group of the AASB", "The Council of the Institute", "The Ministry of Corporate Affairs"], "a": 2, "e": "The AASB frames; the Council authorises issue."}, {"c": "SQC", "t": "Standards &amp; SQC", "q": "SQC 1 applies to:", "o": ["Only assurance engagements covered by the SAEs", "All engagements covered by SAs, SREs, SAEs and SRSs", "Only review engagements covered by the SREs", "Only audit engagements covered by the SAs"], "a": 1, "e": "SQC is the umbrella over all engagement standards."}, {"c": "SQC", "t": "Standards &amp; SQC", "q": "SQC 1 requires a firm to:", "o": ["Rotate the engagement partner after every audit", "Submit every report to ICAI for quality review", "Appoint a partner to approve every report personally", "Establish a quality control system for its engagements"], "a": 3, "e": "The system ensures compliance with standards and issue of the right reports."}, {"c": "SQC", "t": "Standards &amp; SQC", "q": "A member departs materially from the SAs. The consequence is that he:", "o": ["Must get the permission of ICAI, and may then sign the report", "Must state the reason for departure, and may face disciplinary action", "Must withdraw from the audit, and cannot sign the report", "Need not state the reason, and cannot face disciplinary action"], "a": 1, "e": "Clause (9) of Part I of the Second Schedule to the CA Act, 1949 deals with non-compliance."}, {"c": "Assurance", "t": "Assurance Engagements", "q": "A three-party relationship in an assurance engagement consists of:", "o": ["Auditor, management and internal auditor", "Auditor, shareholders and the Registrar", "Practitioner, responsible party and intended users", "Practitioner, regulator and responsible party"], "a": 2, "e": "Intended users are other than the responsible party."}, {"c": "Assurance", "t": "Assurance Engagements", "q": "Which is NOT an element of an assurance engagement?", "o": ["An engagement letter from the practitioner", "Appropriate subject matter to be examined", "A written assurance report issued", "Suitable criteria for evaluation"], "a": 0, "e": "P-S-C-E-R: Parties, Subject matter, Criteria, Evidence, Report."}, {"c": "Assurance", "t": "Assurance Engagements", "q": "In a statutory audit, 'suitable criteria' are:", "o": ["Audit programmes drawn up by the engagement partner", "Standards, laws and regulations used to evaluate the subject matter", "Sampling methods used to select the items for testing", "Terms of the engagement letter signed by the management"], "a": 1, "e": "Criteria are the benchmarks for evaluation."}, {"c": "Assurance", "t": "Assurance Engagements", "q": "Evidence in an assurance engagement should be:", "o": ["Sufficient and appropriate", "Complete and conclusive", "Written and signed", "Voluminous and independent"], "a": 0, "e": "Sufficient = quantity; appropriate = quality."}, {"c": "Audit vs review", "t": "Assurance Engagements", "q": "Compared with an audit, a review engagement provides:", "o": ["A lower level of assurance with more procedures", "The same level of assurance with fewer procedures", "A lower level of assurance with fewer procedures", "A higher level of assurance with fewer procedures"], "a": 2, "e": "Audit = reasonable (high) assurance; review = limited assurance."}, {"c": "Audit vs review", "t": "Assurance Engagements", "q": "The correct ladder of assurance, from highest to lowest, is:", "o": ["Review, audit, agreed-upon procedures, prospective information", "Audit, review, prospective information, agreed-upon procedures", "Prospective information, audit, review, agreed-upon procedures", "Audit, prospective information, review, agreed-upon procedures"], "a": 3, "e": "Reasonable &gt; moderate &gt; limited &gt; none."}, {"c": "Prospective FI", "t": "Assurance Engagements", "q": "An examination of prospective financial information gives:", "o": ["A moderate level of assurance", "No assurance whatsoever", "A reasonable level of assurance", "An absolute level of assurance"], "a": 0, "e": "The practitioner cannot opine that results will be achieved."}, {"c": "Case study", "t": "Case Studies", "q": "Mr. Ramesh buys shares of a listed company because its audited statements look healthy and he believes his money is safe. His belief is:", "o": ["Correct — audited FS guarantee the safety of investments", "Correct — audit covers the future share price movements", "Incorrect — audit applies only to unlisted companies", "Incorrect — audit gives only reasonable assurance on the FS"], "a": 3, "e": "Share prices depend on many factors beyond financial performance."}, {"c": "Case study", "t": "Case Studies", "q": "RS &amp; Co. did proper procedures, but a manager colluded with dealers and the accountant to book small fake purchases. The audit is:", "o": ["Negligent — the auditor should have tested all the purchases", "Not necessarily negligent — collusion is an inherent limitation", "Invalid — the auditor should have been an investigator", "Negligent — the auditor ought to have detected the collusion"], "a": 1, "e": "Failure of internal control through collusion; the auditor reasonably relied on it."}, {"c": "Case study", "t": "Case Studies", "q": "CA Suresh could not get external confirmations from some debtors and used e-invoices, e-way bills and bank receipts. He must:", "o": ["Ignore the departure since the alternatives gave comfort", "Disclaim an opinion since confirmations were not obtained", "Document how the alternatives met the purpose and why he departed", "Qualify the opinion since the confirmations were not received"], "a": 2, "e": "Document the alternative procedures and the reason for departure; the report draws attention to it."}, {"c": "Case study", "t": "Case Studies", "q": "A client reports ₹2 crore of sales. Checking that recorded sales actually exist and are supported by invoices tests the assertion of:", "o": ["Presentation", "Occurrence", "Completeness", "Cut-off"], "a": 1, "e": "Existence of sales = occurrence; all sales recorded = completeness; right period = cut-off."}];
 
-let order = DECK.map((_,i)=>i);
-let pos = 0;
-const answered = new Array(DECK.length).fill(null); // stores chosen index (per deck index)
-const stage = document.getElementById('stage');
-const navwrap = document.getElementById('navwrap');
-const elProg = document.getElementById('prog');
-const elCount = document.getElementById('count');
-const elScore = document.getElementById('score');
-const btnPrev = document.getElementById('prev');
-const btnNext = document.getElementById('next');
-const btnReveal = document.getElementById('reveal');
 const LAB=['A','B','C','D'];
-
-function scored(){return answered.filter((v,i)=>v!==null && v==='reveal'?false:(v!==null && v===DECK[i].a)).length;}
-function correctCount(){let n=0;answered.forEach((v,i)=>{if(typeof v==='number' && v===DECK[i].a)n++});return n;}
-function attempted(){return answered.filter(v=>typeof v==='number').length;}
-
-function render(anim){
-  if(pos>=order.length){return finish();}
-  const di = order[pos];
-  const card = DECK[di];
-  const chosen = answered[di]; // number | 'reveal' | null
-  const locked = chosen!==null;
-  elProg.style.width = ((pos)/order.length*100)+'%';
-  elCount.textContent = (pos+1)+' / '+order.length;
-  elScore.textContent = '✓ '+correctCount();
-
-  const opts = card.o.map((txt,i)=>{
-    let cls='opt';
-    if(locked){
-      if(i===card.a) cls+=' correct';
-      else if(typeof chosen==='number' && i===chosen) cls+=' wrong';
-      else cls+=' dim';
-    }
-    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}>
-        <span class="lab">${LAB[i]}</span><span>${txt}</span></button>`;
-  }).join('');
-
-  let expCls = locked?'exp show':'exp';
+let cur='All', order=[], pos=0;
+const answered=new Array(DECK.length).fill(null);
+const $=id=>document.getElementById(id);
+const stage=$('stage'),navwrap=$('navwrap'),elProg=$('prog'),elCount=$('count'),elScore=$('score'),
+      btnPrev=$('prev'),btnNext=$('next'),btnReveal=$('reveal'),chipsEl=$('chips');
+function build(shuf){
+  order=[];DECK.forEach((c,i)=>{if(cur==='All'||c.t===cur)order.push(i);});
+  if(shuf){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}}
+  pos=0;
+}
+function drawChips(){
+  const tags=['All',...new Set(DECK.map(c=>c.t))];
+  chipsEl.innerHTML=tags.map(t=>{const n=t==='All'?DECK.length:DECK.filter(c=>c.t===t).length;
+    return `<button class="chip${t===cur?' on':''}" data-t="${t.replace(/"/g,'&quot;')}">${t}<small>${n}</small></button>`}).join('');
+  chipsEl.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cur=b.dataset.t;navwrap.classList.remove('hidden');build(false);drawChips();render(true);});
+}
+function correctCount(){let n=0;order.forEach(i=>{if(answered[i]===DECK[i].a)n++});return n;}
+function attempted(){return order.filter(i=>typeof answered[i]==='number').length;}
+function render(){
+  if(pos>=order.length)return finish();
+  const di=order[pos],card=DECK[di],chosen=answered[di],locked=chosen!==null;
+  elProg.style.width=(pos/order.length*100)+'%';
+  elCount.textContent=(pos+1)+' / '+order.length;
+  elScore.textContent='✓ '+correctCount();
+  const opts=card.o.map((txt,i)=>{let cls='opt';
+    if(locked){if(i===card.a)cls+=' correct';else if(typeof chosen==='number'&&i===chosen)cls+=' wrong';else cls+=' dim';}
+    return `<button class="${cls}" data-i="${i}" ${locked?'disabled':''}><span class="lab">${LAB[i]}</span><span>${txt}</span></button>`}).join('');
   let verdict='';
-  if(locked){
-    if(chosen==='reveal') verdict=`<div class="verdict ok">Answer</div>`;
-    else if(chosen===card.a) verdict=`<div class="verdict ok">✓ Correct</div>`;
-    else verdict=`<div class="verdict no">✗ Not quite</div>`;
-  }
-  const expHtml = `<div class="${expCls}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div>`;
-
-  stage.innerHTML = `<div class="card${anim?'':''}" id="card">
-      <div class="cbody">
-        <span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
-        <div class="q">${card.q}</div>
-        <div class="opts">${opts}</div>
-        ${expHtml}
-      </div></div>`;
-
-  stage.querySelectorAll('.opt').forEach(b=>{
-    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
-  });
-  btnPrev.disabled = pos===0;
-  btnNext.disabled = !locked;
-  btnNext.textContent = (pos===order.length-1)?'Finish':'Next ›';
-  btnReveal.style.visibility = locked?'hidden':'visible';
+  if(locked){verdict=chosen==='reveal'?'<div class="verdict ok">Answer</div>':(chosen===card.a?'<div class="verdict ok">✓ Correct</div>':'<div class="verdict no">✗ Not quite</div>');}
+  stage.innerHTML=`<div class="card" id="card"><div class="cbody"><span class="pill">${card.c}</span><span class="qno">Q ${pos+1}</span>
+    <div class="q">${card.q}</div><div class="opts">${opts}</div>
+    <div class="${locked?'exp show':'exp'}">${verdict}<p><span class="ans">Answer: ${LAB[card.a]}.</span> ${card.e}</p></div></div></div>`;
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.i));
+  btnPrev.disabled=pos===0;btnNext.disabled=!locked;
+  btnNext.textContent=(pos===order.length-1)?'Finish':'Next ›';
+  btnReveal.style.visibility=locked?'hidden':'visible';
 }
-
-function choose(i){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]=i;
-  render();
-}
-function reveal(){
-  const di=order[pos];
-  if(answered[di]!==null) return;
-  answered[di]='reveal';
-  render();
-}
-function go(d,dir){
-  const card=document.getElementById('card');
-  if(card && dir){ card.classList.add(dir==='next'?'swipe-l':'swipe-r'); }
-  setTimeout(()=>{ pos=Math.max(0,Math.min(order.length,pos+d)); render(true); window.scrollTo({top:0,behavior:'smooth'}); }, dir?170:0);
-}
+function choose(i){const di=order[pos];if(i>3||answered[di]!==null)return;answered[di]=i;render();}
+function reveal(){const di=order[pos];if(answered[di]!==null)return;answered[di]='reveal';render();}
+function go(d,dir){const c=$('card');if(c&&dir)c.classList.add(dir==='next'?'swipe-l':'swipe-r');
+  setTimeout(()=>{pos=Math.max(0,Math.min(order.length,pos+d));render();window.scrollTo({top:0,behavior:'smooth'});},dir?170:0);}
 function finish(){
-  elProg.style.width='100%'; elCount.textContent=order.length+' / '+order.length;
-  const att=attempted(), cor=correctCount();
-  const pct = att? Math.round(cor/att*100):0;
-  elScore.textContent='✓ '+cor;
-  navwrap.classList.add('hidden');
-  stage.innerHTML = `<div class="done">
-    <div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
-    <h2>Deck complete</h2>
-    <p>${cor} correct out of ${att} attempted · ${DECK.length} cards</p>
-    <div class="row">
-      <button class="btn next" id="again">Restart</button>
-      <button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button>
-    </div>
-  </div>`;
-  document.getElementById('again').onclick=()=>{restart(false);};
-  document.getElementById('shuf2').onclick=()=>{restart(true);};
+  elProg.style.width='100%';elCount.textContent=order.length+' / '+order.length;
+  const att=attempted(),cor=correctCount(),pct=att?Math.round(cor/att*100):0;
+  elScore.textContent='✓ '+cor;navwrap.classList.add('hidden');
+  stage.innerHTML=`<div class="done"><div class="ring" style="--deg:${pct*3.6}deg"><div class="inner"><div><div class="big">${pct}<small>%</small></div></div></div></div>
+  <h2>${cur==='All'?'Deck':'Topic'} complete</h2><p>${cor} correct out of ${att} attempted · ${order.length} cards${cur==='All'?'':' ('+cur+')'}</p>
+  <div class="row"><button class="btn next" id="again">Restart</button><button class="btn reveal" id="shuf2" style="width:auto">Shuffle &amp; retry</button></div></div>`;
+  $('again').onclick=()=>restart(false);$('shuf2').onclick=()=>restart(true);
 }
-function restart(shuf){
-  for(let i=0;i<answered.length;i++) answered[i]=null;
-  order = DECK.map((_,i)=>i);
-  if(shuf){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
-  pos=0; navwrap.classList.remove('hidden'); render(true); window.scrollTo({top:0});
-}
-
-btnPrev.onclick=()=>go(-1,'prev');
-btnNext.onclick=()=>go(1,'next');
-btnReveal.onclick=reveal;
-document.getElementById('shuffle').onclick=()=>restart(true);
-document.getElementById('restart').onclick=()=>restart(false);
-
-// swipe
+function restart(shuf){order.forEach(i=>answered[i]=null);navwrap.classList.remove('hidden');build(shuf);render();window.scrollTo({top:0});}
+btnPrev.onclick=()=>go(-1,'prev');btnNext.onclick=()=>go(1,'next');btnReveal.onclick=reveal;
+$('shuffle').onclick=()=>restart(true);$('restart').onclick=()=>restart(false);
 let sx=0,sy=0;
 stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-stage.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.5){
-    if(dx<0 && !btnNext.disabled) go(1,'next');
-    else if(dx>0 && pos>0) go(-1,'prev');
-  }
-},{passive:true});
+stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0&&!btnNext.disabled)go(1,'next');else if(dx>0&&pos>0)go(-1,'prev');}},{passive:true});
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight' && !btnNext.disabled) go(1,'next');
-  if(e.key==='ArrowLeft' && pos>0) go(-1,'prev');
-  if(['1','2','3','4'].includes(e.key)) choose(parseInt(e.key,10)-1);
-  if(e.key.toLowerCase()==='r') reveal();
-});
-
-render(true);
+  if(e.key==='ArrowRight'&&!btnNext.disabled)go(1,'next');
+  if(e.key==='ArrowLeft'&&pos>0)go(-1,'prev');
+  if(['1','2','3','4'].includes(e.key))choose(+e.key-1);
+  if(e.key.toLowerCase()==='r')reveal();});
+build(false);drawChips();render();
 </script>
 </body>
 </html>
